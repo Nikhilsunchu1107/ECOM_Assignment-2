@@ -179,10 +179,11 @@
             <input type="checkbox" id="remember" style="accent-color:var(--gold)"/>
             <label for="remember" style="font-size:0.82rem;color:var(--muted)">Remember me on this device</label>
           </div>
-          <button class="btn btn-navy" style="width:100%;justify-content:center;" onclick="doLogin()">Sign In Securely →</button>
+          <button id="login-btn" class="btn btn-navy" style="width:100%;justify-content:center;" onclick="doLogin()">Sign In Securely →</button>
           <div class="social-divider"><span>or continue with</span></div>
           <button class="social-btn">🔵 Continue with Google</button>
-          <div class="sec-notice">🔒 Connection secured with TLS 1.3 — Your credentials are encrypted</div>
+          <div id="login-notice" class="sec-notice">🔒 Connection secured with TLS 1.3 — Your credentials are encrypted</div>
+          <div style="font-size: 0.75rem; color: var(--muted); margin-top: 12px; text-align: center;"><em>Demo: Try an incorrect password 3 times to see login rate-limiting in action.</em></div>
         </div>
 
         <!-- REGISTER FORM -->
@@ -328,9 +329,9 @@
     <div class="sec-features-grid">
       <div class="sec-feature-card">
         <div class="sf-icon">🔐</div>
-        <h3>Password Security</h3>
-        <p>Passwords are never stored in plain text. We use bcrypt with a high cost factor for hashing. Password strength enforcement and breach detection via Have I Been Pwned API.</p>
-        <div class="tech-stack"><span class="tech-chip">bcrypt</span><span class="tech-chip">HIBP API</span><span class="tech-chip">Zxcvbn</span></div>
+        <h3>Password Security & Lockout</h3>
+        <p>Passwords hashed via bcrypt. Strict <strong>login rate limiting</strong> prevents brute-force attacks by locking accounts for 1 minute after 3 failed attempts. Checking against known breaches.</p>
+        <div class="tech-stack"><span class="tech-chip">bcrypt</span><span class="tech-chip">Login Rate Limit</span><span class="tech-chip">Account Lockout</span></div>
       </div>
       <div class="sec-feature-card">
         <div class="sf-icon">🛡️</div>
@@ -448,10 +449,70 @@
     if (el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
   }, 1000);
 
+  let failedAttempts = 0;
+  let isLocked = false;
+  let lockTimer = null;
+
   function doLogin() {
+    if (isLocked) {
+      alert('Your account is temporarily locked due to multiple failed login attempts. Please wait.');
+      return;
+    }
+
     const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-pw').value;
+
     if (!email) { alert('Please enter your email address.'); return; }
-    alert('✓ Sign-in initiated. In production: JWT token issued, session started, 2FA triggered if enabled.');
+    if (!password) { alert('Please enter your password.'); return; }
+
+    // Simulate password check (Correct pwd is 'estateiq123')
+    if (password !== 'estateiq123') {
+      failedAttempts++;
+      if (failedAttempts >= 3) {
+        // Trigger lockout
+        isLocked = true;
+        const btn = document.getElementById('login-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = 'Account Locked (1:00)';
+        btn.style.background = '#e05252';
+        btn.style.borderColor = '#e05252';
+        btn.style.pointerEvents = 'none';
+
+        const noticeDiv = document.getElementById('login-notice');
+        const oldNoticeHTML = noticeDiv.innerHTML;
+        noticeDiv.innerHTML = '🚨 Brute Force Prevented: Account locked due to 3 failed attempts. Please wait 1 minute.';
+        noticeDiv.style.background = 'rgba(224, 82, 82, 0.08)';
+        noticeDiv.style.color = '#e05252';
+        noticeDiv.style.borderColor = 'rgba(224, 82, 82, 0.3)';
+
+        let timeLeft = 60;
+        lockTimer = setInterval(() => {
+          timeLeft--;
+          if (timeLeft <= 0) {
+            clearInterval(lockTimer);
+            isLocked = false;
+            failedAttempts = 0;
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.pointerEvents = 'auto';
+            noticeDiv.innerHTML = oldNoticeHTML;
+            noticeDiv.style.background = '';
+            noticeDiv.style.color = '';
+            noticeDiv.style.borderColor = '';
+            alert('Your account has been unlocked. You can try logging in again.');
+          } else {
+            btn.innerHTML = `Account Locked (0:${timeLeft < 10 ? '0' : ''}${timeLeft})`;
+          }
+        }, 1000);
+      } else {
+        alert(`❌ Incorrect password. Attempt ${failedAttempts} of 3 before account lockout.`);
+      }
+      return;
+    }
+
+    failedAttempts = 0;
+    alert('✓ Sign-in initiated securely. Password matched!');
   }
 
   function doRegister() {
