@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CRM Strategy — EstateIQ</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .page-hero { background: var(--navy); padding: 80px 48px 64px; position: relative; overflow: hidden; }
+    .page-hero::after { content:''; position:absolute; left:-100px; bottom:-100px; width:400px; height:400px; border-radius:50%; background:radial-gradient(circle, rgba(184,146,74,0.1) 0%, transparent 70%); }
+    .page-hero h1 { color: var(--white); font-size: 3.2rem; margin-bottom: 12px; }
+    .page-hero p { color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    /* CRM DASHBOARD */
+    .crm-dashboard {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 48px rgba(13,13,13,0.12);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .crm-header {
+      background: var(--navy);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .crm-header-title { color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; }
+    .crm-header-actions { display: flex; gap: 8px; }
+    .crm-header-btn {
+      padding: 7px 14px; border-radius: 4px;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.05em;
+      cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+    }
+    .crm-layout { display: grid; grid-template-columns: 220px 1fr; min-height: 540px; }
+    .crm-sidebar { background: #f0ede8; border-right: 1px solid var(--border); padding: 20px 0; }
+    .crm-nav-item {
+      padding: 10px 20px;
+      font-size: 0.83rem;
+      color: var(--muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .crm-nav-item:hover { color: var(--ink); background: rgba(184,146,74,0.06); }
+    .crm-nav-item.active { color: var(--navy); background: rgba(184,146,74,0.08); border-left-color: var(--gold); font-weight: 500; }
+    .crm-nav-section { font-size: 0.65rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); padding: 16px 20px 6px; margin-top: 8px; }
+    .crm-main { padding: 24px; overflow-y: auto; }
+
+    /* PIPELINE */
+    .pipeline-cols { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 16px; }
+    .pipeline-col { background: var(--paper); border-radius: 6px; padding: 10px; min-height: 200px; }
+    .pipeline-col-header { font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .pipeline-count { background: var(--border); border-radius: 10px; padding: 1px 7px; font-size: 0.7rem; }
+    .lead-card { background: var(--white); border-radius: 5px; padding: 10px; margin-bottom: 6px; box-shadow: 0 1px 4px rgba(13,13,13,0.06); cursor: grab; transition: box-shadow 0.15s; border-left: 2px solid var(--border); }
+    .lead-card:hover { box-shadow: 0 3px 12px rgba(13,13,13,0.1); }
+    .lead-card.hot { border-left-color: #e05252; }
+    .lead-card.warm { border-left-color: var(--gold); }
+    .lead-card.cold { border-left-color: #5d7a94; }
+    .lead-name { font-size: 0.8rem; font-weight: 500; color: var(--navy); margin-bottom: 2px; }
+    .lead-prop { font-size: 0.72rem; color: var(--muted); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lead-meta { display: flex; justify-content: space-between; align-items: center; }
+    .lead-budget { font-size: 0.72rem; font-weight: 500; color: var(--gold); }
+    .lead-days { font-size: 0.68rem; color: var(--muted); }
+    .heat-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    /* KPI MINI CARDS */
+    .crm-kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+    .crm-kpi { background: var(--paper); border-radius: 6px; padding: 14px 16px; }
+    .crm-kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--navy); font-weight: 600; }
+    .crm-kpi-label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .crm-kpi-change { font-size: 0.72rem; color: var(--success); margin-top: 2px; }
+
+    /* CRM PANELS */
+    .crm-panel { display: none; }
+    .crm-panel.active { display: block; }
+
+    /* CONTACTS TABLE */
+    .contact-filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filter-btn { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; border: 1px solid var(--border); background: white; cursor: pointer; transition: all 0.15s; }
+    .filter-btn.active { background: var(--navy); color: white; border-color: var(--navy); }
+
+    /* TASKS */
+    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .task-cb { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid var(--border); cursor: pointer; flex-shrink: 0; margin-top: 2px; transition: all 0.15s; }
+    .task-cb.done { background: var(--success); border-color: var(--success); }
+    .task-title { font-size: 0.85rem; color: var(--ink); margin-bottom: 2px; }
+    .task-title.done-text { text-decoration: line-through; color: var(--muted); }
+    .task-meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 12px; }
+    .task-priority { font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+    .priority-high { background: rgba(224,82,82,0.1); color: #e05252; }
+    .priority-med { background: rgba(184,146,74,0.1); color: var(--gold); }
+    .priority-low { background: rgba(61,122,92,0.1); color: var(--success); }
+
+    /* ANALYTICS */
+    .analytics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .mini-chart-box { background: var(--paper); border-radius: 8px; padding: 16px; }
+    .mini-chart-title { font-size: 0.78rem; font-weight: 500; color: var(--navy); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .bar-mini { display: flex; align-items: flex-end; gap: 6px; height: 80px; }
+    .bar-mini-col { flex: 1; background: var(--gold); border-radius: 2px 2px 0 0; opacity: 0.7; transition: opacity 0.2s; }
+    .bar-mini-col:hover { opacity: 1; }
+    .chart-labels { display: flex; gap: 6px; margin-top: 6px; }
+    .chart-label { flex: 1; text-align: center; font-size: 0.65rem; color: var(--muted); }
+
+    /* CRM STRATEGY EXPLAINER */
+    .strategy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+    .strategy-card { background: var(--white); border-radius: 10px; padding: 28px; box-shadow: var(--card-shadow); }
+    .strategy-card .s-icon { font-size: 2rem; margin-bottom: 12px; }
+    .strategy-card h3 { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--navy); margin-bottom: 8px; }
+    .strategy-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+    /* LIFECYCLE */
+    .lifecycle-wrap { background: var(--white); border-radius: 10px; padding: 36px; box-shadow: var(--card-shadow); margin-top: 48px; }
+    .lifecycle-stages { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: 28px; }
+    .lc-stage { text-align: center; position: relative; }
+    .lc-stage::after { content:'→'; position:absolute; right:-8px; top:20px; color:var(--border); font-size:1rem; }
+    .lc-stage:last-child::after { display: none; }
+    .lc-circle { width: 48px; height: 48px; border-radius: 50%; background: var(--paper); border: 2px solid var(--border); margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s; }
+    .lc-stage:hover .lc-circle { background: var(--gold); border-color: var(--gold); }
+    .lc-name { font-size: 0.72rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+    .lc-action { font-size: 0.7rem; color: var(--muted); margin-top: 4px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="revenue.html">Revenue</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="crm.html" class="active">CRM</a>
+    <a href="security.html">Security</a>
+    <a href="security.html" class="nav-cta">Sign In</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="section-label" style="color:var(--gold)">Customer Relations</div>
+    <h1>CRM Strategy</h1>
+    <p>How EstateIQ manages leads, nurtures client relationships, and drives conversions through a structured Customer Relationship Management system.</p>
+  </div>
+</div>
+
+<!-- STRATEGY OVERVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Strategy</div>
+    <h2 class="section-title">Our CRM Approach</h2>
+    <div class="strategy-grid">
+      <div class="strategy-card">
+        <div class="s-icon">🎯</div>
+        <h3>Lead Scoring & Segmentation</h3>
+        <p>Every lead is automatically scored based on budget, intent signals, engagement frequency, and property type preference. High-score leads are prioritized for immediate follow-up.</p>
+      </div>
+      <div class="strategy-card">
+        <div class="s-icon">🔔</div>
+        <h3>Automated Nurture Sequences</h3>
+        <p>Leads who don't convert immediately are enrolled in drip email/WhatsApp sequences — property alerts, market updates, and agent check-ins — to keep EstateIQ top-of-mind.</p>
+      </div>
+      <div class="strategy-card">
+        <div class="s-icon">📊</div>
+        <h3>Agent Performance Tracking</h3>
+        <p>Each agent's response time, conversion rate, client feedback, and deal pipeline is tracked. Data-driven coaching improves agent quality and customer satisfaction.</p>
+      </div>
+      <div class="strategy-card">
+        <div class="s-icon">🔄</div>
+        <h3>Post-Sale Retention</h3>
+        <p>After a transaction, clients receive post-move support, home loan reminders, rental management tips, and re-engagement campaigns when it's time to upgrade or invest again.</p>
+      </div>
+      <div class="strategy-card">
+        <div class="s-icon">📱</div>
+        <h3>Omnichannel Communication</h3>
+        <p>CRM integrates email, WhatsApp, phone calls, and in-app notifications into a single view per client. No lead falls through the cracks, no message goes unanswered.</p>
+      </div>
+      <div class="strategy-card">
+        <div class="s-icon">🤖</div>
+        <h3>AI-Powered Recommendations</h3>
+        <p>Machine learning analyzes browsing behavior and search patterns to suggest the right properties to the right buyer at the right time — increasing engagement and conversion.</p>
+      </div>
+    </div>
+
+    <!-- LIFECYCLE -->
+    <div class="lifecycle-wrap">
+      <div class="section-label">Customer Journey</div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--navy);">Client Lifecycle Management</h3>
+      <div class="lifecycle-stages">
+        <div class="lc-stage">
+          <div class="lc-circle">👋</div>
+          <div class="lc-name">Aware</div>
+          <div class="lc-action">First visit via SEO/Ads</div>
+        </div>
+        <div class="lc-stage">
+          <div class="lc-circle">🔍</div>
+          <div class="lc-name">Prospect</div>
+          <div class="lc-action">Registers, saves listings</div>
+        </div>
+        <div class="lc-stage">
+          <div class="lc-circle">💬</div>
+          <div class="lc-name">Lead</div>
+          <div class="lc-action">Enquires, contacts agent</div>
+        </div>
+        <div class="lc-stage">
+          <div class="lc-circle">🤝</div>
+          <div class="lc-name">Negotiating</div>
+          <div class="lc-action">Site visits, offers</div>
+        </div>
+        <div class="lc-stage">
+          <div class="lc-circle">✅</div>
+          <div class="lc-name">Customer</div>
+          <div class="lc-action">Deal closed</div>
+        </div>
+        <div class="lc-stage">
+          <div class="lc-circle">⭐</div>
+          <div class="lc-name">Advocate</div>
+          <div class="lc-action">Reviews & referrals</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTERACTIVE CRM DASHBOARD -->
+<section class="section" style="background:var(--paper)">
+  <div class="container">
+    <div class="section-label">Live Demo</div>
+    <h2 class="section-title">CRM Dashboard</h2>
+    <p class="section-sub">A preview of the agent-facing CRM dashboard used to manage leads, track pipeline, and schedule follow-ups.</p>
+
+    <div class="crm-dashboard">
+      <div class="crm-header">
+        <div class="crm-header-title">🏠 EstateIQ CRM — Agent Dashboard</div>
+        <div class="crm-header-actions">
+          <button class="crm-header-btn" style="background:var(--gold);color:white" onclick="addLead()">+ Add Lead</button>
+          <button class="crm-header-btn" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)">Export</button>
+        </div>
+      </div>
+
+      <div class="crm-layout">
+        <!-- SIDEBAR -->
+        <div class="crm-sidebar">
+          <div class="crm-nav-section">Overview</div>
+          <div class="crm-nav-item active" onclick="showPanel('pipeline',this)">📋 Lead Pipeline</div>
+          <div class="crm-nav-item" onclick="showPanel('contacts',this)">👥 Contacts</div>
+          <div class="crm-nav-item" onclick="showPanel('tasks',this)">✅ Tasks</div>
+          <div class="crm-nav-item" onclick="showPanel('analytics',this)">📊 Analytics</div>
+          <div class="crm-nav-section">Tools</div>
+          <div class="crm-nav-item" onclick="showPanel('emails',this)">📧 Email Templates</div>
+          <div class="crm-nav-item">⚙️ Settings</div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="crm-main">
+
+          <!-- PIPELINE PANEL -->
+          <div class="crm-panel active" id="panel-pipeline">
+            <div class="crm-kpi-row">
+              <div class="crm-kpi">
+                <div class="crm-kpi-val">47</div>
+                <div class="crm-kpi-label">Active Leads</div>
+                <div class="crm-kpi-change">↑ 12 this week</div>
+              </div>
+              <div class="crm-kpi">
+                <div class="crm-kpi-val">8</div>
+                <div class="crm-kpi-label">Site Visits Scheduled</div>
+                <div class="crm-kpi-change">↑ 3 new</div>
+              </div>
+              <div class="crm-kpi">
+                <div class="crm-kpi-val">₹4.2 Cr</div>
+                <div class="crm-kpi-label">Pipeline Value</div>
+                <div class="crm-kpi-change">↑ 18% MoM</div>
+              </div>
+              <div class="crm-kpi">
+                <div class="crm-kpi-val">14%</div>
+                <div class="crm-kpi-label">Conversion Rate</div>
+                <div class="crm-kpi-change">↑ 2% vs last month</div>
+              </div>
+            </div>
+
+            <div style="font-size:0.82rem;font-weight:500;color:var(--navy);margin-bottom:4px;">Lead Pipeline</div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:12px;">Drag cards to update stage — 🔴 Hot  🟡 Warm  🔵 Cold</div>
+            <div class="pipeline-cols" id="pipeline-board">
+              <div class="pipeline-col">
+                <div class="pipeline-col-header">New <span class="pipeline-count" id="count-new">3</span></div>
+                <div id="stage-new">
+                  <div class="lead-card warm" draggable="true" ondragstart="drag(event)" id="lead1">
+                    <div class="lead-name">Priya Sharma</div>
+                    <div class="lead-prop">3 BHK Bandra, ₹2.5 Cr</div>
+                    <div class="lead-meta"><span class="lead-budget">₹2–3 Cr</span><span class="lead-days">2 days ago</span></div>
+                  </div>
+                  <div class="lead-card cold" draggable="true" ondragstart="drag(event)" id="lead2">
+                    <div class="lead-name">Arjun Kapoor</div>
+                    <div class="lead-prop">Plot Pune, ₹60 L</div>
+                    <div class="lead-meta"><span class="lead-budget">₹50–80 L</span><span class="lead-days">Today</span></div>
+                  </div>
+                  <div class="lead-card hot" draggable="true" ondragstart="drag(event)" id="lead3">
+                    <div class="lead-name">Sneha Iyer</div>
+                    <div class="lead-prop">2 BHK Koramangala rent</div>
+                    <div class="lead-meta"><span class="lead-budget">₹30K/mo</span><span class="lead-days">1 hr ago</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pipeline-col" ondragover="allowDrop(event)" ondrop="drop(event,'contacted')">
+                <div class="pipeline-col-header">Contacted <span class="pipeline-count" id="count-contacted">2</span></div>
+                <div id="stage-contacted">
+                  <div class="lead-card warm" draggable="true" ondragstart="drag(event)" id="lead4">
+                    <div class="lead-name">Rahul Mehta</div>
+                    <div class="lead-prop">4 BHK Juhu, ₹4.8 Cr</div>
+                    <div class="lead-meta"><span class="lead-budget">₹4–6 Cr</span><span class="lead-days">5 days ago</span></div>
+                  </div>
+                  <div class="lead-card hot" draggable="true" ondragstart="drag(event)" id="lead5">
+                    <div class="lead-name">Nandini Rao</div>
+                    <div class="lead-prop">Office space Whitefield</div>
+                    <div class="lead-meta"><span class="lead-budget">₹1.2 Cr</span><span class="lead-days">3 days ago</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pipeline-col" ondragover="allowDrop(event)" ondrop="drop(event,'visit')">
+                <div class="pipeline-col-header">Site Visit <span class="pipeline-count" id="count-visit">2</span></div>
+                <div id="stage-visit">
+                  <div class="lead-card hot" draggable="true" ondragstart="drag(event)" id="lead6">
+                    <div class="lead-name">Vikram Singh</div>
+                    <div class="lead-prop">Villa Lonavala, ₹1.8 Cr</div>
+                    <div class="lead-meta"><span class="lead-budget">₹1.5–2 Cr</span><span class="lead-days">Visit tmrw</span></div>
+                  </div>
+                  <div class="lead-card warm" draggable="true" ondragstart="drag(event)" id="lead7">
+                    <div class="lead-name">Kavita Patel</div>
+                    <div class="lead-prop">2 BHK Khar, ₹1.1 Cr</div>
+                    <div class="lead-meta"><span class="lead-budget">₹90L–1.2Cr</span><span class="lead-days">Visit Sat</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pipeline-col" ondragover="allowDrop(event)" ondrop="drop(event,'negotiating')">
+                <div class="pipeline-col-header">Negotiating <span class="pipeline-count" id="count-negotiating">1</span></div>
+                <div id="stage-negotiating">
+                  <div class="lead-card hot" draggable="true" ondragstart="drag(event)" id="lead8">
+                    <div class="lead-name">Aditya Joshi</div>
+                    <div class="lead-prop">3 BHK Powai, ₹1.9 Cr</div>
+                    <div class="lead-meta"><span class="lead-budget">₹1.8–2 Cr</span><span class="lead-days">Offer made</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="pipeline-col" style="background:rgba(61,122,92,0.06)" ondragover="allowDrop(event)" ondrop="drop(event,'closed')">
+                <div class="pipeline-col-header" style="color:var(--success)">Closed ✓ <span class="pipeline-count" id="count-closed">1</span></div>
+                <div id="stage-closed">
+                  <div class="lead-card" style="border-left-color:var(--success)" draggable="true" ondragstart="drag(event)" id="lead9">
+                    <div class="lead-name">Meena Thomas</div>
+                    <div class="lead-prop">2 BHK Indiranagar</div>
+                    <div class="lead-meta"><span class="lead-budget" style="color:var(--success)">₹82 L ✓</span><span class="lead-days">Closed!</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONTACTS PANEL -->
+          <div class="crm-panel" id="panel-contacts">
+            <div style="font-size:0.95rem;font-weight:500;color:var(--navy);margin-bottom:12px;">All Contacts</div>
+            <div class="contact-filters">
+              <button class="filter-btn active" onclick="filterContacts(this,'all')">All</button>
+              <button class="filter-btn" onclick="filterContacts(this,'buyer')">Buyers</button>
+              <button class="filter-btn" onclick="filterContacts(this,'renter')">Renters</button>
+              <button class="filter-btn" onclick="filterContacts(this,'seller')">Sellers</button>
+              <button class="filter-btn" onclick="filterContacts(this,'hot')">🔴 Hot</button>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Budget</th>
+                  <th>Location</th>
+                  <th>Score</th>
+                  <th>Last Contact</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><b>Priya Sharma</b></td><td><span class="badge badge-gold">Buyer</span></td><td>₹2–3 Cr</td><td>Mumbai</td><td><span style="color:var(--gold);font-weight:600">87</span></td><td>2 days ago</td></tr>
+                <tr><td><b>Rahul Mehta</b></td><td><span class="badge badge-gold">Buyer</span></td><td>₹4–6 Cr</td><td>Mumbai</td><td><span style="color:#e05252;font-weight:600">94</span></td><td>5 days ago</td></tr>
+                <tr><td><b>Sneha Iyer</b></td><td><span class="badge badge-navy">Renter</span></td><td>₹30K/mo</td><td>Bangalore</td><td><span style="color:#e05252;font-weight:600">91</span></td><td>1 hr ago</td></tr>
+                <tr><td><b>Arjun Kapoor</b></td><td><span class="badge badge-gold">Buyer</span></td><td>₹50–80 L</td><td>Pune</td><td><span style="color:#5d7a94;font-weight:600">42</span></td><td>Today</td></tr>
+                <tr><td><b>Nandini Rao</b></td><td><span class="badge" style="background:rgba(61,122,92,0.1);color:var(--success)">Commercial</span></td><td>₹1.2 Cr</td><td>Bangalore</td><td><span style="color:#e05252;font-weight:600">88</span></td><td>3 days ago</td></tr>
+                <tr><td><b>Meena Thomas</b></td><td><span class="badge badge-green">Closed ✓</span></td><td>₹82 L</td><td>Bangalore</td><td><span style="color:var(--success);font-weight:600">100</span></td><td>Yesterday</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TASKS PANEL -->
+          <div class="crm-panel" id="panel-tasks">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <div style="font-size:0.95rem;font-weight:500;color:var(--navy);">Today's Tasks</div>
+              <button onclick="addTask()" style="padding:6px 14px;background:var(--navy);color:white;border:none;border-radius:4px;font-size:0.78rem;cursor:pointer;">+ Add Task</button>
+            </div>
+            <div id="task-list">
+              <div class="task-item">
+                <div class="task-cb" onclick="toggleTask(this)"></div>
+                <div style="flex:1">
+                  <div class="task-title">Call Rahul Mehta — follow up on Juhu property visit</div>
+                  <div class="task-meta"><span>📅 Today 11:00 AM</span><span>👤 Rahul Mehta</span><span class="task-priority priority-high">High</span></div>
+                </div>
+              </div>
+              <div class="task-item">
+                <div class="task-cb" onclick="toggleTask(this)"></div>
+                <div style="flex:1">
+                  <div class="task-title">Schedule site visit for Vikram Singh — Lonavala Villa</div>
+                  <div class="task-meta"><span>📅 Today 2:00 PM</span><span>👤 Vikram Singh</span><span class="task-priority priority-high">High</span></div>
+                </div>
+              </div>
+              <div class="task-item">
+                <div class="task-cb done" onclick="toggleTask(this)"></div>
+                <div style="flex:1">
+                  <div class="task-title done-text">Send agreement draft to Meena Thomas</div>
+                  <div class="task-meta"><span>📅 Yesterday</span><span>👤 Meena Thomas</span><span class="task-priority priority-low">Done</span></div>
+                </div>
+              </div>
+              <div class="task-item">
+                <div class="task-cb" onclick="toggleTask(this)"></div>
+                <div style="flex:1">
+                  <div class="task-title">Send WhatsApp property alerts to cold leads batch</div>
+                  <div class="task-meta"><span>📅 Tomorrow</span><span>👥 12 leads</span><span class="task-priority priority-med">Medium</span></div>
+                </div>
+              </div>
+              <div class="task-item">
+                <div class="task-cb" onclick="toggleTask(this)"></div>
+                <div style="flex:1">
+                  <div class="task-title">Review and respond to 3 new property inquiries</div>
+                  <div class="task-meta"><span>📅 Today EOD</span><span>👥 3 leads</span><span class="task-priority priority-med">Medium</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ANALYTICS PANEL -->
+          <div class="crm-panel" id="panel-analytics">
+            <div style="font-size:0.95rem;font-weight:500;color:var(--navy);margin-bottom:16px;">Performance Analytics — Last 6 Months</div>
+            <div class="crm-kpi-row">
+              <div class="crm-kpi"><div class="crm-kpi-val">14%</div><div class="crm-kpi-label">Conversion Rate</div></div>
+              <div class="crm-kpi"><div class="crm-kpi-val">1.8d</div><div class="crm-kpi-label">Avg Response Time</div></div>
+              <div class="crm-kpi"><div class="crm-kpi-val">4.6⭐</div><div class="crm-kpi-label">Client Rating</div></div>
+              <div class="crm-kpi"><div class="crm-kpi-val">₹28L</div><div class="crm-kpi-label">Commissions Earned</div></div>
+            </div>
+            <div class="analytics-grid">
+              <div class="mini-chart-box">
+                <div class="mini-chart-title">New Leads per Month</div>
+                <div class="bar-mini">
+                  <div class="bar-mini-col" style="height:40%"></div>
+                  <div class="bar-mini-col" style="height:55%"></div>
+                  <div class="bar-mini-col" style="height:48%"></div>
+                  <div class="bar-mini-col" style="height:70%"></div>
+                  <div class="bar-mini-col" style="height:80%"></div>
+                  <div class="bar-mini-col" style="height:100%;background:var(--navy)"></div>
+                </div>
+                <div class="chart-labels">
+                  <span class="chart-label">Jul</span><span class="chart-label">Aug</span><span class="chart-label">Sep</span>
+                  <span class="chart-label">Oct</span><span class="chart-label">Nov</span><span class="chart-label">Dec</span>
+                </div>
+              </div>
+              <div class="mini-chart-box">
+                <div class="mini-chart-title">Deals Closed per Month</div>
+                <div class="bar-mini">
+                  <div class="bar-mini-col" style="height:30%;background:var(--success);opacity:0.6"></div>
+                  <div class="bar-mini-col" style="height:50%;background:var(--success);opacity:0.7"></div>
+                  <div class="bar-mini-col" style="height:40%;background:var(--success);opacity:0.7"></div>
+                  <div class="bar-mini-col" style="height:65%;background:var(--success);opacity:0.8"></div>
+                  <div class="bar-mini-col" style="height:75%;background:var(--success);opacity:0.9"></div>
+                  <div class="bar-mini-col" style="height:90%;background:var(--success)"></div>
+                </div>
+                <div class="chart-labels">
+                  <span class="chart-label">Jul</span><span class="chart-label">Aug</span><span class="chart-label">Sep</span>
+                  <span class="chart-label">Oct</span><span class="chart-label">Nov</span><span class="chart-label">Dec</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EMAIL TEMPLATES PANEL -->
+          <div class="crm-panel" id="panel-emails">
+            <div style="font-size:0.95rem;font-weight:500;color:var(--navy);margin-bottom:16px;">Email Templates Library</div>
+            <table>
+              <thead><tr><th>Template Name</th><th>Use Case</th><th>Open Rate</th><th>Action</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td><b>New Listing Alert</b></td>
+                  <td>Notify saved search matches</td>
+                  <td><span style="color:var(--success);font-weight:600">42%</span></td>
+                  <td><button style="padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:3px;font-size:0.72rem;cursor:pointer">Use</button></td>
+                </tr>
+                <tr>
+                  <td><b>Follow-up After Visit</b></td>
+                  <td>Post site-visit check-in</td>
+                  <td><span style="color:var(--success);font-weight:600">38%</span></td>
+                  <td><button style="padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:3px;font-size:0.72rem;cursor:pointer">Use</button></td>
+                </tr>
+                <tr>
+                  <td><b>Price Drop Alert</b></td>
+                  <td>Notify interested leads of reduction</td>
+                  <td><span style="color:var(--success);font-weight:600">55%</span></td>
+                  <td><button style="padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:3px;font-size:0.72rem;cursor:pointer">Use</button></td>
+                </tr>
+                <tr>
+                  <td><b>Re-engagement (Cold)</b></td>
+                  <td>Win back inactive leads (30+ days)</td>
+                  <td><span style="color:var(--muted);font-weight:600">18%</span></td>
+                  <td><button style="padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:3px;font-size:0.72rem;cursor:pointer">Use</button></td>
+                </tr>
+                <tr>
+                  <td><b>Deal Closed — Thank You</b></td>
+                  <td>Post-transaction thank you + review ask</td>
+                  <td><span style="color:var(--success);font-weight:600">61%</span></td>
+                  <td><button style="padding:4px 10px;background:var(--gold);color:white;border:none;border-radius:3px;font-size:0.72rem;cursor:pointer">Use</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div><!-- /crm-main -->
+      </div><!-- /crm-layout -->
+    </div><!-- /crm-dashboard -->
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-logo">Estate<span>IQ</span></div><div class="footer-tagline">India's most trusted online real estate platform.</div></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="index.html">Home</a></li></ul></div>
+    <div class="footer-col"><h4>Business</h4><ul><li><a href="revenue.html">Revenue Model</a></li><li><a href="marketing.html">Marketing</a></li><li><a href="crm.html">CRM</a></li><li><a href="security.html">Security</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 EstateIQ Technologies Pvt. Ltd.</span></div>
+</footer>
+
+<script>
+  function showPanel(name, el) {
+    document.querySelectorAll('.crm-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.crm-nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-'+name).classList.add('active');
+    el.classList.add('active');
+  }
+
+  function toggleTask(cb) {
+    cb.classList.toggle('done');
+    const titleEl = cb.nextElementSibling.querySelector('.task-title');
+    titleEl.classList.toggle('done-text');
+  }
+
+  function addTask() {
+    const name = prompt('Task description:');
+    if (!name) return;
+    const list = document.getElementById('task-list');
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `<div class="task-cb" onclick="toggleTask(this)"></div><div style="flex:1"><div class="task-title">${name}</div><div class="task-meta"><span>📅 Today</span><span class="task-priority priority-med">Medium</span></div></div>`;
+    list.appendChild(div);
+  }
+
+  let draggedId = null;
+  function drag(e) { draggedId = e.target.id; }
+  function allowDrop(e) { e.preventDefault(); }
+  function drop(e, stage) {
+    e.preventDefault();
+    if (!draggedId) return;
+    const el = document.getElementById(draggedId);
+    document.getElementById('stage-'+stage).appendChild(el);
+    updateCounts();
+  }
+
+  function updateCounts() {
+    ['new','contacted','visit','negotiating','closed'].forEach(s => {
+      const cnt = document.getElementById('stage-'+s);
+      if (cnt) document.getElementById('count-'+s).textContent = cnt.children.length;
+    });
+  }
+
+  function addLead() {
+    const name = prompt('Lead name:');
+    if (!name) return;
+    const budget = prompt('Budget (e.g. ₹1.5 Cr):') || '₹?';
+    const id = 'lead'+Date.now();
+    const div = document.createElement('div');
+    div.className = 'lead-card warm';
+    div.draggable = true;
+    div.id = id;
+    div.ondragstart = drag;
+    div.innerHTML = `<div class="lead-name">${name}</div><div class="lead-prop">New enquiry</div><div class="lead-meta"><span class="lead-budget">${budget}</span><span class="lead-days">Just now</span></div>`;
+    document.getElementById('stage-new').appendChild(div);
+    updateCounts();
+  }
+
+  function filterContacts(btn, filter) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+</script>
+</body>
+</html>

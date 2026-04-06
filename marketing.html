@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marketing Strategy — EstateIQ</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #2a3a60 100%);
+      padding: 80px 48px 64px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero h1 { color: var(--white); font-size: 3.2rem; margin-bottom: 12px; }
+    .page-hero p { color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    .funnel-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-top: 48px;
+    }
+    .funnel-stage {
+      text-align: center;
+      padding: 22px 40px;
+      color: var(--white);
+      cursor: default;
+      transition: filter 0.2s;
+      clip-path: polygon(4% 0%, 96% 0%, 100% 100%, 0% 100%);
+    }
+    .funnel-stage:hover { filter: brightness(1.1); }
+    .funnel-stage h4 { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; }
+    .funnel-stage p { font-size: 0.78rem; opacity: 0.75; }
+    .funnel-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; margin-bottom: 2px; }
+
+    .strat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .strat-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 32px 28px;
+      box-shadow: var(--card-shadow);
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 20px;
+    }
+    .strat-icon-box {
+      width: 56px; height: 56px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .strat-card h3 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; margin-bottom: 8px; color: var(--navy); }
+    .strat-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+    .strat-tactics { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tactic-chip {
+      padding: 4px 10px;
+      background: var(--paper);
+      border-radius: 20px;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* CHANNEL MIX */
+    .channel-bar-row {
+      display: grid;
+      grid-template-columns: 160px 1fr 60px;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .channel-bar-row:last-child { border-bottom: none; }
+    .channel-name { font-size: 0.85rem; font-weight: 500; color: var(--ink); }
+    .channel-bar-bg { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .channel-bar-fill { height: 100%; border-radius: 4px; }
+    .channel-pct { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--navy); text-align: right; }
+
+    /* CAMPAIGN CALENDAR */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .cal-quarter {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+    }
+    .cal-q-label { font-size: 0.7rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 8px; }
+    .cal-q-title { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; color: var(--navy); margin-bottom: 12px; }
+    .cal-items { display: flex; flex-direction: column; gap: 8px; }
+    .cal-item { font-size: 0.78rem; color: var(--muted); display: flex; align-items: flex-start; gap: 6px; }
+    .cal-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 5px; flex-shrink: 0; }
+
+    /* KPIs */
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+    .kpi-card { background: var(--white); border-radius: 8px; padding: 24px; box-shadow: var(--card-shadow); border-left: 3px solid var(--gold); }
+    .kpi-val { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--navy); font-weight: 600; margin-bottom: 4px; }
+    .kpi-name { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); }
+
+    /* REFERRAL */
+    .referral-box {
+      background: var(--navy);
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .referral-box h3 { color: var(--white); font-size: 1.8rem; margin-bottom: 12px; }
+    .referral-box p { color: rgba(255,255,255,0.5); font-size: 0.88rem; line-height: 1.7; margin-bottom: 24px; }
+    .referral-steps { display: flex; flex-direction: column; gap: 16px; }
+    .ref-step { display: flex; align-items: flex-start; gap: 16px; }
+    .ref-num { width: 28px; height: 28px; border-radius: 50%; background: var(--gold); color: white; font-size: 0.75rem; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ref-text h5 { color: var(--white); font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 500; margin-bottom: 2px; }
+    .ref-text p { color: rgba(255,255,255,0.45); font-size: 0.8rem; margin: 0; }
+    .reward-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 28px; text-align: center; }
+    .reward-amt { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--gold); font-weight: 600; }
+    .reward-label { color: rgba(255,255,255,0.5); font-size: 0.82rem; margin-top: 8px; }
+    .reward-sub { color: rgba(255,255,255,0.3); font-size: 0.75rem; margin-top: 4px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="revenue.html">Revenue</a>
+    <a href="marketing.html" class="active">Marketing</a>
+    <a href="crm.html">CRM</a>
+    <a href="security.html">Security</a>
+    <a href="security.html" class="nav-cta">Sign In</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="section-label" style="color:var(--gold)">Go-To-Market</div>
+    <h1>Marketing Strategy</h1>
+    <p>A multi-channel digital marketing approach designed to build brand trust, generate leads, and drive platform adoption across India's top cities.</p>
+  </div>
+</div>
+
+<!-- ACQUISITION FUNNEL -->
+<section class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
+      <div>
+        <div class="section-label">The Framework</div>
+        <h2 class="section-title">Acquisition Funnel</h2>
+        <p class="section-sub" style="margin-bottom:28px;">We drive users through a structured AIDA funnel — from initial awareness all the way to advocacy and referrals.</p>
+        <div class="funnel-wrap" style="align-items:stretch;">
+          <div class="funnel-stage" style="background:var(--navy);border-radius:8px 8px 0 0">
+            <div class="funnel-num">2.5M+</div>
+            <h4>Awareness</h4>
+            <p>SEO, social media, ads, PR</p>
+          </div>
+          <div class="funnel-stage" style="background:#253153;margin:2px 20px;">
+            <div class="funnel-num">480K</div>
+            <h4>Interest</h4>
+            <p>Property search, content, retargeting</p>
+          </div>
+          <div class="funnel-stage" style="background:#b8924a;margin:2px 40px;">
+            <div class="funnel-num">96K</div>
+            <h4>Desire</h4>
+            <p>Agent connect, saved listings, alerts</p>
+          </div>
+          <div class="funnel-stage" style="background:#a07d3a;margin:2px 60px;border-radius:0 0 8px 8px;">
+            <div class="funnel-num">22K</div>
+            <h4>Action</h4>
+            <p>Site visits, deals closed</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Channel Mix</div>
+        <h2 class="section-title" style="font-size:2rem;">Budget Allocation</h2>
+        <p style="font-size:0.85rem;color:var(--muted);margin-bottom:28px;">Year 1 marketing budget: ₹80 Lakhs</p>
+        <div>
+          <div class="channel-bar-row">
+            <span class="channel-name">🔍 SEO & Content</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:35%;background:var(--gold)"></div></div>
+            <span class="channel-pct">35%</span>
+          </div>
+          <div class="channel-bar-row">
+            <span class="channel-name">📱 Social Media Ads</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:25%;background:var(--navy)"></div></div>
+            <span class="channel-pct">25%</span>
+          </div>
+          <div class="channel-bar-row">
+            <span class="channel-name">💰 Google Ads (PPC)</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:20%;background:#5d7a94"></div></div>
+            <span class="channel-pct">20%</span>
+          </div>
+          <div class="channel-bar-row">
+            <span class="channel-name">🤝 Influencer / PR</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:10%;background:#9fb870"></div></div>
+            <span class="channel-pct">10%</span>
+          </div>
+          <div class="channel-bar-row">
+            <span class="channel-name">📧 Email Marketing</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:5%;background:#c8b890"></div></div>
+            <span class="channel-pct">5%</span>
+          </div>
+          <div class="channel-bar-row">
+            <span class="channel-name">🎁 Referral Program</span>
+            <div class="channel-bar-bg"><div class="channel-bar-fill" style="width:5%;background:#8a8278"></div></div>
+            <span class="channel-pct">5%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STRATEGY CARDS -->
+<section class="section" style="background:var(--paper)">
+  <div class="container">
+    <div class="section-label">Channels</div>
+    <h2 class="section-title">Marketing Channels in Detail</h2>
+    <div class="strat-grid">
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(184,146,74,0.1)">🔍</div>
+        <div>
+          <h3>SEO & Content Marketing</h3>
+          <p>Target high-intent keywords like "3 BHK flats in Mumbai", "buy apartment Bangalore under 1 crore". Publish area guides, investment tips, market reports to drive organic traffic and establish authority.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Long-tail keywords</span>
+            <span class="tactic-chip">Area guides</span>
+            <span class="tactic-chip">Blog content</span>
+            <span class="tactic-chip">Backlink building</span>
+            <span class="tactic-chip">Local SEO</span>
+          </div>
+        </div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(26,37,64,0.08)">📱</div>
+        <div>
+          <h3>Social Media Marketing</h3>
+          <p>Instagram & Facebook campaigns featuring property tours, success stories, and market tips. YouTube channel with neighbourhood walkthroughs. LinkedIn for B2B targeting of agents and builders.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Instagram Reels</span>
+            <span class="tactic-chip">Facebook Ads</span>
+            <span class="tactic-chip">YouTube Tours</span>
+            <span class="tactic-chip">LinkedIn B2B</span>
+          </div>
+        </div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(93,122,148,0.1)">💰</div>
+        <div>
+          <h3>Performance Marketing (PPC)</h3>
+          <p>Google Search Ads targeting buyers at decision stage. Retargeting campaigns for users who viewed listings but didn't enquire. Display ads on real estate news portals and financial websites.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Google Search Ads</span>
+            <span class="tactic-chip">Retargeting</span>
+            <span class="tactic-chip">Display Network</span>
+            <span class="tactic-chip">A/B Testing</span>
+          </div>
+        </div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(159,184,112,0.1)">🤝</div>
+        <div>
+          <h3>Influencer & PR Marketing</h3>
+          <p>Partner with finance influencers (Fintech YouTube channels, Instagram personal finance creators) and local lifestyle bloggers in each city. Press coverage in Economic Times Property, Mint, Moneycontrol.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Finance influencers</span>
+            <span class="tactic-chip">Press releases</span>
+            <span class="tactic-chip">City lifestyle blogs</span>
+            <span class="tactic-chip">Podcast appearances</span>
+          </div>
+        </div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(200,184,144,0.2)">📧</div>
+        <div>
+          <h3>Email & WhatsApp Marketing</h3>
+          <p>Weekly "New Listings in Your Area" emails. Price drop alerts. Monthly market reports. WhatsApp Business API for instant property alerts and agent communication.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Drip campaigns</span>
+            <span class="tactic-chip">Price alerts</span>
+            <span class="tactic-chip">WhatsApp Business</span>
+            <span class="tactic-chip">Segmented lists</span>
+          </div>
+        </div>
+      </div>
+      <div class="strat-card">
+        <div class="strat-icon-box" style="background:rgba(138,130,120,0.1)">🏙️</div>
+        <div>
+          <h3>Offline & Partnership Marketing</h3>
+          <p>Tie-ups with housing loan banks (HDFC, SBI Home Loans), co-branded campaigns. Property expos in Mumbai, Pune, Bangalore. Corporate tie-ups for employee housing programs.</p>
+          <div class="strat-tactics">
+            <span class="tactic-chip">Bank partnerships</span>
+            <span class="tactic-chip">Property expos</span>
+            <span class="tactic-chip">Corporate deals</span>
+            <span class="tactic-chip">Builder tie-ups</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- REFERRAL PROGRAM -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Viral Growth</div>
+    <h2 class="section-title">Referral Program</h2>
+    <div class="referral-box">
+      <div>
+        <h3>Earn When You Refer</h3>
+        <p>Our referral program turns happy customers into brand ambassadors. Both the referrer and new user benefit — creating a viral growth loop that reduces customer acquisition cost over time.</p>
+        <div class="referral-steps">
+          <div class="ref-step">
+            <div class="ref-num">1</div>
+            <div class="ref-text"><h5>Share Your Unique Link</h5><p>Users get a unique referral code to share with friends looking to buy, sell, or rent.</p></div>
+          </div>
+          <div class="ref-step">
+            <div class="ref-num">2</div>
+            <div class="ref-text"><h5>Friend Signs Up & Transacts</h5><p>When the referred friend completes a property enquiry or transaction on EstateIQ.</p></div>
+          </div>
+          <div class="ref-step">
+            <div class="ref-num">3</div>
+            <div class="ref-text"><h5>Both Earn Rewards</h5><p>Referrer earns ₹2,000 cashback. New user gets ₹500 off their first subscription or service.</p></div>
+          </div>
+        </div>
+      </div>
+      <div class="reward-box">
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:8px">You Earn</div>
+        <div class="reward-amt">₹2,000</div>
+        <div class="reward-label">per successful referral</div>
+        <div style="margin:20px 0;height:1px;background:rgba(255,255,255,0.08)"></div>
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.4);margin-bottom:8px">Your Friend Gets</div>
+        <div class="reward-amt" style="font-size:2.5rem">₹500</div>
+        <div class="reward-label">off their first transaction</div>
+        <div class="reward-sub">No cap on referrals. Earn unlimited rewards.</div>
+        <a href="security.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:20px;">Start Referring →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CAMPAIGN CALENDAR -->
+<section class="section" style="background:var(--paper)">
+  <div class="container">
+    <div class="section-label">Planning</div>
+    <h2 class="section-title">Year 1 Campaign Calendar</h2>
+    <div class="cal-grid">
+      <div class="cal-quarter">
+        <div class="cal-q-label">Q1 — Jan to Mar</div>
+        <div class="cal-q-title">🚀 Launch & Awareness</div>
+        <div class="cal-items">
+          <div class="cal-item"><div class="cal-dot"></div><span>Platform launch PR blitz in 5 cities</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Google & Facebook brand awareness campaigns</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Agent onboarding drive</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>SEO foundation: area guides published</span></div>
+        </div>
+      </div>
+      <div class="cal-quarter">
+        <div class="cal-q-label">Q2 — Apr to Jun</div>
+        <div class="cal-q-title">📈 Growth & Content</div>
+        <div class="cal-items">
+          <div class="cal-item"><div class="cal-dot"></div><span>Influencer partnership launches</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>"Summer New Launches" campaign</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>YouTube property tour series kicks off</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>WhatsApp alert service launch</span></div>
+        </div>
+      </div>
+      <div class="cal-quarter">
+        <div class="cal-q-label">Q3 — Jul to Sep</div>
+        <div class="cal-q-title">🏆 Festive Push</div>
+        <div class="cal-items">
+          <div class="cal-item"><div class="cal-dot"></div><span>Navratri + Dussehra property sales event</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Bank loan partnership campaigns</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Referral program national rollout</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Property expo participation (Mumbai)</span></div>
+        </div>
+      </div>
+      <div class="cal-quarter">
+        <div class="cal-q-label">Q4 — Oct to Dec</div>
+        <div class="cal-q-title">🎉 Retention & Scale</div>
+        <div class="cal-items">
+          <div class="cal-item"><div class="cal-dot"></div><span>Diwali "Dream Home" mega campaign</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Year-end market report (PR)</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Loyalty rewards for returning users</span></div>
+          <div class="cal-item"><div class="cal-dot"></div><span>Expand to 5 new cities</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- KPIs -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">Measurement</div>
+    <h2 class="section-title">Key Marketing KPIs</h2>
+    <p class="section-sub">We track these metrics monthly to measure campaign effectiveness and marketing ROI.</p>
+    <div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-val">₹320</div><div class="kpi-name">Customer Acquisition Cost (CAC)</div></div>
+      <div class="kpi-card"><div class="kpi-val">4.2%</div><div class="kpi-name">Lead-to-Enquiry Conversion Rate</div></div>
+      <div class="kpi-card"><div class="kpi-val">8.5x</div><div class="kpi-name">Marketing ROI (Year 1 Target)</div></div>
+      <div class="kpi-card"><div class="kpi-val">38%</div><div class="kpi-name">Organic Traffic Share (SEO)</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div><div class="footer-logo">Estate<span>IQ</span></div><div class="footer-tagline">India's most trusted online real estate platform.</div></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="index.html">Home</a></li></ul></div>
+    <div class="footer-col"><h4>Business</h4><ul><li><a href="revenue.html">Revenue Model</a></li><li><a href="marketing.html">Marketing</a></li><li><a href="crm.html">CRM</a></li><li><a href="security.html">Security</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 EstateIQ Technologies Pvt. Ltd.</span></div>
+</footer>
+</body>
+</html>
