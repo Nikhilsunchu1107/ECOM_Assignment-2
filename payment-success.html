@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Successful — EstateIQ</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .success-hero {
+      min-height: 60vh;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .success-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(184,146,74,0.15) 0%, transparent 60%);
+    }
+    .success-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 48px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      max-width: 480px;
+      width: 90%;
+      position: relative;
+      z-index: 1;
+    }
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      font-size: 2.5rem;
+    }
+    .success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .success-message {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .transaction-id {
+      background: var(--paper);
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .transaction-id strong {
+      color: var(--navy);
+    }
+    .btn-home {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--navy);
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .btn-home:hover {
+      background: #2a3a5a;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="revenue.html">Revenue</a>
+    <a href="marketing.html">Marketing</a>
+    <a href="crm.html">CRM</a>
+    <a href="security.html">Security</a>
+    <a href="security.html" class="nav-cta">Sign In</a>
+  </div>
+</nav>
+
+<div class="success-hero">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h1 class="success-title">Payment Successful!</h1>
+    <p class="success-message">Your transaction has been processed. You will receive a confirmation email shortly with the payment details.</p>
+<div class="transaction-id">
+      Transaction ID: <strong id="txn-id">Loading...</strong>
+    </div>
+    <a href="index.html" class="btn-home">Return to Home</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Estate<span>IQ</span></div>
+      <div class="footer-tagline">India's most trusted online real estate platform.</div>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="index.html">Home</a></li><li><a href="#">Buy Property</a></li></ul></div>
+    <div class="footer-col"><h4>Business</h4><ul><li><a href="revenue.html">Revenue Model</a></li><li><a href="marketing.html">Marketing</a></li><li><a href="crm.html">CRM Strategy</a></li><li><a href="security.html">Security</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 EstateIQ Technologies Pvt. Ltd.</span><span>RERA Registered</span></div>
+</footer>
+
+<script>
+  document.getElementById('txn-id').textContent = 'TXN-' + Math.random().toString(36).substr(2, 10).toUpperCase();
+</script>
+
+</body>
+</html>

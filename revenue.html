@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Revenue Model — EstateIQ</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
   <style>
     .page-hero {
       background: var(--navy);
@@ -12,16 +13,33 @@
       position: relative;
       overflow: hidden;
     }
+
     .page-hero::after {
       content: '';
-      position: absolute; right: -100px; top: -100px;
-      width: 500px; height: 500px;
+      position: absolute;
+      right: -100px;
+      top: -100px;
+      width: 500px;
+      height: 500px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(184,146,74,0.12) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(184, 146, 74, 0.12) 0%, transparent 70%);
     }
-    .page-hero .container { position: relative; z-index: 1; }
-    .page-hero h1 { color: var(--white); font-size: 3.2rem; margin-bottom: 12px; }
-    .page-hero p { color: rgba(255,255,255,0.5); max-width: 560px; }
+
+    .page-hero .container {
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-hero h1 {
+      color: var(--white);
+      font-size: 3.2rem;
+      margin-bottom: 12px;
+    }
+
+    .page-hero p {
+      color: rgba(255, 255, 255, 0.5);
+      max-width: 560px;
+    }
 
     /* REVENUE STREAMS */
     .stream-grid {
@@ -30,6 +48,7 @@
       gap: 24px;
       margin-top: 48px;
     }
+
     .stream-card {
       background: var(--white);
       border-radius: 10px;
@@ -38,12 +57,43 @@
       border-top: 3px solid var(--border);
       transition: border-color 0.2s;
     }
-    .stream-card:hover { border-top-color: var(--gold); }
-    .stream-icon { font-size: 2.2rem; margin-bottom: 16px; }
-    .stream-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--navy); margin-bottom: 8px; }
-    .stream-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
-    .stream-amount { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: var(--gold); font-weight: 600; }
-    .stream-amount span { font-size: 0.8rem; font-family: 'DM Sans', sans-serif; color: var(--muted); font-weight: 400; }
+
+    .stream-card:hover {
+      border-top-color: var(--gold);
+    }
+
+    .stream-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+    }
+
+    .stream-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .stream-desc {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .stream-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .stream-amount span {
+      font-size: 0.8rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--muted);
+      font-weight: 400;
+    }
 
     /* PRICING TABLE */
     .pricing-grid {
@@ -52,6 +102,7 @@
       gap: 24px;
       margin-top: 48px;
     }
+
     .plan-card {
       background: var(--white);
       border-radius: 10px;
@@ -59,30 +110,108 @@
       box-shadow: var(--card-shadow);
       position: relative;
     }
+
     .plan-card.featured {
       background: var(--navy);
       transform: scale(1.04);
     }
+
     .plan-badge {
-      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--gold); color: white;
-      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 4px 14px; border-radius: 20px;
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 14px;
+      border-radius: 20px;
     }
-    .plan-name { font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
-    .plan-card.featured .plan-name { color: rgba(255,255,255,0.4); }
-    .plan-price { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; color: var(--navy); line-height: 1; }
-    .plan-card.featured .plan-price { color: var(--white); }
-    .plan-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 8px; display: inline-block; }
-    .plan-price sub { font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 400; }
-    .plan-desc { font-size: 0.82rem; color: var(--muted); margin: 8px 0 24px; }
-    .plan-card.featured .plan-desc { color: rgba(255,255,255,0.4); }
-    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
-    .plan-features li { font-size: 0.85rem; display: flex; align-items: center; gap: 10px; }
-    .plan-card.featured .plan-features li { color: rgba(255,255,255,0.75); }
-    .check { color: var(--success); font-size: 0.9rem; }
-    .plan-card.featured .check { color: var(--gold); }
-    .cross { color: var(--muted); font-size: 0.9rem; }
+
+    .plan-name {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .plan-card.featured .plan-name {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .plan-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .plan-card.featured .plan-price {
+      color: var(--white);
+    }
+
+    .plan-price sup {
+      font-size: 1.2rem;
+      vertical-align: top;
+      margin-top: 8px;
+      display: inline-block;
+    }
+
+    .plan-price sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    .plan-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 8px 0 24px;
+    }
+
+    .plan-card.featured .plan-desc {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .plan-features li {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .plan-card.featured .plan-features li {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .check {
+      color: var(--success);
+      font-size: 0.9rem;
+    }
+
+    .plan-card.featured .check {
+      color: var(--gold);
+    }
+
+    .cross {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
 
     /* PIE CHART VISUAL */
     .rev-breakdown {
@@ -96,313 +225,530 @@
       align-items: center;
       margin-top: 48px;
     }
-    .donut-wrap { position: relative; width: 220px; margin: 0 auto; }
-    .donut-label { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .donut-label .big { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; color: var(--navy); }
-    .donut-label .small { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
-    .legend-item { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-    .legend-label { font-size: 0.85rem; color: var(--ink); flex: 1; }
-    .legend-pct { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--navy); }
+
+    .donut-wrap {
+      position: relative;
+      width: 220px;
+      margin: 0 auto;
+    }
+
+    .donut-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donut-label .big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .donut-label .small {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .legend-label {
+      font-size: 0.85rem;
+      color: var(--ink);
+      flex: 1;
+    }
+
+    .legend-pct {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
 
     /* FINANCIAL PROJECTIONS */
-    .proj-table-wrap { background: var(--white); border-radius: 10px; box-shadow: var(--card-shadow); overflow: hidden; margin-top: 48px; }
-    .proj-header { background: var(--navy); padding: 24px 32px; }
-    .proj-header h3 { color: var(--white); font-size: 1.2rem; }
-    .bar-row { display: grid; grid-template-columns: 80px 1fr 80px; gap: 16px; align-items: center; padding: 12px 32px; border-bottom: 1px solid var(--border); }
-    .bar-row:last-child { border-bottom: none; }
-    .bar-year { font-size: 0.78rem; font-weight: 500; color: var(--muted); text-transform: uppercase; }
-    .bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-    .bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); border-radius: 4px; transition: width 1s ease; }
-    .bar-value { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--navy); text-align: right; }
+    .proj-table-wrap {
+      background: var(--white);
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-top: 48px;
+    }
+
+    .proj-header {
+      background: var(--navy);
+      padding: 24px 32px;
+    }
+
+    .proj-header h3 {
+      color: var(--white);
+      font-size: 1.2rem;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 80px;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bar-row:last-child {
+      border-bottom: none;
+    }
+
+    .bar-year {
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .bar-track {
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 4px;
+      transition: width 1s ease;
+    }
+
+    .bar-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      text-align: right;
+    }
 
     /* COMMISSION MODEL */
-    .commission-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 48px; }
-    .comm-card { background: var(--white); border-radius: 10px; padding: 28px; box-shadow: var(--card-shadow); }
-    .comm-card h4 { font-family: 'DM Sans', sans-serif; font-size: 1rem; font-weight: 500; margin-bottom: 8px; color: var(--navy); }
-    .comm-rate { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; color: var(--gold); font-weight: 600; margin: 4px 0; }
-    .comm-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+    .commission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    .comm-card {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 28px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .comm-card h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--navy);
+    }
+
+    .comm-rate {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.4rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin: 4px 0;
+    }
+
+    .comm-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
   </style>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    function initRazorpay(planName, amount) {
+      var options = {
+        "key": "rzp_test_SZLsFwKR6ceM6J", // <-- Add your test key here!
+        "amount": amount * 100,
+        "currency": "INR",
+        "name": "EstateIQ",
+        "description": planName + " Plan",
+        "theme": { "color": "#1a2540" },
+        "handler": function (response) {
+          window.location.href = "payment-success.html";
+        }
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
 </head>
+
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
-  <div class="nav-links">
-    <a href="index.html">Home</a>
-    <a href="revenue.html" class="active">Revenue</a>
-    <a href="marketing.html">Marketing</a>
-    <a href="crm.html">CRM</a>
-    <a href="security.html">Security</a>
-    <a href="security.html" class="nav-cta">Sign In</a>
-  </div>
-</nav>
+  <nav>
+    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="revenue.html" class="active">Revenue</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="crm.html">CRM</a>
+      <a href="security.html">Security</a>
+      <a href="security.html" class="nav-cta">Sign In</a>
+    </div>
+  </nav>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <div class="container">
-    <div class="section-label" style="color:var(--gold)">Business Model</div>
-    <h1>Revenue Model</h1>
-    <p>How EstateIQ generates sustainable revenue across multiple streams while delivering value to buyers, sellers, and agents.</p>
-  </div>
-</div>
-
-<!-- OVERVIEW -->
-<section class="section">
-  <div class="container">
-    <div class="section-label">Overview</div>
-    <h2 class="section-title">Multiple Revenue Streams</h2>
-    <p class="section-sub">EstateIQ operates on a diversified model — combining subscription plans, transaction commissions, advertising, and value-added services to ensure stable and scalable income.</p>
-
-    <div class="stream-grid">
-      <div class="stream-card">
-        <div class="stream-icon">📋</div>
-        <div class="stream-title">Subscription Plans</div>
-        <div class="stream-desc">Agents and builders pay monthly or annual fees to list properties, access leads, and use advanced CRM tools on our platform.</div>
-        <div class="stream-amount">₹999 – ₹4,999 <span>/ month</span></div>
-      </div>
-      <div class="stream-card">
-        <div class="stream-icon">💰</div>
-        <div class="stream-title">Transaction Commission</div>
-        <div class="stream-desc">A 0.5% – 2% commission is charged on successful property transactions facilitated through EstateIQ's platform.</div>
-        <div class="stream-amount">0.5% – 2% <span>of deal value</span></div>
-      </div>
-      <div class="stream-card">
-        <div class="stream-icon">⭐</div>
-        <div class="stream-title">Featured Listings</div>
-        <div class="stream-desc">Sellers and agents can pay to boost their listing to the top of search results and get a "Featured" badge for higher visibility.</div>
-        <div class="stream-amount">₹2,000 – ₹15,000 <span>/ listing</span></div>
-      </div>
-      <div class="stream-card">
-        <div class="stream-icon">📢</div>
-        <div class="stream-title">Display Advertising</div>
-        <div class="stream-desc">Banks, home loan companies, interior designers, and moving services advertise on the platform to reach our high-intent audience.</div>
-        <div class="stream-amount">CPM / CPC <span>based model</span></div>
-      </div>
-      <div class="stream-card">
-        <div class="stream-icon">📊</div>
-        <div class="stream-title">Market Intelligence Reports</div>
-        <div class="stream-desc">Premium market trend reports, price analytics, and investment insights sold to developers, investors, and financial institutions.</div>
-        <div class="stream-amount">₹5,000 – ₹50,000 <span>/ report</span></div>
-      </div>
-      <div class="stream-card">
-        <div class="stream-icon">🏠</div>
-        <div class="stream-title">Value-Added Services</div>
-        <div class="stream-desc">Home loan referrals (referral fee), legal documentation assistance, interior design packages, and packers & movers partnerships.</div>
-        <div class="stream-amount">₹1,500 – ₹10,000 <span>/ service</span></div>
-      </div>
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="section-label" style="color:var(--gold)">Business Model</div>
+      <h1>Revenue Model</h1>
+      <p>How EstateIQ generates sustainable revenue across multiple streams while delivering value to buyers, sellers,
+        and agents.</p>
     </div>
   </div>
-</section>
 
-<div class="divider"></div>
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Overview</div>
+      <h2 class="section-title">Multiple Revenue Streams</h2>
+      <p class="section-sub">EstateIQ operates on a diversified model — combining subscription plans, transaction
+        commissions, advertising, and value-added services to ensure stable and scalable income.</p>
 
-<!-- SUBSCRIPTION PLANS -->
-<section class="section">
-  <div class="container">
-    <div class="section-label">Pricing</div>
-    <h2 class="section-title">Agent & Builder Plans</h2>
-    <p class="section-sub">Flexible plans for individual agents to large development companies.</p>
-
-    <div class="pricing-grid">
-      <!-- Starter -->
-      <div class="plan-card">
-        <div class="plan-name">Starter</div>
-        <div class="plan-price"><sup>₹</sup>999<sub>/mo</sub></div>
-        <div class="plan-desc">For independent agents just starting out</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 5 active listings</li>
-          <li><span class="check">✓</span> Basic lead management</li>
-          <li><span class="check">✓</span> Standard search placement</li>
-          <li><span class="check">✓</span> Email support</li>
-          <li><span class="cross">✗</span> Analytics dashboard</li>
-          <li><span class="cross">✗</span> Featured listing slots</li>
-          <li><span class="cross">✗</span> CRM access</li>
-        </ul>
-        <a href="security.html" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
-      </div>
-
-      <!-- Professional (Featured) -->
-      <div class="plan-card featured">
-        <div class="plan-badge">Most Popular</div>
-        <div class="plan-name">Professional</div>
-        <div class="plan-price"><sup>₹</sup>2,499<sub>/mo</sub></div>
-        <div class="plan-desc" style="color:rgba(255,255,255,0.4)">For active agents and small firms</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> 25 active listings</li>
-          <li><span class="check">✓</span> Full CRM dashboard</li>
-          <li><span class="check">✓</span> Priority search placement</li>
-          <li><span class="check">✓</span> Analytics & insights</li>
-          <li><span class="check">✓</span> 2 featured listing slots</li>
-          <li><span class="check">✓</span> Chat + phone support</li>
-          <li><span class="check">✓</span> Lead scoring</li>
-        </ul>
-        <a href="security.html" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
-      </div>
-
-      <!-- Enterprise -->
-      <div class="plan-card">
-        <div class="plan-name">Enterprise</div>
-        <div class="plan-price"><sup>₹</sup>4,999<sub>/mo</sub></div>
-        <div class="plan-desc">For builders and large real estate firms</div>
-        <ul class="plan-features">
-          <li><span class="check">✓</span> Unlimited listings</li>
-          <li><span class="check">✓</span> Dedicated account manager</li>
-          <li><span class="check">✓</span> Top search placement</li>
-          <li><span class="check">✓</span> Advanced analytics API</li>
-          <li><span class="check">✓</span> 10 featured listing slots</li>
-          <li><span class="check">✓</span> 24/7 priority support</li>
-          <li><span class="check">✓</span> Custom branding</li>
-        </ul>
-        <a href="security.html" class="btn btn-navy" style="width:100%;justify-content:center;">Contact Sales</a>
+      <div class="stream-grid">
+        <div class="stream-card">
+          <div class="stream-icon">📋</div>
+          <div class="stream-title">Subscription Plans</div>
+          <div class="stream-desc">Agents and builders pay monthly or annual fees to list properties, access leads, and
+            use advanced CRM tools on our platform.</div>
+          <div class="stream-amount">₹999 – ₹4,999 <span>/ month</span></div>
+        </div>
+        <div class="stream-card">
+          <div class="stream-icon">💰</div>
+          <div class="stream-title">Transaction Commission</div>
+          <div class="stream-desc">A 0.5% – 2% commission is charged on successful property transactions facilitated
+            through EstateIQ's platform.</div>
+          <div class="stream-amount">0.5% – 2% <span>of deal value</span></div>
+        </div>
+        <div class="stream-card">
+          <div class="stream-icon">⭐</div>
+          <div class="stream-title">Featured Listings</div>
+          <div class="stream-desc">Sellers and agents can pay to boost their listing to the top of search results and
+            get a "Featured" badge for higher visibility.</div>
+          <div class="stream-amount">₹2,000 – ₹15,000 <span>/ listing</span></div>
+        </div>
+        <div class="stream-card">
+          <div class="stream-icon">📢</div>
+          <div class="stream-title">Display Advertising</div>
+          <div class="stream-desc">Banks, home loan companies, interior designers, and moving services advertise on the
+            platform to reach our high-intent audience.</div>
+          <div class="stream-amount">CPM / CPC <span>based model</span></div>
+        </div>
+        <div class="stream-card">
+          <div class="stream-icon">📊</div>
+          <div class="stream-title">Market Intelligence Reports</div>
+          <div class="stream-desc">Premium market trend reports, price analytics, and investment insights sold to
+            developers, investors, and financial institutions.</div>
+          <div class="stream-amount">₹5,000 – ₹50,000 <span>/ report</span></div>
+        </div>
+        <div class="stream-card">
+          <div class="stream-icon">🏠</div>
+          <div class="stream-title">Value-Added Services</div>
+          <div class="stream-desc">Home loan referrals (referral fee), legal documentation assistance, interior design
+            packages, and packers & movers partnerships.</div>
+          <div class="stream-amount">₹1,500 – ₹10,000 <span>/ service</span></div>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="divider"></div>
+  <div class="divider"></div>
 
-<!-- REVENUE BREAKDOWN (DONUT CHART) -->
-<section class="section" style="background:var(--paper)">
-  <div class="container">
-    <div class="section-label">Revenue Mix</div>
-    <h2 class="section-title">Revenue Breakdown</h2>
-    <p class="section-sub">Projected Year 2 revenue distribution across all income streams.</p>
+  <!-- SUBSCRIPTION PLANS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Agent & Builder Plans</h2>
+      <p class="section-sub">Flexible plans for individual agents to large development companies.</p>
 
-    <div class="rev-breakdown">
-      <div>
-        <div class="donut-wrap">
-          <svg viewBox="0 0 220 220" width="220" height="220">
-            <!-- Donut segments (manual SVG) -->
-            <!-- Total circumference for r=80: 2*pi*80 = 502.65 -->
-            <!-- Subscriptions 35% = 175.93, offset 0 -->
-            <!-- Commission 30% = 150.8, offset 175.93 -->
-            <!-- Featured 20% = 100.53, offset 326.73 -->
-            <!-- Ads 10% = 50.27, offset 427.26 -->
-            <!-- Reports 5% = 25.13, offset 477.53 -->
-            <circle cx="110" cy="110" r="80" fill="none" stroke="var(--border)" stroke-width="28"/>
-            <circle cx="110" cy="110" r="80" fill="none" stroke="#b8924a" stroke-width="28"
-              stroke-dasharray="175.93 326.72" stroke-dashoffset="125.66" />
-            <circle cx="110" cy="110" r="80" fill="none" stroke="#1a2540" stroke-width="28"
-              stroke-dasharray="150.8 351.85" stroke-dashoffset="-50.27" />
-            <circle cx="110" cy="110" r="80" fill="none" stroke="#5d7a94" stroke-width="28"
-              stroke-dasharray="100.53 402.12" stroke-dashoffset="-201.07" />
-            <circle cx="110" cy="110" r="80" fill="none" stroke="#9fb870" stroke-width="28"
-              stroke-dasharray="50.27 452.38" stroke-dashoffset="-301.6" />
-            <circle cx="110" cy="110" r="80" fill="none" stroke="#c8b890" stroke-width="28"
-              stroke-dasharray="25.13 477.52" stroke-dashoffset="-351.87" />
-          </svg>
-          <div class="donut-label">
-            <div class="big">₹4.2 Cr</div>
-            <div class="small">Year 2 ARR</div>
+      <div class="pricing-grid">
+        <!-- Starter -->
+        <div class="plan-card">
+          <div class="plan-name">Starter</div>
+          <div class="plan-price"><sup>₹</sup>999<sub>/mo</sub></div>
+          <div class="plan-desc">For independent agents just starting out</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> 5 active listings</li>
+            <li><span class="check">✓</span> Basic lead management</li>
+            <li><span class="check">✓</span> Standard search placement</li>
+            <li><span class="check">✓</span> Email support</li>
+            <li><span class="cross">✗</span> Analytics dashboard</li>
+            <li><span class="cross">✗</span> Featured listing slots</li>
+            <li><span class="cross">✗</span> CRM access</li>
+          </ul>
+          <a href="#" class="btn btn-outline" style="width:100%;justify-content:center;"
+            onclick="initRazorpay('Starter', 999); return false;">Get Started</a>
+        </div>
+
+        <!-- Professional (Featured) -->
+        <div class="plan-card featured">
+          <div class="plan-badge">Most Popular</div>
+          <div class="plan-name">Professional</div>
+          <div class="plan-price"><sup>₹</sup>2,499<sub>/mo</sub></div>
+          <div class="plan-desc" style="color:rgba(255,255,255,0.4)">For active agents and small firms</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> 25 active listings</li>
+            <li><span class="check">✓</span> Full CRM dashboard</li>
+            <li><span class="check">✓</span> Priority search placement</li>
+            <li><span class="check">✓</span> Analytics & insights</li>
+            <li><span class="check">✓</span> 2 featured listing slots</li>
+            <li><span class="check">✓</span> Chat + phone support</li>
+            <li><span class="check">✓</span> Lead scoring</li>
+          </ul>
+          <a href="#" class="btn btn-primary" style="width:100%;justify-content:center;"
+            onclick="initRazorpay('Professional', 2499); return false;">Get Started</a>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="plan-card">
+          <div class="plan-name">Enterprise</div>
+          <div class="plan-price"><sup>₹</sup>4,999<sub>/mo</sub></div>
+          <div class="plan-desc">For builders and large real estate firms</div>
+          <ul class="plan-features">
+            <li><span class="check">✓</span> Unlimited listings</li>
+            <li><span class="check">✓</span> Dedicated account manager</li>
+            <li><span class="check">✓</span> Top search placement</li>
+            <li><span class="check">✓</span> Advanced analytics API</li>
+            <li><span class="check">✓</span> 10 featured listing slots</li>
+            <li><span class="check">✓</span> 24/7 priority support</li>
+            <li><span class="check">✓</span> Custom branding</li>
+          </ul>
+          <a href="#" class="btn btn-navy" style="width:100%;justify-content:center;"
+            onclick="initRazorpay('Enterprise', 4999); return false;">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- REVENUE BREAKDOWN (DONUT CHART) -->
+  <section class="section" style="background:var(--paper)">
+    <div class="container">
+      <div class="section-label">Revenue Mix</div>
+      <h2 class="section-title">Revenue Breakdown</h2>
+      <p class="section-sub">Projected Year 2 revenue distribution across all income streams.</p>
+
+      <div class="rev-breakdown">
+        <div>
+          <div class="donut-wrap">
+            <svg viewBox="0 0 220 220" width="220" height="220">
+              <!-- Donut segments (manual SVG) -->
+              <!-- Total circumference for r=80: 2*pi*80 = 502.65 -->
+              <!-- Subscriptions 35% = 175.93, offset 0 -->
+              <!-- Commission 30% = 150.8, offset 175.93 -->
+              <!-- Featured 20% = 100.53, offset 326.73 -->
+              <!-- Ads 10% = 50.27, offset 427.26 -->
+              <!-- Reports 5% = 25.13, offset 477.53 -->
+              <circle cx="110" cy="110" r="80" fill="none" stroke="var(--border)" stroke-width="28" />
+              <circle cx="110" cy="110" r="80" fill="none" stroke="#b8924a" stroke-width="28"
+                stroke-dasharray="175.93 326.72" stroke-dashoffset="125.66" />
+              <circle cx="110" cy="110" r="80" fill="none" stroke="#1a2540" stroke-width="28"
+                stroke-dasharray="150.8 351.85" stroke-dashoffset="-50.27" />
+              <circle cx="110" cy="110" r="80" fill="none" stroke="#5d7a94" stroke-width="28"
+                stroke-dasharray="100.53 402.12" stroke-dashoffset="-201.07" />
+              <circle cx="110" cy="110" r="80" fill="none" stroke="#9fb870" stroke-width="28"
+                stroke-dasharray="50.27 452.38" stroke-dashoffset="-301.6" />
+              <circle cx="110" cy="110" r="80" fill="none" stroke="#c8b890" stroke-width="28"
+                stroke-dasharray="25.13 477.52" stroke-dashoffset="-351.87" />
+            </svg>
+            <div class="donut-label">
+              <div class="big">₹4.2 Cr</div>
+              <div class="small">Year 2 ARR</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="margin-bottom:8px;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--navy);">
+            Revenue Sources</div>
+          <div style="margin-bottom:24px;font-size:0.85rem;color:var(--muted);">Projected Year 2 annual recurring
+            revenue</div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#b8924a"></div>
+            <div class="legend-label">Subscription Plans</div>
+            <div class="legend-pct">35%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#1a2540"></div>
+            <div class="legend-label">Transaction Commission</div>
+            <div class="legend-pct">30%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#5d7a94"></div>
+            <div class="legend-label">Featured Listings</div>
+            <div class="legend-pct">20%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#9fb870"></div>
+            <div class="legend-label">Display Advertising</div>
+            <div class="legend-pct">10%</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#c8b890"></div>
+            <div class="legend-label">Reports & VAS</div>
+            <div class="legend-pct">5%</div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- PROJECTIONS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label">Growth</div>
+      <h2 class="section-title">Financial Projections</h2>
+      <p class="section-sub">Estimated revenue growth over 5 years with aggressive but achievable targets.</p>
+
+      <div class="proj-table-wrap">
+        <div class="proj-header">
+          <h3>Annual Revenue Forecast (₹ Crores)</h3>
+        </div>
+        <div style="padding: 24px 32px;">
+          <div class="bar-row">
+            <span class="bar-year">Year 1</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:10%"></div>
+            </div>
+            <span class="bar-value">₹0.8 Cr</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-year">Year 2</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:28%"></div>
+            </div>
+            <span class="bar-value">₹4.2 Cr</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-year">Year 3</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:50%"></div>
+            </div>
+            <span class="bar-value">₹9.5 Cr</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-year">Year 4</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:72%"></div>
+            </div>
+            <span class="bar-value">₹18 Cr</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-year">Year 5</span>
+            <div class="bar-track">
+              <div class="bar-fill" style="width:95%"></div>
+            </div>
+            <span class="bar-value">₹32 Cr</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Commission model -->
+      <div style="margin-top:56px;">
+        <div class="section-label">Commission Structure</div>
+        <h2 class="section-title" style="font-size:2rem">Transaction Commission Model</h2>
+        <div class="commission-grid">
+          <div class="comm-card">
+            <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏠</div>
+            <h4>Residential Sale</h4>
+            <div class="comm-rate">1%</div>
+            <div class="comm-desc">A 1% commission on the final transaction value of any residential property sale
+              facilitated through the platform. Split 50/50 between buyer's and seller's agent.</div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏢</div>
+            <h4>Commercial Property</h4>
+            <div class="comm-rate">2%</div>
+            <div class="comm-desc">Higher commission on commercial deals given greater complexity, longer sales cycles,
+              and higher deal values. Includes dedicated agent support.</div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🔑</div>
+            <h4>Rental Agreements</h4>
+            <div class="comm-rate">0.5%</div>
+            <div class="comm-desc">Half-month rent equivalent charged as one-time fee when a rental deal is closed via
+              the platform. Paid by the landlord or property manager.</div>
+          </div>
+          <div class="comm-card">
+            <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏗️</div>
+            <h4>New Projects (Builders)</h4>
+            <div class="comm-rate">1.5%</div>
+            <div class="comm-desc">Builders pay a 1.5% referral commission for every unit sold via EstateIQ, plus a flat
+              onboarding fee to list new launch projects on the platform.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
       <div>
-        <div style="margin-bottom:8px;font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--navy);">Revenue Sources</div>
-        <div style="margin-bottom:24px;font-size:0.85rem;color:var(--muted);">Projected Year 2 annual recurring revenue</div>
-        <div class="legend-item"><div class="legend-dot" style="background:#b8924a"></div><div class="legend-label">Subscription Plans</div><div class="legend-pct">35%</div></div>
-        <div class="legend-item"><div class="legend-dot" style="background:#1a2540"></div><div class="legend-label">Transaction Commission</div><div class="legend-pct">30%</div></div>
-        <div class="legend-item"><div class="legend-dot" style="background:#5d7a94"></div><div class="legend-label">Featured Listings</div><div class="legend-pct">20%</div></div>
-        <div class="legend-item"><div class="legend-dot" style="background:#9fb870"></div><div class="legend-label">Display Advertising</div><div class="legend-pct">10%</div></div>
-        <div class="legend-item"><div class="legend-dot" style="background:#c8b890"></div><div class="legend-label">Reports & VAS</div><div class="legend-pct">5%</div></div>
+        <div class="footer-logo">Estate<span>IQ</span></div>
+        <div class="footer-tagline">India's most trusted online real estate platform.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="#">Buy Property</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Business</h4>
+        <ul>
+          <li><a href="revenue.html">Revenue Model</a></li>
+          <li><a href="marketing.html">Marketing</a></li>
+          <li><a href="crm.html">CRM Strategy</a></li>
+          <li><a href="security.html">Security</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
       </div>
     </div>
-  </div>
-</section>
+    <div class="footer-bottom"><span>© 2025 EstateIQ Technologies Pvt. Ltd.</span><span>RERA Registered</span></div>
+  </footer>
 
-<div class="divider"></div>
-
-<!-- PROJECTIONS -->
-<section class="section">
-  <div class="container">
-    <div class="section-label">Growth</div>
-    <h2 class="section-title">Financial Projections</h2>
-    <p class="section-sub">Estimated revenue growth over 5 years with aggressive but achievable targets.</p>
-
-    <div class="proj-table-wrap">
-      <div class="proj-header"><h3>Annual Revenue Forecast (₹ Crores)</h3></div>
-      <div style="padding: 24px 32px;">
-        <div class="bar-row">
-          <span class="bar-year">Year 1</span>
-          <div class="bar-track"><div class="bar-fill" style="width:10%"></div></div>
-          <span class="bar-value">₹0.8 Cr</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-year">Year 2</span>
-          <div class="bar-track"><div class="bar-fill" style="width:28%"></div></div>
-          <span class="bar-value">₹4.2 Cr</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-year">Year 3</span>
-          <div class="bar-track"><div class="bar-fill" style="width:50%"></div></div>
-          <span class="bar-value">₹9.5 Cr</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-year">Year 4</span>
-          <div class="bar-track"><div class="bar-fill" style="width:72%"></div></div>
-          <span class="bar-value">₹18 Cr</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-year">Year 5</span>
-          <div class="bar-track"><div class="bar-fill" style="width:95%"></div></div>
-          <span class="bar-value">₹32 Cr</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Commission model -->
-    <div style="margin-top:56px;">
-      <div class="section-label">Commission Structure</div>
-      <h2 class="section-title" style="font-size:2rem">Transaction Commission Model</h2>
-      <div class="commission-grid">
-        <div class="comm-card">
-          <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏠</div>
-          <h4>Residential Sale</h4>
-          <div class="comm-rate">1%</div>
-          <div class="comm-desc">A 1% commission on the final transaction value of any residential property sale facilitated through the platform. Split 50/50 between buyer's and seller's agent.</div>
-        </div>
-        <div class="comm-card">
-          <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏢</div>
-          <h4>Commercial Property</h4>
-          <div class="comm-rate">2%</div>
-          <div class="comm-desc">Higher commission on commercial deals given greater complexity, longer sales cycles, and higher deal values. Includes dedicated agent support.</div>
-        </div>
-        <div class="comm-card">
-          <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🔑</div>
-          <h4>Rental Agreements</h4>
-          <div class="comm-rate">0.5%</div>
-          <div class="comm-desc">Half-month rent equivalent charged as one-time fee when a rental deal is closed via the platform. Paid by the landlord or property manager.</div>
-        </div>
-        <div class="comm-card">
-          <div class="comm-card-icon" style="font-size:1.5rem;margin-bottom:8px">🏗️</div>
-          <h4>New Projects (Builders)</h4>
-          <div class="comm-rate">1.5%</div>
-          <div class="comm-desc">Builders pay a 1.5% referral commission for every unit sold via EstateIQ, plus a flat onboarding fee to list new launch projects on the platform.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="footer-grid">
-    <div>
-      <div class="footer-logo">Estate<span>IQ</span></div>
-      <div class="footer-tagline">India's most trusted online real estate platform.</div>
-    </div>
-    <div class="footer-col"><h4>Platform</h4><ul><li><a href="index.html">Home</a></li><li><a href="#">Buy Property</a></li></ul></div>
-    <div class="footer-col"><h4>Business</h4><ul><li><a href="revenue.html">Revenue Model</a></li><li><a href="marketing.html">Marketing</a></li><li><a href="crm.html">CRM Strategy</a></li><li><a href="security.html">Security</a></li></ul></div>
-    <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="#">Contact Us</a></li></ul></div>
-  </div>
-  <div class="footer-bottom"><span>© 2025 EstateIQ Technologies Pvt. Ltd.</span><span>RERA Registered</span></div>
-</footer>
-
-<script>
-  // Animate bars on scroll
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.style.width = e.target.dataset.w; });
-  }, { threshold: 0.3 });
-</script>
+  <script>
+    // Animate bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.style.width = e.target.dataset.w; });
+    }, { threshold: 0.3 });
+  </script>
 </body>
+
 </html>
