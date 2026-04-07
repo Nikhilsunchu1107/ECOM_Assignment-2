@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | EstateIQ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="nexusrent.html">NexusRent</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="crm.html">CRM</a>
+      <a href="security.html">Security</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
+        <div class="nav-dropdown-menu">
+          <a href="landowner.html">Landowner</a>
+          <a href="client.html">Client (Tenant)</a>
+          <a href="admin.html" class="active">Admin</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="dashboard-hero">
+        <div class="section-label" style="color:var(--gold-light)">Admin Command Center</div>
+        <h1 style="font-size:2.6rem">Operations & Revenue Intelligence</h1>
+        <p>Unified analytics for property income, platform revenue, complaints trend, onboarding pipeline, and expansion planning.</p>
+      </div>
+
+      <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr);gap:14px;">
+        <div class="dashboard-card">
+          <h4>Total Properties</h4>
+          <div class="metric-value" id="kpi-total-properties">0</div>
+          <div class="metric-sub">All inventory on platform</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Available</h4>
+          <div class="metric-value" id="kpi-available">0</div>
+          <div class="metric-sub">Ready for booking / inquiry</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Sold / Rented Out</h4>
+          <div class="metric-value" id="kpi-sold">0</div>
+          <div class="metric-sub">Occupied or fully committed</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Remaining Inventory</h4>
+          <div class="metric-value" id="kpi-remaining">0</div>
+          <div class="metric-sub">Unsold / unoccupied units</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:repeat(4,1fr);gap:14px;">
+        <div class="dashboard-card">
+          <h4>Tenants Defaulted &gt;1 Month</h4>
+          <div class="metric-value" style="color:var(--danger)" id="kpi-defaulters">0</div>
+          <div class="metric-sub">Needs collections follow-up</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Multi-Complaint Tenants</h4>
+          <div class="metric-value" style="color:var(--danger)" id="kpi-multi-complaint">0</div>
+          <div class="metric-sub">2+ complaints in active window</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>New Tenants Added</h4>
+          <div class="metric-value" id="kpi-new-tenants">0</div>
+          <div class="metric-sub">Current month onboardings</div>
+        </div>
+        <div class="dashboard-card">
+          <h4>New Inquiries</h4>
+          <div class="metric-value" id="kpi-inquiries">0</div>
+          <div class="metric-sub">Leads generated this month</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr 1fr;">
+        <div class="dashboard-card">
+          <h4>Platform Revenue (1% admin fee from both sides)</h4>
+          <div class="metric-value" id="kpi-platform-revenue">₹0</div>
+          <div class="metric-sub">Computed on total order value × 2%</div>
+          <div style="margin-top:10px;color:var(--muted);font-size:0.9rem;">Order Value: <strong id="kpi-order-value">₹0</strong></div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Compliance Health</h4>
+          <ul class="dash-list" id="compliance-list"></ul>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr 1fr;">
+        <div class="dashboard-card">
+          <h4>Tenant Default Queue</h4>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Tenant</th>
+                <th>Property</th>
+                <th>Months Due</th>
+                <th>Amount Due</th>
+              </tr>
+            </thead>
+            <tbody id="default-queue-body"></tbody>
+          </table>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Tenants with Multiple Complaints</h4>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Tenant</th>
+                <th>Property</th>
+                <th>Complaints</th>
+                <th>Latest</th>
+              </tr>
+            </thead>
+            <tbody id="complaint-queue-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr 1fr;">
+        <div class="dashboard-card">
+          <h4>Verify & Add New Properties</h4>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>City</th>
+                <th>Verification</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="verification-body"></tbody>
+          </table>
+        </div>
+        <div class="dashboard-card">
+          <h4>Delisting Requests</h4>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Requested By</th>
+                <th>Reason</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="delist-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr 1fr;">
+        <div class="dashboard-card">
+          <h4>Funnel: Inquiry → Visit → Booking</h4>
+          <div class="chart-wrap" id="funnel-bars"></div>
+          <div id="funnel-summary" class="metric-sub" style="margin-top:8px;"></div>
+        </div>
+        <div class="dashboard-card">
+          <h4>Admin Action Notes</h4>
+          <ul class="dash-list">
+            <li>Prioritize legal verification for properties pending more than 7 days.</li>
+            <li>Auto-escalate tenants with 2+ unpaid months to collections workflow.</li>
+            <li>Trigger landlord counseling for units with repeated complaint clusters.</li>
+            <li>Launch referral campaign in cities with high inquiry but low visit conversion.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const adminData = (function(){
+      // generate ~102 properties and scale related datasets to reflect larger platform
+      const cities = ['Mumbai','Bangalore','Hyderabad','Pune','Chennai','Noida'];
+      const properties = [];
+      const totalProps = 102;
+      for(let i=1;i<=totalProps;i++){
+        const city = cities[i % cities.length];
+        const status = i <= 64 ? 'sold' : 'available'; // 64 sold, 38 available
+        const base = 18000 + ((i % 6) * 6000);
+        properties.push({ name: `Property ${i}`, city, status, value: base, occupied: status==='sold' });
+      }
+
+      // orders: create a single bulk order value to reach ~1.23 crore total order value
+      const orders = [ { id: 'bulk-2026', totalValue: 12300000 } ]; // ₹1.23 Cr
+
+      // generate tenants dataset: larger pool, with some defaulters and complaint counts
+      const tenants = [];
+      const tenantCount = 160;
+      for(let t=1;t<=tenantCount;t++){
+        const propIdx = (t % totalProps) + 1;
+        const property = `Property ${propIdx}`;
+        // make some defaulters and multi-complaint tenants
+        const monthsDue = (t % 25 === 0) ? 2 + (t % 4) : (t % 18 === 0 ? 3 : 0);
+        const complaints = (t % 20 === 0) ? 3 : (t % 11 === 0 ? 2 : (t % 7 === 0 ? 1 : 0));
+        const amountDue = monthsDue > 0 ? (properties[propIdx-1].value * monthsDue) : 0;
+        tenants.push({ name: `Tenant ${t}`, property, monthsDue, amountDue, complaints, latestComplaint: complaints? 'Reported issue' : '' });
+      }
+
+      // onboarding funnel scaled
+      const onboarding = { newTenants: 92, inquiries: 1240, visits: 820, bookings: 412 };
+      // onboarding monthly for past 6 months (mock data, last entry aligns with onboarding totals)
+      const onboardingMonthly = (function(){
+        // generate labels for past 6 months
+        const months = [];
+        const now = new Date();
+        for(let m=5;m>=0;m--){
+          const d = new Date(now.getFullYear(), now.getMonth() - m, 1);
+          months.push(d.toLocaleString('en-US',{month:'short', year:'2-digit'}));
+        }
+        // mock numbers (keep last month close to onboarding totals)
+        const samples = [900, 980, 1050, 1120, 1185, 1240]; // inquiries
+        const visits = samples.map(s => Math.round(s * (0.60 + (Math.random()*0.15))));
+        const bookings = visits.map((v,i) => Math.round(v * (0.35 + (i*0.01))));
+        return months.map((lab,i)=>({ month: lab, inquiries: samples[i], visits: visits[i], bookings: bookings[i] }));
+      })();
+      const verificationQueue = [
+        { property: 'Nexus Horizon Tower', city: 'Noida', status: 'Verification Pending', action: 'Review Docs' },
+        { property: 'Greenline Residences', city: 'Pune', status: 'Pending KYC', action: 'Request KYC' },
+        { property: 'Marina Bay Homes', city: 'Chennai', status: 'Approved', action: 'Add Live' }
+      ];
+      const delistingRequests = [
+        { property: 'Old Palm Residency', by: 'Landowner', reason: 'Renovation', status: 'In Review' },
+        { property: 'Maple Studios', by: 'Admin Audit', reason: 'Document mismatch', status: 'Approved' },
+        { property: 'Urban Nest A-4', by: 'Landowner', reason: 'Owner occupied', status: 'Pending' }
+      ];
+
+      return { properties, tenants, orders, onboarding, onboardingMonthly, verificationQueue, delistingRequests };
+    })();
+
+    function fmt(n) { return `₹${n.toLocaleString('en-IN')}`; }
+
+    function renderKPIs() {
+      const total = adminData.properties.length;
+      const available = adminData.properties.filter(p => p.status === 'available').length;
+      const sold = adminData.properties.filter(p => p.status === 'sold').length;
+      const remaining = available;
+      const defaulters = adminData.tenants.filter(t => t.monthsDue > 1);
+      const multiComplaint = adminData.tenants.filter(t => t.complaints > 1);
+
+      const totalOrderValue = adminData.orders.reduce((s, o) => s + o.totalValue, 0);
+      const platformRevenue = Math.round(totalOrderValue * 0.02); // 1% from each side
+
+      document.getElementById('kpi-total-properties').textContent = total;
+      document.getElementById('kpi-available').textContent = available;
+      document.getElementById('kpi-sold').textContent = sold;
+      document.getElementById('kpi-remaining').textContent = remaining;
+      document.getElementById('kpi-defaulters').textContent = defaulters.length;
+      document.getElementById('kpi-multi-complaint').textContent = multiComplaint.length;
+      document.getElementById('kpi-new-tenants').textContent = adminData.onboarding.newTenants;
+      document.getElementById('kpi-inquiries').textContent = adminData.onboarding.inquiries;
+      document.getElementById('kpi-platform-revenue').textContent = fmt(platformRevenue);
+      document.getElementById('kpi-order-value').textContent = fmt(totalOrderValue);
+
+      const compliance = document.getElementById('compliance-list');
+      compliance.innerHTML = `
+        <li>Verification Queue: <strong>${adminData.verificationQueue.length}</strong> properties</li>
+        <li>Delisting Queue: <strong>${adminData.delistingRequests.length}</strong> requests</li>
+  <li>Collections Risk: <strong>${defaulters.length}</strong> tenants more than 1 month overdue</li>
+        <li>Complaint Risk: <strong>${multiComplaint.length}</strong> repeat complaint tenants</li>
+      `;
+    }
+
+    function renderQueues() {
+      const defaultBody = document.getElementById('default-queue-body');
+      defaultBody.innerHTML = '';
+      adminData.tenants.filter(t => t.monthsDue > 1).forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${t.name}</td><td>${t.property}</td><td>${t.monthsDue}</td><td>${fmt(t.amountDue)}</td>`;
+        defaultBody.appendChild(tr);
+      });
+
+      const complaintBody = document.getElementById('complaint-queue-body');
+      complaintBody.innerHTML = '';
+      adminData.tenants.filter(t => t.complaints > 1).forEach(t => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${t.name}</td><td>${t.property}</td><td>${t.complaints}</td><td>${t.latestComplaint}</td>`;
+        complaintBody.appendChild(tr);
+      });
+    }
+
+    function renderVerificationAndDelist() {
+      const vBody = document.getElementById('verification-body');
+      vBody.innerHTML = '';
+      adminData.verificationQueue.forEach(i => {
+        const chipClass = i.status.includes('Approved') ? 'status-ok' : (i.status.includes('Pending') ? 'status-open' : 'status-progress');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i.property}</td><td>${i.city}</td><td><span class="status-chip ${chipClass}">${i.status}</span></td><td><button class="btn btn-outline" style="padding:6px 10px;">${i.action}</button></td>`;
+        vBody.appendChild(tr);
+      });
+
+      const dBody = document.getElementById('delist-body');
+      dBody.innerHTML = '';
+      adminData.delistingRequests.forEach(i => {
+        const chipClass = i.status === 'Approved' ? 'status-ok' : (i.status === 'Pending' ? 'status-open' : 'status-progress');
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${i.property}</td><td>${i.by}</td><td>${i.reason}</td><td><span class="status-chip ${chipClass}">${i.status}</span></td>`;
+        dBody.appendChild(tr);
+      });
+    }
+
+    function renderFunnel() {
+      const container = document.getElementById('funnel-bars');
+      const data = adminData.onboardingMonthly || [];
+      // chart dimensions
+  const rect = container.getBoundingClientRect();
+  const w = Math.max(420, Math.round(rect.width) || 600);
+  // make the SVG occupy ~80% of the card height so the chart appears large
+  const totalSvg = Math.max(200, Math.round((rect.height || 260) * 0.8));
+  const pad = { t: 12, r: 12, b: 36, l: 44 };
+  const h = Math.max(120, totalSvg - pad.t - pad.b);
+      container.innerHTML = '';
+      // create a small HTML legend so it doesn't overlap the title
+      const legendDiv = document.createElement('div');
+      legendDiv.style.display = 'flex';
+      legendDiv.style.gap = '12px';
+      legendDiv.style.alignItems = 'center';
+      legendDiv.style.marginBottom = '6px';
+      [['Inquiries','#1f77b4'], ['Visits','#ff7f0e'], ['Bookings','#2ca02c']].forEach(l=>{
+        const item = document.createElement('div'); item.style.display='flex'; item.style.alignItems='center';
+        const box = document.createElement('span'); box.style.width='12px'; box.style.height='10px'; box.style.display='inline-block'; box.style.background = l[1]; box.style.marginRight='6px'; box.style.borderRadius='2px';
+        const txt = document.createElement('span'); txt.textContent = l[0]; txt.style.fontSize='13px'; txt.style.color='#222';
+        item.appendChild(box); item.appendChild(txt); legendDiv.appendChild(item);
+      });
+      container.appendChild(legendDiv);
+
+      const svgNS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(svgNS, 'svg');
+  // make svg responsive in width and set height to ~80% of the card
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('height', totalSvg);
+  svg.setAttribute('viewBox', `0 0 ${w} ${totalSvg}`);
+
+      // compute scales
+      const allVals = data.flatMap(d => [d.inquiries, d.visits, d.bookings]);
+      const rawMax = Math.max(...allVals, 1);
+      const yTicks = 4;
+      // make tick step a rounded, human-friendly number (10s/50s/100s..)
+      const tickStepRaw = rawMax / yTicks;
+      const magnitude = Math.pow(10, Math.floor(Math.log10(tickStepRaw)));
+      const tickStep = Math.ceil(tickStepRaw / magnitude) * magnitude;
+      const maxAxis = tickStep * yTicks;
+      const xStep = (w - pad.l - pad.r) / Math.max(1, data.length - 1);
+
+      function x(i){ return pad.l + (i * xStep); }
+      function y(val){ return pad.t + (h - ((val / maxAxis) * h)); }
+
+      // grid lines and y labels
+      for(let t=0;t<=yTicks;t++){
+        const val = tickStep * t;
+        const yy = y(val);
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', pad.l); line.setAttribute('x2', w - pad.r);
+        line.setAttribute('y1', yy); line.setAttribute('y2', yy);
+        line.setAttribute('stroke', '#eee'); line.setAttribute('stroke-width', '1');
+        svg.appendChild(line);
+        const lab = document.createElementNS(svgNS, 'text');
+        lab.setAttribute('x', pad.l - 8); lab.setAttribute('y', yy + 4);
+        lab.setAttribute('fill', '#666'); lab.setAttribute('font-size','11'); lab.setAttribute('text-anchor','end');
+        lab.textContent = val.toLocaleString();
+        svg.appendChild(lab);
+      }
+
+      // helper to draw line for a series
+      function drawSeries(key, color){
+        const pathParts = [];
+        data.forEach((d,i)=>{
+          const px = x(i);
+          const py = y(d[key]);
+          pathParts.push(`${i===0?'M':'L'}${px},${py}`);
+        });
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', pathParts.join(' '));
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', '2');
+        svg.appendChild(path);
+
+        // points
+        data.forEach((d,i)=>{
+          const px = x(i); const py = y(d[key]);
+          const c = document.createElementNS(svgNS, 'circle');
+          c.setAttribute('cx', px); c.setAttribute('cy', py); c.setAttribute('r','3');
+          c.setAttribute('fill', color); c.setAttribute('stroke','#fff'); c.setAttribute('stroke-width','1');
+          svg.appendChild(c);
+        });
+      }
+
+  drawSeries('inquiries','#1f77b4');
+  drawSeries('visits','#ff7f0e');
+  drawSeries('bookings','#2ca02c');
+
+      // x labels
+      data.forEach((d,i)=>{
+        const lx = document.createElementNS(svgNS,'text');
+        lx.setAttribute('x', x(i)); lx.setAttribute('y', h + pad.t + 18);
+        lx.setAttribute('text-anchor','middle'); lx.setAttribute('fill','#444'); lx.setAttribute('font-size','11');
+        lx.textContent = d.month;
+        svg.appendChild(lx);
+      });
+
+      container.appendChild(svg);
+
+      // ensure the chart redraws when the window resizes (debounced)
+      if(!window._adminFunnelResizeAttached){
+        let to;
+        window.addEventListener('resize', ()=>{ clearTimeout(to); to = setTimeout(()=>{ renderFunnel(); }, 150); });
+        window._adminFunnelResizeAttached = true;
+      }
+
+      // funnel summary: use last month conversions
+      if(data.length){
+        const last = data[data.length-1];
+        const convVisit = last.inquiries ? Math.round((last.visits / last.inquiries) * 100) : 0;
+        const convBook = last.visits ? Math.round((last.bookings / last.visits) * 100) : 0;
+        document.getElementById('funnel-summary').textContent = `${data[data.length-1].month} — Visit conversion: ${convVisit}% • Booking conversion: ${convBook}%`;
+      } else {
+        document.getElementById('funnel-summary').textContent = '';
+      }
+    }
+
+    renderKPIs();
+    renderQueues();
+    renderVerificationAndDelist();
+    renderFunnel();
+  </script>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Estate<span>IQ</span></div>
+        <div class="footer-tagline">Centralized control for scaling rental operations.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Dashboards</h4>
+        <ul>
+          <li><a href="client.html">Client</a></li>
+          <li><a href="landowner.html">Landowner</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="nexusrent.html">NexusRent</a></li>
+          <li><a href="revenue.html">Revenue</a></li>
+          <li><a href="security.html">Security</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Home</h4>
+        <ul>
+          <li><a href="index.html">Main Site</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EstateIQ Technologies Pvt. Ltd. All rights reserved.</span>
+      <span>Admin analytics suite</span>
+    </div>
+  </footer>
+</body>
+
+</html>

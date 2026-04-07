@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Dashboard | EstateIQ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="nexusrent.html">NexusRent</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="crm.html">CRM</a>
+      <a href="security.html">Security</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
+        <div class="nav-dropdown-menu">
+          <a href="landowner.html">Landowner</a>
+          <a href="client.html" class="active">Client (Tenant)</a>
+          <a href="admin.html">Admin</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="dashboard-hero">
+        <div class="section-label" style="color:var(--gold-light)">Client Dashboard</div>
+        <h1 style="font-size:2.6rem">Welcome back, Chinmay 👋</h1>
+        <p>Track liked properties, roommate options, current rental status, pending rent, complaints, and bill-split updates in one place.</p>
+      </div>
+
+      <!-- Tabs: Liked & Shared vs My Rental -->
+      <div style="margin-top:18px;">
+        <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;">
+          <div>
+            <button class="btn btn-outline" id="tab-liked">Liked & Shared</button>
+            <button class="btn btn-outline" id="tab-rental">My Rental</button>
+          </div>
+          <div id="liked-controls" style="display:flex;gap:8px;align-items:center;">
+              <input id="client-search" class="form-input" placeholder="Search liked properties or roommates" style="width:320px;" />
+              <select id="gender-filter" class="form-select" style="width:160px;">
+                <option value="all">All genders</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="any">Any</option>
+              </select>
+            </div>
+        </div>
+
+        <div id="tab-content" style="margin-top:16px;">
+          <!-- Liked & Shared view -->
+          <div id="view-liked">
+            <div class="nexus-property-grid" id="client-liked-grid"></div>
+
+            <h3 style="margin-top:18px">Shared / Roommate Matches</h3>
+            <div class="nexus-property-grid" id="client-shared-grid"></div>
+          </div>
+
+          <!-- My Rental view -->
+          <div id="view-rental" style="display:none;">
+            <div class="dashboard-grid" style="grid-template-columns:1.4fr 0.6fr;gap:18px;">
+              <div class="dashboard-card">
+                <h3>Your Property Details</h3>
+                <p><strong>Property:</strong> Nexus Heights</p>
+                <p><strong>Landlord:</strong> Mr. Rohit Mehra — +91 99887 66554 — rohit@landlord.com</p>
+                <p><strong>Lease:</strong> Jan 2026 — Dec 2026 (<span id="months-left">9</span> months left)</p>
+                <p><strong>Agreement Notes:</strong> No pets without approval. Tenant responsible for minor repairs under ₹2,000.</p>
+
+                <h4 style="margin-top:12px;">Occupancy</h4>
+                <div style="margin-bottom:8px;">Occupants: <strong id="occupants-count">3</strong> / <strong id="occupants-total">5</strong></div>
+                <div class="progress" style="height:12px;background:var(--paper);border-radius:8px;overflow:hidden;">
+                  <div id="occupancy-bar" style="height:100%;width:60%;background:linear-gradient(90deg,var(--gold),#9d7736);"></div>
+                </div>
+
+                <h4 style="margin-top:12px;">Tenants</h4>
+                <div id="tenant-list" style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+                  <!-- tenant items populated by JS -->
+                </div>
+
+                <h4 style="margin-top:12px;">Monthly Payments</h4>
+                <div id="rental-payments" style="margin-top:8px;font-size:0.95rem;color:var(--muted)"></div>
+
+                
+              </div>
+
+              <div>
+                <div class="dashboard-card">
+                  <h4>Quick Actions</h4>
+                  <button id="pay-rent-quick" class="btn btn-primary" style="width:100%;margin-bottom:8px;">Pay Your Share</button>
+                  <button id="request-repair" class="btn btn-outline" style="width:100%;margin-bottom:8px;">Request Repair</button>
+                  <button id="view-agreement" class="btn btn-outline" style="width:100%;">View Agreement</button>
+                </div>
+
+                <div class="dashboard-card" style="margin-top:12px;">
+                  <h4>Bills Split</h4>
+                  <div id="bills-split" style="margin-top:8px;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:18px;display:grid;grid-template-columns:1fr 420px;gap:18px;">
+              <div class="dashboard-card">
+                <h3>Issues & Maintenance</h3>
+                <div id="issues-list">
+                  <!-- issues rendered here -->
+                </div>
+              </div>
+
+              <div class="dashboard-card">
+                <h4>Report New Issue</h4>
+                <div class="form-group">
+                  <label class="form-label">Issue Title</label>
+                  <input id="new-issue-title" class="form-input" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Details</label>
+                  <textarea id="new-issue-details" class="form-textarea" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Urgency</label>
+                  <select id="new-issue-urgency" class="form-select">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                  </select>
+                </div>
+                <button class="btn btn-primary" id="add-issue">Submit Issue</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Property detail modal -->
+      <div class="nexus-modal" id="client-modal" style="z-index:400;">
+        <div class="nexus-modal-card">
+          <div class="nexus-modal-media" id="client-modal-media">
+            <button id="client-modal-close" class="nexus-modal-close" type="button">✕</button>
+            <button class="modal-carousel-btn left" type="button" onclick="clientPrevImage()">‹</button>
+            <button class="modal-carousel-btn right" type="button" onclick="clientNextImage()">›</button>
+            <div class="modal-image-counter" id="client-modal-counter">0 / 0</div>
+          </div>
+          <div class="nexus-modal-content">
+            <div class="section-label">Property Details</div>
+            <h3 id="client-detail-title">Title</h3>
+            <p id="client-detail-location" style="color:var(--muted)"></p>
+
+            <div class="nexus-detail-list" style="margin-top:8px;">
+              <div><strong>Rent:</strong> <span id="client-detail-rent"></span></div>
+              <div><strong>Size:</strong> <span id="client-detail-size"></span></div>
+              <div><strong>Rooms:</strong> <span id="client-detail-rooms"></span></div>
+              <div><strong>Deposit:</strong> <span id="client-detail-deposit">₹0</span></div>
+              <div><strong>Furnishing:</strong> <span id="client-detail-furnished">—</span></div>
+            </div>
+
+            <div style="display:flex;gap:18px;margin-top:12px;align-items:flex-start;">
+              <div style="flex:1">
+                <h4 style="margin:0 0 8px 0">Landlord & Lease</h4>
+                <div id="client-detail-landlord" style="color:var(--muted);font-size:0.92rem">—</div>
+                <div style="margin-top:6px;color:var(--muted);font-size:0.9rem"><strong>Lease:</strong> <span id="client-detail-lease">—</span></div>
+                <div style="margin-top:6px;color:var(--muted);font-size:0.9rem"><strong>Agreement Notes:</strong> <span id="client-detail-agreement">—</span></div>
+              </div>
+              <div style="width:240px;">
+                <h4 style="margin:0 0 8px 0">Occupancy</h4>
+                <div style="margin-bottom:8px;">Current: <strong id="client-occupants-current">0</strong> / <strong id="client-occupants-total">0</strong></div>
+                <div class="progress" style="height:12px;background:var(--paper);border-radius:8px;overflow:hidden;">
+                  <div id="client-occupancy-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--gold),#9d7736);"></div>
+                </div>
+                <div style="margin-top:10px;font-size:0.9rem;color:var(--muted)"><strong>Gender Preference:</strong> <span id="client-detail-gender">Any</span></div>
+              </div>
+            </div>
+
+            <div class="nexus-amenities" id="client-detail-amenities" style="margin-top:12px;"></div>
+            <p style="margin-top:12px;" id="client-detail-comment"></p>
+
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button class="btn btn-primary" id="client-book-token">Pay Token & Book Visit</button>
+              <button class="btn btn-outline" id="client-like-btn">Toggle Like</button>
+              <button class="btn btn-outline" id="client-contact-landlord">Contact Landlord</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+        // Sample data (kept small) — ideally this would come from server
+        const clientLiked = [
+          { id: 'nx-1', name: 'Skyline Residences', location: 'Worli, Mumbai', bhk: '3 BHK', rent: 72000, images: ['https://images.unsplash.com/photo-1502005097973-6a7082348e28?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80'], amenities: ['Gym','Sea View'], comment: 'Great view. Close to promenade.', furnished: 'Furnished', deposit: 144000, landlord: {name: 'Rohit Mehra', phone:'+91 99887 66554', email:'rohit@landlord.com'}, lease: 'Jan 2026 — Dec 2026', agreement: 'No pets without approval.' },
+          { id: 'nx-3', name: 'Nexus Heights', location: 'Whitefield, Bangalore', bhk: '2 BHK', rent: 42000, images: ['https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80'], amenities: ['WiFi','Co-working'], comment: 'Close to tech parks.', furnished: 'Semi-Furnished', deposit: 84000, landlord: {name:'Anita Rao', phone:'+91 88776 55443', email:'anita@landlord.com'}, lease: 'Mar 2026 — Feb 2027', agreement: 'Tenant pays minor repairs under ₹2,000.' },
+          { id: 'nx-10', name: 'Crescent Co-living', location: 'HSR Layout, Bangalore', bhk: '2 BHK', rent: 34000, images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80','https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80'], amenities: ['Co-working','Gym'], comment: 'Shared living with community events.', furnished: 'Unfurnished', deposit: 68000, landlord: {name:'Sanjay Gupta', phone:'+91 77665 44332', email:'sanjay@landlord.com'}, lease: 'Feb 2026 — Jan 2027', agreement: 'Flexible roommate policies.' },
+          { id: 'nx-11', name: 'Green Palms Suite', location: 'Koregaon Park, Pune', bhk: '3 BHK', rent: 56000, images: ['https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=1200&q=80'], amenities: ['Garden','Parking'], comment: 'Large balconies.', furnished: 'Furnished', deposit: 112000, landlord:{name:'Meera Joshi',phone:'+91 99840 33421',email:'meera@landlord.com'}, lease:'Apr 2026 — Mar 2027', agreement:'No subletting allowed.' },
+          { id: 'nx-12', name: 'Azure Bay Flats', location: 'Hitech City, Hyderabad', bhk: '3 BHK', rent: 52000, images: ['https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=1200&q=80'], amenities:['Pool','Security'], comment:'Managed by Nexus-certified facility team.', furnished:'Furnished', deposit:104000, landlord:{name:'Vikram Singh',phone:'+91 99876 44321',email:'vikram@landlord.com'}, lease:'May 2026 — Apr 2027', agreement:'Standard lease.'}
+        ];
+
+        const clientShared = [
+          { id: 'sh-1', name: 'Crescent Co-living', location: 'HSR Layout', roomType: 'Shared 2BHK', match: 'Riya (UX Designer)', images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80'], totalSlots:5, occupied:3, genderPreference:'female', rent:34000, size:'—', rooms:'—', deposit:68000, furnished:'Unfurnished', landlord:{name:'Sanjay Gupta', phone:'+91 77665 44332', email:'sanjay@landlord.com'}, lease:'Feb 2026 — Jan 2027', agreement:'Flexible roommate policies.', amenities:['Co-working','Gym'] },
+          { id: 'sh-2', name: 'Riverstone Studios', location: 'Indiranagar', roomType: 'Studio Split', match: 'Aman (Data Analyst)', images: ['https://images.unsplash.com/photo-1505691723518-36a5ac3be353?auto=format&fit=crop&w=1200&q=80'], totalSlots:2, occupied:1, genderPreference:'male', rent:18000, size:'—', rooms:'—', deposit:36000, furnished:'Semi-Furnished', landlord:{name:'Karthik Rao', phone:'+91 99811 22334', email:'karthik@landlord.com'}, lease:'Mar 2026 — Feb 2027', agreement:'No loud parties after 11pm.', amenities:['WiFi'] },
+          { id: 'sh-3', name: 'Comfort Living', location: 'Bandra West', roomType: 'Shared 3BHK', match: 'Multiple', images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80'], totalSlots:4, occupied:2, genderPreference:'any', rent:46000, size:'—', rooms:'—', deposit:92000, furnished:'Furnished', landlord:{name:'Meera Shah', phone:'+91 88777 66554', email:'meera@landlord.com'}, lease:'Apr 2026 — Mar 2027', agreement:'No subletting without approval.', amenities:['Parking','Security'] },
+          { id: 'sh-4', name: 'Nova Lakeview', location: 'Powai', roomType: 'Shared 2BHK', match: 'Sana (Designer)', images: ['https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80'], totalSlots:3, occupied:1, genderPreference:'female', rent:38000, size:'—', rooms:'—', deposit:76000, furnished:'Furnished', landlord:{name:'Ritu Verma', phone:'+91 99000 11223', email:'ritu@landlord.com'}, lease:'May 2026 — Apr 2027', agreement:'Standard lease.', amenities:['Lake View','Gym'] }
+        ];
+
+        const currentIssues = [
+          { id: 'is-1', title: 'Kitchen sink leakage', date: '04 Apr 2026', status: 'In Progress', urgency: 'high' },
+          { id: 'is-2', title: 'Hall AC service', date: '28 Mar 2026', status: 'Open', urgency: 'medium' }
+        ];
+
+        // Render liked properties
+        const likedGrid = document.getElementById('client-liked-grid');
+        function renderLiked() {
+          likedGrid.innerHTML = '';
+          clientLiked.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'nexus-property-card';
+            const thumb = p.images && p.images[0] ? p.images[0] : '';
+            card.innerHTML = `
+              <div class="nexus-property-img" style="background-image:url('${thumb}')">
+                <div class="prop-bhk">${p.bhk}</div>
+              </div>
+              <div class="nexus-property-body">
+                <h4>${p.name}</h4>
+                <div class="nexus-property-meta">
+                  <span>📍 ${p.location}</span>
+                  <span>₹${p.rent.toLocaleString('en-IN')}/mo</span>
+                </div>
+              </div>
+            `;
+            card.addEventListener('click', () => openClientModal(p));
+            likedGrid.appendChild(card);
+          });
+        }
+
+        // --- Rental / Bills data and rendering ---
+        const currentRental = {
+          property: 'Nexus Heights',
+          rent: 18000,
+          landlord: { name: 'Mr. Rohit Mehra', phone: '+91 99887 66554', email: 'rohit@landlord.com' },
+          tenants: [
+            { name: 'Chinmay (You)', email: 'chinmay@example.com', phone: '+91 90000 11111' },
+            { name: 'Rohit', email: 'rohit.room@example.com', phone: '+91 98888 22222' },
+            { name: 'Nidhi', email: 'nidhi.room@example.com', phone: '+91 97777 33333' }
+          ],
+          payments: [
+            { month: 'Jan 2026', total: 18000, paid: true },
+            { month: 'Feb 2026', total: 18000, paid: true },
+            { month: 'Mar 2026', total: 18000, paid: true }
+          ],
+          bills: [
+            { id: 'b1', name: 'Electricity', total: 3200 },
+            { id: 'b2', name: 'WiFi', total: 999 },
+            { id: 'b3', name: 'Water', total: 800 }
+          ]
+        };
+
+        function renderTenantList() {
+          const el = document.getElementById('tenant-list');
+          el.innerHTML = '';
+          currentRental.tenants.forEach(t => {
+            const row = document.createElement('div');
+            row.style.display = 'flex'; row.style.justifyContent = 'space-between'; row.style.alignItems = 'center';
+            row.innerHTML = `<div><strong>${t.name}</strong> <div style="font-size:0.88rem;color:var(--muted)">${t.email || ''} • ${t.phone || ''}</div></div>`;
+            el.appendChild(row);
+          });
+        }
+
+        function renderRentalPayments() {
+          const el = document.getElementById('rental-payments');
+          el.innerHTML = '';
+          const totalPaid = currentRental.payments.reduce((s,p)=> s + (p.paid? p.total:0), 0);
+          const totalElem = document.createElement('div');
+          totalElem.innerHTML = `<div class="metric-value">₹${totalPaid.toLocaleString('en-IN')}</div><div class="metric-sub">Total rent paid till date</div>`;
+          el.appendChild(totalElem);
+
+          const list = document.createElement('div'); list.style.marginTop='8px';
+          currentRental.payments.forEach(p => {
+            const perTenant = Math.round(p.total / currentRental.tenants.length);
+            const item = document.createElement('div');
+            item.style.display='flex'; item.style.justifyContent='space-between'; item.style.alignItems='center'; item.style.padding='6px 0';
+            item.innerHTML = `<div><strong>${p.month}:</strong> ₹${p.total.toLocaleString('en-IN')} <div style=\"font-size:0.9rem;color:var(--muted)\">Each: ₹${perTenant.toLocaleString('en-IN')}</div></div>`;
+            const actions = document.createElement('div');
+            const view = document.createElement('button'); view.className='btn btn-outline'; view.style.marginRight='8px'; view.textContent='View Invoice';
+            view.addEventListener('click', ()=> generateInvoice(p.month, p.total));
+            const pay = document.createElement('button'); pay.className='btn btn-primary'; pay.textContent = p.paid ? 'Paid' : 'Pay Your Share';
+            pay.disabled = p.paid;
+            pay.addEventListener('click', ()=> initRentPayment(Math.round(p.total / currentRental.tenants.length), `Rent - ${p.month}`));
+            actions.appendChild(view); actions.appendChild(pay);
+            item.appendChild(actions);
+            list.appendChild(item);
+          });
+          el.appendChild(list);
+        }
+
+        function renderBillsSplit() {
+          const el = document.getElementById('bills-split'); el.innerHTML='';
+          currentRental.bills.forEach(b => {
+            const per = Math.round(b.total / currentRental.tenants.length);
+            const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='6px 0';
+            row.innerHTML = `<div><strong>${b.name}:</strong> ₹${b.total.toLocaleString('en-IN')}<div style="font-size:0.9rem;color:var(--muted)">Each: ₹${per.toLocaleString('en-IN')}</div></div>`;
+            const pay = document.createElement('button'); pay.className='btn btn-primary'; pay.textContent='Pay Your Share';
+            pay.addEventListener('click', ()=> initRentPayment(per, `${b.name} Bill`));
+            row.appendChild(pay);
+            el.appendChild(row);
+          });
+        }
+
+        function generateInvoice(month, amount) {
+          const content = `Invoice for ${month}\nProperty: ${currentRental.property}\nTotal: ₹${amount}\nPer tenant: ₹${Math.round(amount/currentRental.tenants.length)}`;
+          const blob = new Blob([content], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = `invoice-${month.replace(/\s+/g,'-')}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        }
+
+        // Payment function for rent/bills (per-tenant)
+        function initRentPayment(amount, description='Rent') {
+          if (!amount || amount <= 0) { alert('Invalid amount'); return; }
+          const options = {
+            key: 'rzp_test_SZLsFwKR6ceM6J',
+            amount: amount * 100,
+            currency: 'INR',
+            name: currentRental.property,
+            description: description,
+            theme: { color: '#1a2540' },
+            handler: function() { alert('Payment success (demo)'); }
+          };
+          const rzp = new Razorpay(options); rzp.open();
+        }
+
+        // Hook quick actions
+        document.getElementById('pay-rent-quick').addEventListener('click', ()=> {
+          const share = Math.round(currentRental.rent / currentRental.tenants.length);
+          initRentPayment(share, 'Monthly Rent');
+        });
+
+        // initial render for rental-related sections
+        renderTenantList(); renderRentalPayments(); renderBillsSplit();
+
+        // Render shared (programmatic handlers to avoid inline JSON in HTML)
+        const sharedGrid = document.getElementById('client-shared-grid');
+        function renderShared(filterGender = 'all') {
+          sharedGrid.innerHTML = '';
+          clientShared.forEach(s => {
+            if (filterGender !== 'all') {
+              if (filterGender === 'male' && s.genderPreference !== 'male' && s.genderPreference !== 'any') return;
+              if (filterGender === 'female' && s.genderPreference !== 'female' && s.genderPreference !== 'any') return;
+            }
+            const card = document.createElement('div');
+            card.className = 'nexus-property-card';
+            const thumb = s.images && s.images[0] ? s.images[0] : '';
+            const remaining = Math.max(0, (s.totalSlots || 0) - (s.occupied || 0));
+            const genderLabel = s.genderPreference === 'any' ? 'Any' : (s.genderPreference === 'male' ? 'Male' : 'Female');
+            card.innerHTML = `
+              <div class="nexus-property-img" style="background-image:url('${thumb}')">
+                <div class="prop-bhk">${s.roomType}</div>
+                <div class="gender-badge">${genderLabel}</div>
+                <div class="occupancy-remaining">${remaining} left</div>
+              </div>
+              <div class="nexus-property-body">
+                <h4>${s.name}</h4>
+                <div class="nexus-property-meta">
+                  <span>📍 ${s.location}</span>
+                  <span>${s.match}</span>
+                </div>
+                <div class="shared-actions" style="margin-top:8px;display:flex;gap:8px;"></div>
+              </div>
+            `;
+
+            sharedGrid.appendChild(card);
+
+            // programmatically add action buttons to avoid HTML-escaped JSON issues
+            const actions = card.querySelector('.shared-actions');
+            const reqBtn = document.createElement('button');
+            reqBtn.className = 'btn btn-primary';
+            reqBtn.textContent = 'Request to Join';
+            reqBtn.addEventListener('click', (ev) => { ev.stopPropagation(); openClientModal(s, 'request'); });
+
+            const viewBtn = document.createElement('button');
+            viewBtn.className = 'btn btn-outline';
+            viewBtn.textContent = 'View Details';
+            viewBtn.addEventListener('click', (ev) => { ev.stopPropagation(); openClientModal(s); });
+
+            actions.appendChild(reqBtn);
+            actions.appendChild(viewBtn);
+          });
+        }
+
+        // Modal logic
+        const clientModal = document.getElementById('client-modal');
+        const clientModalMedia = document.getElementById('client-modal-media');
+        const clientModalCounter = document.getElementById('client-modal-counter');
+        let clientSelected = null;
+        let clientImageIndex = 0;
+
+        function openClientModal(item, mode) {
+          // support object or JSON string (defensive)
+          if (typeof item === 'string') {
+            try { item = JSON.parse(item); } catch (e) { /* ignore */ }
+          }
+          clientSelected = item;
+          clientImageIndex = 0;
+          showClientImage();
+          document.getElementById('client-detail-title').textContent = item.name || 'Property';
+          document.getElementById('client-detail-location').textContent = item.location || '';
+          document.getElementById('client-detail-rent').textContent = item.rent ? `₹${item.rent.toLocaleString('en-IN')}/mo` : (item.roomType || '');
+          document.getElementById('client-detail-size').textContent = item.size || '—';
+          document.getElementById('client-detail-rooms').textContent = item.rooms || '—';
+          document.getElementById('client-detail-deposit').textContent = item.deposit ? `₹${(item.deposit).toLocaleString('en-IN')}` : '—';
+          document.getElementById('client-detail-furnished').textContent = item.furnished || '—';
+          document.getElementById('client-detail-comment').textContent = item.comment || '';
+          const am = document.getElementById('client-detail-amenities'); am.innerHTML = '';
+          (item.amenities || []).forEach(a => { const s = document.createElement('span'); s.textContent = a; am.appendChild(s); });
+
+          // landlord and lease
+          if (item.landlord) {
+            const l = item.landlord;
+            document.getElementById('client-detail-landlord').textContent = `${l.name || ''} — ${l.phone || ''} ${l.email ? '• ' + l.email : ''}`;
+          } else {
+            document.getElementById('client-detail-landlord').textContent = '—';
+          }
+          document.getElementById('client-detail-lease').textContent = item.lease || '—';
+          document.getElementById('client-detail-agreement').textContent = item.agreement || '—';
+
+          // occupancy
+          const occCur = item.occupied || 0;
+          const occTotal = item.totalSlots || 0;
+          document.getElementById('client-occupants-current').textContent = occCur;
+          document.getElementById('client-occupants-total').textContent = occTotal;
+          const pct = occTotal ? Math.round((occCur / occTotal) * 100) : 0;
+          document.getElementById('client-occupancy-bar').style.width = pct + '%';
+          document.getElementById('client-detail-gender').textContent = item.genderPreference ? (item.genderPreference === 'any' ? 'Any' : (item.genderPreference === 'male' ? 'Male' : 'Female')) : 'Any';
+
+          clientModal.classList.add('active');
+        }
+
+        function showClientImage() {
+          if (!clientSelected) return;
+          const arr = clientSelected.images || [];
+          const url = arr[clientImageIndex] || '';
+          clientModalMedia.style.backgroundImage = `url('${url}')`;
+          clientModalCounter.textContent = `${(arr.length?clientImageIndex+1:0)} / ${arr.length}`;
+        }
+
+        function clientPrevImage(){ if(!clientSelected) return; clientImageIndex = (clientImageIndex-1 + (clientSelected.images||[]).length) % (clientSelected.images||[]).length; showClientImage(); }
+        function clientNextImage(){ if(!clientSelected) return; clientImageIndex = (clientImageIndex+1) % (clientSelected.images||[]).length; showClientImage(); }
+        function closeClientModal(){ clientModal.classList.remove('active'); clientSelected=null; }
+
+        // Modal close bindings: close button, overlay click, Escape key
+        const clientModalCloseBtn = document.getElementById('client-modal-close');
+        if (clientModalCloseBtn) clientModalCloseBtn.addEventListener('click', closeClientModal);
+        clientModal.addEventListener('click', (ev) => { if (ev.target === clientModal) closeClientModal(); });
+        document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape') closeClientModal(); });
+
+        // Payment handler for client modal (10% refundable token)
+        function initClientPayment() {
+          if (!clientSelected) { alert('Please select a property first.'); return; }
+          const tokenAmount = Math.round((clientSelected.rent || 0) * 0.1);
+          const options = {
+            key: 'rzp_test_SZLsFwKR6ceM6J',
+            amount: tokenAmount * 100,
+            currency: 'INR',
+            name: 'NexusRent',
+            description: `Refundable visit token — ${clientSelected.name}`,
+            theme: { color: '#1a2540' },
+            handler: function () { window.location.href = 'payment-success.html'; }
+          };
+          const rzp = new Razorpay(options);
+          rzp.open();
+        }
+
+        // Hook action buttons inside modal
+        const clientBookBtn = document.getElementById('client-book-token');
+        if (clientBookBtn) clientBookBtn.addEventListener('click', initClientPayment);
+
+        const clientLikeBtn = document.getElementById('client-like-btn');
+        if (clientLikeBtn) clientLikeBtn.addEventListener('click', () => {
+          if (!clientSelected) return; const idx = clientLiked.findIndex(p => p.id === clientSelected.id);
+          if (idx > -1) { clientLiked.splice(idx, 1); alert('Removed from liked'); }
+          else { clientLiked.unshift(clientSelected); alert('Added to liked'); }
+          renderLiked(); closeClientModal();
+        });
+
+        const clientContactBtn = document.getElementById('client-contact-landlord');
+        if (clientContactBtn) clientContactBtn.addEventListener('click', () => {
+          if (!clientSelected) return; const l = clientSelected.landlord || {}; if (l.email) { window.location.href = `mailto:${l.email}?subject=Inquiry about ${encodeURIComponent(clientSelected.name)}`; } else { alert('No landlord contact available.'); }
+        });
+
+        // Gender filter wiring for shared render
+        const genderFilterEl = document.getElementById('gender-filter');
+        if (genderFilterEl) genderFilterEl.addEventListener('change', () => renderShared(genderFilterEl.value));
+
+        // Issues rendering and adding
+        function renderIssues(){ const el = document.getElementById('issues-list'); el.innerHTML=''; currentIssues.forEach(i=>{ const item = document.createElement('div'); item.style.marginBottom='8px'; item.innerHTML = `<strong>${i.title}</strong> <div style="color:var(--muted);font-size:0.85rem">${i.date} • <span class="status-chip ${i.status==='In Progress'?'status-progress':i.status==='Open'?'status-open':'status-ok'}">${i.status}</span> • Urgency: ${i.urgency}</div>`; el.appendChild(item); }); }
+
+        document.getElementById('add-issue').addEventListener('click', ()=>{
+          const title = document.getElementById('new-issue-title').value.trim();
+          const details = document.getElementById('new-issue-details').value.trim();
+          const urgency = document.getElementById('new-issue-urgency').value;
+          if(!title){ alert('Please add an issue title'); return; }
+          const id = 'is-'+Date.now();
+          currentIssues.unshift({ id, title, date: new Date().toLocaleDateString('en-GB'), status: 'Open', urgency });
+          renderIssues();
+          document.getElementById('new-issue-title').value=''; document.getElementById('new-issue-details').value='';
+        });
+
+        // Tabs wiring (also toggle search/gender controls visibility)
+        const likedControls = document.getElementById('liked-controls');
+        document.getElementById('tab-liked').addEventListener('click', ()=>{
+          document.getElementById('view-liked').style.display='block';
+          document.getElementById('view-rental').style.display='none';
+          if (likedControls) likedControls.style.display = 'flex';
+        });
+        document.getElementById('tab-rental').addEventListener('click', ()=>{
+          document.getElementById('view-liked').style.display='none';
+          document.getElementById('view-rental').style.display='block';
+          if (likedControls) likedControls.style.display = 'none';
+        });
+
+        // initial render
+        renderLiked(); renderShared(); renderIssues();
+        // ensure the controls are visible when starting on Liked view
+        if (likedControls) likedControls.style.display = document.getElementById('view-liked').style.display === 'none' ? 'none' : 'flex';
+      </script>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Estate<span>IQ</span></div>
+        <div class="footer-tagline">Smart dashboards for tenants, owners, and operations teams.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Dashboards</h4>
+        <ul>
+          <li><a href="client.html">Client</a></li>
+          <li><a href="landowner.html">Landowner</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Business</h4>
+        <ul>
+          <li><a href="revenue.html">Revenue</a></li>
+          <li><a href="marketing.html">Marketing</a></li>
+          <li><a href="crm.html">CRM</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EstateIQ Technologies Pvt. Ltd. All rights reserved.</span>
+      <span>Tenant-first rental ecosystem</span>
+    </div>
+  </footer>
+</body>
+
+</html>

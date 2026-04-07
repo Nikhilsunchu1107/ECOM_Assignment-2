@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Landowner Dashboard | EstateIQ</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="nexusrent.html">NexusRent</a>
+      <a href="revenue.html">Revenue</a>
+      <a href="marketing.html">Marketing</a>
+      <a href="crm.html">CRM</a>
+      <a href="security.html">Security</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
+        <div class="nav-dropdown-menu">
+          <a href="landowner.html" class="active">Landowner</a>
+          <a href="client.html">Client (Tenant)</a>
+          <a href="admin.html">Admin</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+      <div class="dashboard-hero">
+        <div class="section-label" style="color:var(--gold-light)">Landowner Dashboard</div>
+        <h1 style="font-size:2.6rem">Portfolio Control Center</h1>
+        <p>Monitor monthly income, tenant complaints, and communication logs. Raise owner-side complaints and manage operational issues quickly.</p>
+      </div>
+
+      <div class="dashboard-grid" style="grid-template-columns:1.25fr 0.75fr;">
+        <div class="dashboard-card">
+          <h3>Monthly Income Table</h3>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Expected Rent</th>
+                <th>Received</th>
+                <th>Pending</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Skyline Residences</td>
+                <td>₹72,000</td>
+                <td>₹72,000</td>
+                <td>₹0</td>
+              </tr>
+              <tr>
+                <td>Comfort Living</td>
+                <td>₹38,000</td>
+                <td>₹29,600</td>
+                <td>₹8,400</td>
+              </tr>
+              <tr>
+                <td>Nova Lakeview</td>
+                <td>₹28,000</td>
+                <td>₹28,000</td>
+                <td>₹0</td>
+              </tr>
+              <tr>
+                <td>Azure Bay Flats</td>
+                <td>₹52,000</td>
+                <td>₹52,000</td>
+                <td>₹0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Income Summary</h4>
+          <div class="metric-value">₹1,81,600</div>
+          <div class="metric-sub">Total received this month</div>
+          <div style="height:12px"></div>
+          <div class="metric-value" style="color:var(--danger)">₹8,400</div>
+          <div class="metric-sub">Pending collection</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr 1fr 1fr;">
+        <div class="dashboard-card">
+          <h4>Tenant Complaints</h4>
+          <ul class="dash-list">
+            <li>Lift sensor issue — <span class="status-chip status-open">Open</span></li>
+            <li>Parking gate lag — <span class="status-chip status-progress">In Progress</span></li>
+            <li>Water pressure low — <span class="status-chip status-ok">Resolved</span></li>
+          </ul>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Owner Complaint Form</h4>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select">
+              <option>Maintenance</option>
+              <option>Tenant Behavior</option>
+              <option>Billing</option>
+              <option>Legal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Issue Details</label>
+            <textarea class="form-textarea" rows="4" placeholder="Add complaint details..."></textarea>
+          </div>
+          <button class="btn btn-primary">Submit Complaint</button>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Messages / Tenant Problems</h4>
+          <ul class="dash-list">
+            <li><strong>Tenant A:</strong> Requested 2-day rent extension due to payroll delay.</li>
+            <li><strong>Tenant B:</strong> Asked approval for pet onboarding and extra deposit terms.</li>
+            <li><strong>Tenant C:</strong> Shared recurring complaint on late-night noise from adjacent unit.</li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Properties list for owner -->
+      <div style="margin-top:18px;">
+        <div class="dashboard-card">
+          <h3>Your Properties</h3>
+          <div id="owner-properties" style="display:flex;flex-direction:column;gap:10px;margin-top:10px;"></div>
+        </div>
+      </div>
+
+  <!-- Property detail modal for landowner -->
+  <div class="nexus-modal" id="owner-prop-modal" style="z-index:500;">
+        <div class="nexus-modal-card" style="width:80vw;max-width:1000px;">
+          <div style="position:relative;">
+            <button id="owner-prop-close" class="nexus-modal-close" style="position:absolute;right:8px;top:8px;">✕</button>
+          </div>
+          <div class="nexus-modal-content">
+            <div class="section-label">Property Details</div>
+            <h3 id="owner-prop-title">Property</h3>
+            <p id="owner-prop-location" style="color:var(--muted)"></p>
+
+            <div style="display:grid;grid-template-columns:1fr 320px;gap:16px;margin-top:10px;">
+              <div>
+                <h4>Tenants</h4>
+                <div id="owner-tenant-list" style="display:flex;flex-direction:column;gap:8px;margin-top:6px;"></div>
+
+                <h4 style="margin-top:12px;">Agreement</h4>
+                <div id="owner-agreement" style="color:var(--muted);font-size:0.95rem;margin-top:6px;"></div>
+                <div style="margin-top:6px;color:var(--muted);">Lease: <span id="owner-lease"></span></div>
+              </div>
+
+              <div>
+                <h4>Recent Rent Payments</h4>
+                <div id="owner-payments" style="display:flex;flex-direction:column;gap:8px;margin-top:6px;"></div>
+
+                <h4 style="margin-top:12px;">Bills & Collections</h4>
+                <div id="owner-bills" style="display:flex;flex-direction:column;gap:8px;margin-top:6px;"></div>
+
+                <div style="margin-top:12px;">
+                  <h4>Occupancy</h4>
+                  <div id="owner-occupants" style="font-weight:600;margin-top:6px"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;display:flex;gap:8px;">
+              <button id="owner-download-invoices" class="btn btn-outline">Download All Invoices</button>
+              <button id="owner-mark-paid" class="btn btn-primary">Mark Month Paid</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- New floating window (landlord) - 80% size, data-only, no photo -->
+    <div id="owner-floating" class="owner-floating" aria-hidden="true">
+      <div class="owner-floating-card">
+        <button id="owner-floating-close" class="nexus-modal-close" aria-label="Close">✕</button>
+        <div class="owner-floating-body">
+          <div class="owner-floating-left">
+            <div class="section-label">PROPERTY DETAILS</div>
+            <h2 id="floating-title">Property</h2>
+            <div id="floating-location" style="color:var(--muted);margin-bottom:12px;"></div>
+
+            <h4>Tenants</h4>
+            <div id="floating-tenants" style="display:flex;flex-direction:column;gap:10px;margin-top:8px;"></div>
+
+            <h4 style="margin-top:12px;">Agreement</h4>
+            <div id="floating-agreement" style="color:var(--muted);margin-top:6px;"></div>
+            <div style="margin-top:8px;color:var(--muted);">Lease: <span id="floating-lease"></span></div>
+          </div>
+
+          <div class="owner-floating-right">
+            <h4>Recent Rent Payments</h4>
+            <div id="floating-payments" style="display:flex;flex-direction:column;gap:10px;margin-top:8px;"></div>
+
+            <h4 style="margin-top:12px;">Bills</h4>
+            <div id="floating-bills" style="display:flex;flex-direction:column;gap:10px;margin-top:8px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <script>
+    // Sample owner properties data
+    const ownerProperties = [
+      {
+        id: 'p1',
+        name: 'Skyline Residences',
+        location: 'Worli, Mumbai',
+        rent: 72000,
+        lease: 'Jan 2026 — Dec 2026',
+        agreement: 'No pets without approval. Minor repairs tenant responsibility under ₹2,000.',
+        tenants: [
+          { name: 'Amit Kumar', phone: '+91 90000 11111', email: 'amit@example.com' },
+          { name: 'Sneha Rao', phone: '+91 90000 22222', email: 'sneha@example.com' }
+        ],
+        bills: [ {name: 'Electricity', amount: 4500}, {name: 'Water', amount: 800}, {name:'WiFi', amount: 999} ],
+        payments: [ {month:'Mar 2026', amount:72000, paid:true}, {month:'Feb 2026', amount:72000, paid:true}, {month:'Jan 2026', amount:72000, paid:true} ]
+      },
+      {
+        id: 'p2',
+        name: 'Azure Bay Flats',
+        location: 'Hitech City, Hyderabad',
+        rent: 52000,
+        lease: 'May 2026 — Apr 2027',
+        agreement: 'Standard lease.',
+        tenants: [
+          { name: 'Vikram Singh', phone: '+91 99876 44321', email: 'vikram@landlord.com' }
+        ],
+        bills: [ {name: 'Electricity', amount: 3200}, {name:'WiFi', amount:999} ],
+        payments: [ {month:'Mar 2026', amount:52000, paid:true}, {month:'Feb 2026', amount:52000, paid:true}, {month:'Jan 2026', amount:52000, paid:true} ]
+      }
+      ,
+      {
+        id: 'p3',
+        name: 'Comfort Living',
+        location: 'Bandra West',
+        rent: 38000,
+        lease: 'Feb 2026 — Jan 2027',
+        agreement: 'No subletting without approval.',
+        tenants: [
+          { name: 'Sana Kapoor', phone: '+91 98888 33444', email: 'sana@tenant.com' },
+          { name: 'Riya Mehta', phone: '+91 97777 44555', email: 'riya@tenant.com' }
+        ],
+        bills: [ {name: 'Electricity', amount: 2600}, {name:'WiFi', amount:999}, {name:'Water', amount:700} ],
+        payments: [ {month:'Mar 2026', amount:38000, paid:true}, {month:'Feb 2026', amount:38000, paid:false}, {month:'Jan 2026', amount:38000, paid:true} ]
+      },
+      {
+        id: 'p4',
+        name: 'Nova Lakeview',
+        location: 'Powai',
+        rent: 28000,
+        lease: 'Mar 2026 — Feb 2027',
+        agreement: 'Standard co-living agreement.',
+        tenants: [
+          { name: 'Karan Singh', phone: '+91 96666 55444', email: 'karan@tenant.com' }
+        ],
+        bills: [ {name: 'Electricity', amount: 2200}, {name:'Water', amount:650} ],
+        payments: [ {month:'Mar 2026', amount:28000, paid:true}, {month:'Feb 2026', amount:28000, paid:true}, {month:'Jan 2026', amount:28000, paid:true} ]
+      }
+    ];
+
+    const ownerContainer = document.getElementById('owner-properties');
+    const modal = document.getElementById('owner-prop-modal');
+    const modalClose = document.getElementById('owner-prop-close');
+
+    function renderOwnerProperties(){
+      ownerContainer.innerHTML = '';
+      ownerProperties.forEach(p => {
+        const row = document.createElement('div');
+        row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='8px 0';
+        row.innerHTML = `<div><strong>${p.name}</strong><div style="font-size:0.9rem;color:var(--muted)"> ${p.location} • Rent: ₹${p.rent.toLocaleString('en-IN')}</div></div>`;
+  const btn = document.createElement('button'); btn.className='btn btn-outline'; btn.textContent='View Details';
+  btn.addEventListener('click', ()=> openOwnerFloating(p.id));
+        row.appendChild(btn);
+        ownerContainer.appendChild(row);
+      });
+    }
+
+    function openOwnerModal(id){
+      const p = ownerProperties.find(x=>x.id===id);
+      if(!p) return;
+      document.getElementById('owner-prop-title').textContent = p.name;
+      document.getElementById('owner-prop-location').textContent = p.location;
+      document.getElementById('owner-agreement').textContent = p.agreement || '—';
+      document.getElementById('owner-lease').textContent = p.lease || '—';
+      document.getElementById('owner-occupants').textContent = `${p.tenants.length} tenants`;
+
+      const tlist = document.getElementById('owner-tenant-list'); tlist.innerHTML='';
+      p.tenants.forEach(t => {
+        const item = document.createElement('div'); item.style.display='flex'; item.style.justifyContent='space-between'; item.style.alignItems='center';
+        item.innerHTML = `<div><strong>${t.name}</strong><div style="font-size:0.88rem;color:var(--muted)">${t.email || ''} • ${t.phone || ''}</div></div>`;
+        tlist.appendChild(item);
+      });
+
+      const billsEl = document.getElementById('owner-bills'); billsEl.innerHTML='';
+      p.bills.forEach(b => {
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='6px 0';
+        row.innerHTML = `<div><strong>${b.name}</strong><div style="font-size:0.9rem;color:var(--muted)">Total: ₹${b.amount.toLocaleString('en-IN')} • Each: ₹${Math.round(b.amount / Math.max(1,p.tenants.length)).toLocaleString('en-IN')}</div></div>`;
+        const dl = document.createElement('button'); dl.className='btn btn-outline'; dl.textContent='Invoice';
+        dl.addEventListener('click', ()=> generateInvoiceForOwner(p, b));
+        row.appendChild(dl);
+        billsEl.appendChild(row);
+      });
+
+      // render recent payments
+      const paymentsEl = document.getElementById('owner-payments'); paymentsEl.innerHTML = '';
+      (p.payments || []).forEach(pay => {
+        const perTenant = Math.round(pay.amount / Math.max(1, p.tenants.length));
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='6px 0';
+        row.innerHTML = `<div><strong>${pay.month}</strong><div style="font-size:0.9rem;color:var(--muted)">Total: ₹${pay.amount.toLocaleString('en-IN')} • Each: ₹${perTenant.toLocaleString('en-IN')}</div></div>`;
+        const dl = document.createElement('button'); dl.className='btn btn-outline'; dl.textContent='Download Invoice';
+        dl.addEventListener('click', ()=> generateInvoiceForPayment(p, pay));
+        row.appendChild(dl);
+        paymentsEl.appendChild(row);
+      });
+
+      modal.classList.add('active');
+    }
+
+    // New floating window functions (80% size, no photo)
+    const floating = document.getElementById('owner-floating');
+    const floatingClose = document.getElementById('owner-floating-close');
+
+    function openOwnerFloating(id){
+      const p = ownerProperties.find(x=>x.id===id);
+      if(!p) return;
+      document.getElementById('floating-title').textContent = p.name;
+      document.getElementById('floating-location').textContent = p.location || '';
+      document.getElementById('floating-agreement').textContent = p.agreement || '—';
+      document.getElementById('floating-lease').textContent = p.lease || '—';
+
+      const tEl = document.getElementById('floating-tenants'); tEl.innerHTML='';
+      p.tenants.forEach(t => {
+        const d = document.createElement('div'); d.style.padding='6px 0';
+        d.innerHTML = `<strong style="display:block;color:var(--navy)">${t.name}</strong><div style="color:var(--muted);font-size:0.9rem;margin-top:6px">${t.email||''} • ${t.phone||''}</div>`;
+        tEl.appendChild(d);
+      });
+
+      const payEl = document.getElementById('floating-payments'); payEl.innerHTML='';
+      (p.payments||[]).forEach(pay => {
+        const per = Math.round(pay.amount / Math.max(1,p.tenants.length));
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
+        row.innerHTML = `<div><strong>${pay.month}</strong><div style="color:var(--muted);font-size:0.9rem">Total: ₹${pay.amount.toLocaleString('en-IN')} • Each: ₹${per.toLocaleString('en-IN')}</div></div>`;
+        const dl = document.createElement('button'); dl.className='btn btn-outline'; dl.textContent='Download Invoice'; dl.addEventListener('click', ()=> generateInvoiceForPayment(p,pay));
+        row.appendChild(dl);
+        payEl.appendChild(row);
+      });
+
+      const billsEl = document.getElementById('floating-bills'); billsEl.innerHTML='';
+      (p.bills||[]).forEach(b => {
+        const per = Math.round(b.amount / Math.max(1,p.tenants.length));
+        const row = document.createElement('div'); row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.gap='8px';
+        row.innerHTML = `<div><strong>${b.name}</strong><div style="color:var(--muted);font-size:0.9rem">Total: ₹${b.amount.toLocaleString('en-IN')} • Each: ₹${per.toLocaleString('en-IN')}</div></div>`;
+        const dl = document.createElement('button'); dl.className='btn btn-outline'; dl.textContent='Invoice'; dl.addEventListener('click', ()=> generateInvoiceForOwner(p,b));
+        row.appendChild(dl);
+        billsEl.appendChild(row);
+      });
+
+      // show floating window
+      if(floating){ floating.setAttribute('aria-hidden','false'); floating.classList.add('active'); }
+    }
+
+    function closeOwnerFloating(){ if(floating){ floating.classList.remove('active'); floating.setAttribute('aria-hidden','true'); } }
+    if(floatingClose) floatingClose.addEventListener('click', closeOwnerFloating);
+    if(floating) floating.addEventListener('click', (ev)=>{ if(ev.target===floating) closeOwnerFloating(); });
+
+    function closeOwnerModal(){ modal.classList.remove('active'); }
+    if(modalClose) modalClose.addEventListener('click', closeOwnerModal);
+    modal.addEventListener('click', (ev)=>{ if(ev.target===modal) closeOwnerModal(); });
+
+    function generateInvoiceForOwner(prop, bill){
+      const content = `Invoice - ${bill.name}\nProperty: ${prop.name}\nTotal: ₹${bill.amount}\nPer tenant: ₹${Math.round(bill.amount/Math.max(1,prop.tenants.length))}`;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${prop.name.replace(/\s+/g,'-')}-${bill.name}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    function generateInvoiceForPayment(prop, payment){
+      const content = `Invoice - ${payment.month}\nProperty: ${prop.name}\nTotal: ₹${payment.amount}\nPer tenant: ₹${Math.round(payment.amount/Math.max(1,prop.tenants.length))}`;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download = `${prop.name.replace(/\s+/g,'-')}-${payment.month.replace(/\s+/g,'-')}.txt`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+
+    // placeholder: mark month paid (owner-side)
+    const markPaidBtn = document.getElementById('owner-mark-paid');
+    if(markPaidBtn) markPaidBtn.addEventListener('click', ()=>{ alert('Marked month paid (demo). In a real app this would trigger accounting and notifications).'); });
+    const dlAllBtn = document.getElementById('owner-download-invoices');
+    if(dlAllBtn) dlAllBtn.addEventListener('click', ()=>{ ownerProperties.forEach(p=> p.bills.forEach(b=> generateInvoiceForOwner(p,b))); alert('Downloaded invoices (as .txt)'); });
+
+    renderOwnerProperties();
+  </script>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Estate<span>IQ</span></div>
+        <div class="footer-tagline">Owner-first controls with transparent tenant communication.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Dashboards</h4>
+        <ul>
+          <li><a href="client.html">Client</a></li>
+          <li><a href="landowner.html">Landowner</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="nexusrent.html">NexusRent</a></li>
+          <li><a href="revenue.html">Revenue</a></li>
+          <li><a href="security.html">Security</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Home</h4>
+        <ul>
+          <li><a href="index.html">Main Site</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EstateIQ Technologies Pvt. Ltd. All rights reserved.</span>
+      <span>Owner portfolio analytics enabled</span>
+    </div>
+  </footer>
+</body>
+
+</html>
