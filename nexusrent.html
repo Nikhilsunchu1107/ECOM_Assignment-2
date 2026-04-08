@@ -94,6 +94,7 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="nexusrent.html" class="active">NexusRent</a>
+      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -144,7 +145,7 @@
     </div>
   </section>
 
-  <section class="section" style="background:var(--paper)">
+  <section class="section" style="background:var(--paper)" id="property-selection">
     <div class="container">
       <div class="section-label">Properties</div>
       <h2 class="section-title">Select a Property to View Details</h2>
@@ -931,6 +932,22 @@
     });
 
     renderProperties(properties);
+
+    (function autoFocusPropertySelection() {
+      if (!window.location.hash) {
+        window.addEventListener('load', function() {
+          const target = document.getElementById('property-selection');
+          if (!target) return;
+          setTimeout(function() {
+            try {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (e) {
+              target.scrollIntoView();
+            }
+          }, 160);
+        });
+      }
+    })();
   </script>
 </body>
 

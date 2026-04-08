@@ -425,12 +425,41 @@
       font-size: 0.8rem;
       margin-bottom: 12px;
     }
+
+    .comment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .comment-list {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .comment-list li {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--paper);
+      padding: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .comment-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
+    var HOME_BOOKING_AMOUNT = 10000;
+
     function initTokenPayment(propertyName, tokenAmount) {
       var safeName = propertyName || "Selected Property";
-      var amount = Number(tokenAmount || 100000);
+      var amount = HOME_BOOKING_AMOUNT;
       var options = {
         "key": "rzp_test_SZLsFwKR6ceM6J", // <-- Add your test key here!
         "amount": amount * 100,
@@ -456,6 +485,7 @@
     <div class="nav-links">
       <a href="home.html" class="active">Home</a>
       <a href="nexusrent.html">NexusRent</a>
+      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -493,25 +523,26 @@
       <div class="search-box fade-up delay-2">
         <h3>Search Properties</h3>
         <div class="search-tabs">
-          <button class="search-tab active" onclick="setTab(this,'Buy')">Buy</button>
-          <button class="search-tab" onclick="setTab(this,'Rent')">Rent</button>
-          <button class="search-tab" onclick="setTab(this,'Commercial')">Commercial</button>
+          <button class="search-tab active" data-home-mode="Buy" onclick="setTab(this,'Buy')">Buy</button>
+          <button class="search-tab" data-home-mode="Rent" onclick="setTab(this,'Rent')">Rent</button>
+          <button class="search-tab" data-home-mode="Commercial" onclick="setTab(this,'Commercial')">Commercial</button>
         </div>
         <div class="search-row">
-          <input class="search-input" placeholder="City or Locality" />
-          <select class="search-input" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)">
-            <option style="background:#1a2540">Property Type</option>
-            <option style="background:#1a2540">Apartment</option>
-            <option style="background:#1a2540">Villa</option>
-            <option style="background:#1a2540">Plot</option>
-            <option style="background:#1a2540">Office</option>
+          <input class="search-input" id="home-hero-search" placeholder="City or Locality" />
+          <select class="search-input" id="home-hero-type" style="background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7)">
+            <option value="" style="background:#1a2540">Property Type</option>
+            <option value="Apartment" style="background:#1a2540">Apartment</option>
+            <option value="Villa" style="background:#1a2540">Villa</option>
+            <option value="Penthouse" style="background:#1a2540">Penthouse</option>
+            <option value="Duplex" style="background:#1a2540">Duplex</option>
+            <option value="Commercial" style="background:#1a2540">Commercial</option>
           </select>
         </div>
         <div class="search-row">
-          <input class="search-input" placeholder="Min Budget (₹)" />
-          <input class="search-input" placeholder="Max Budget (₹)" />
+          <input class="search-input" id="home-hero-min" placeholder="Min Budget (₹)" type="number" />
+          <input class="search-input" id="home-hero-max" placeholder="Max Budget (₹)" type="number" />
         </div>
-        <button class="search-btn">🔍 Search Properties</button>
+        <button class="search-btn" id="home-hero-btn" type="button">🔍 Search Properties</button>
       </div>
     </div>
   </section>
@@ -578,14 +609,61 @@
           <div class="section-label">Featured</div>
           <h2 class="section-title">Hand-Picked Properties</h2>
         </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <span class="tag active">All</span>
-          <span class="tag">Mumbai</span>
-          <span class="tag">Pune</span>
-          <span class="tag">Bangalore</span>
-          <span class="tag">Delhi NCR</span>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;" id="home-city-tags">
+          <span class="tag active" data-city="">All</span>
+          <span class="tag" data-city="Mumbai">Mumbai</span>
+          <span class="tag" data-city="Pune">Pune</span>
+          <span class="tag" data-city="Bangalore">Bangalore</span>
+          <span class="tag" data-city="Delhi NCR">Delhi NCR</span>
         </div>
       </div>
+
+      <div class="nexus-filter-bar" style="margin-top:14px;">
+        <input class="form-input" id="home-filter-search" placeholder="Search by name or locality" />
+        <select class="form-select" id="home-filter-city">
+          <option value="">All Cities</option>
+          <option>Mumbai</option>
+          <option>Pune</option>
+          <option>Bangalore</option>
+          <option>Delhi NCR</option>
+          <option>Chennai</option>
+        </select>
+        <select class="form-select" id="home-filter-type">
+          <option value="">Property Type</option>
+          <option>Apartment</option>
+          <option>Villa</option>
+          <option>Penthouse</option>
+          <option>Duplex</option>
+          <option>Commercial</option>
+        </select>
+        <select class="form-select" id="home-filter-bhk">
+          <option value="">BHK</option>
+          <option>1 BHK</option>
+          <option>2 BHK</option>
+          <option>3 BHK</option>
+          <option>3.5 BHK</option>
+          <option>4 BHK</option>
+          <option>5 BHK</option>
+        </select>
+      </div>
+      <div class="nexus-filter-bar" style="grid-template-columns:repeat(3,1fr);margin-top:12px;">
+        <input class="form-input" id="home-filter-min" placeholder="Min Budget (₹)" type="number" />
+        <input class="form-input" id="home-filter-max" placeholder="Max Budget (₹)" type="number" />
+        <select class="form-select" id="home-filter-sort">
+          <option value="">Sort by</option>
+          <option value="low-high">Budget: Low to High</option>
+          <option value="high-low">Budget: High to Low</option>
+          <option value="popular">Most Popular</option>
+        </select>
+      </div>
+      <div class="nexus-filter-tags" id="home-filter-tags" style="margin-top:10px;">
+        <span class="nexus-filter-tag" data-filter="furnished">Furnished</span>
+        <span class="nexus-filter-tag" data-filter="metro">Near Metro</span>
+        <span class="nexus-filter-tag" data-filter="parking">Parking</span>
+        <span class="nexus-filter-tag" data-filter="gym">Gym</span>
+        <span class="nexus-filter-tag" data-filter="seaView">Sea View</span>
+      </div>
+      <div id="home-results-count" style="margin-top:10px;color:var(--muted);font-size:0.84rem;"></div>
 
       <div class="listings-grid" id="home-listings-grid"></div>
 
@@ -720,6 +798,42 @@
     </div>
   </div>
 
+  <section class="section" style="padding-top:44px;" id="community-feedback">
+    <div class="container">
+      <div class="section-label">Feedback</div>
+      <h2 class="section-title" style="font-size:2rem;">Share Your Views on EstateIQ</h2>
+      <p class="section-sub">Post your quick comments here, or take our detailed 10-question satisfaction review to help improve the app.</p>
+
+      <div class="comment-grid">
+        <div class="dashboard-card">
+          <h4>Quick Comment Section</h4>
+          <div class="form-group" style="margin-top:10px;">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" id="home-comment-name" placeholder="Name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Your View</label>
+            <textarea class="form-textarea" id="home-comment-text" rows="4" placeholder="Share your feedback about EstateIQ..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="home-comment-submit" type="button">Post Comment</button>
+          <div id="home-comment-status" style="margin-top:8px;color:var(--muted);font-size:0.82rem;"></div>
+        </div>
+
+        <div class="dashboard-card">
+          <h4>Detailed Review (10 Questions)</h4>
+          <p class="metric-sub" style="margin-top:8px;">Help us improve with a structured app experience review. It takes ~2 minutes.</p>
+          <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;">
+            <a class="btn btn-primary" href="give-review.html">Give Full Review</a>
+            <a class="btn btn-outline" href="#listings">Continue Browsing</a>
+          </div>
+
+          <h4 style="margin-top:16px;">Recent User Comments</h4>
+          <ul id="home-comment-list" class="comment-list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div class="footer-grid">
@@ -748,6 +862,7 @@
         <ul>
           <li><a href="#">Help Center</a></li>
           <li><a href="#">Contact Us</a></li>
+          <li><a href="give-review.html">Give Review</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
         </ul>
@@ -760,9 +875,13 @@
   </footer>
 
   <script>
+    let currentHomeMode = 'Buy';
+
     function setTab(el, type) {
       document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
       el.classList.add('active');
+      currentHomeMode = type;
+      applyHomeFilters();
     }
 
     const homeProperties = [
@@ -948,12 +1067,98 @@
       }
     ];
 
-    function renderHomeListings() {
+    function parseIndianPriceLabel(label) {
+      if (!label) return 0;
+      const lower = label.toLowerCase();
+      const num = parseFloat(lower.replace(/[^0-9.]/g, '')) || 0;
+      if (lower.includes('cr')) return Math.round(num * 10000000);
+      if (lower.includes('l')) return Math.round(num * 100000);
+      return Math.round(num);
+    }
+
+    function normalizeCity(rawCity) {
+      if (/gurgaon|noida|dwarka/i.test(rawCity)) return 'Delhi NCR';
+      return rawCity;
+    }
+
+    function detectPropertyType(text) {
+      const t = (text || '').toLowerCase();
+      if (t.includes('villa')) return 'Villa';
+      if (t.includes('penthouse')) return 'Penthouse';
+      if (t.includes('duplex')) return 'Duplex';
+      if (t.includes('business district') || t.includes('commercial') || t.includes('office')) return 'Commercial';
+      return 'Apartment';
+    }
+
+    function enrichHomeProperty(p) {
+      const rawCity = (p.location.split(',')[1] || '').trim() || p.location;
+      const city = normalizeCity(rawCity);
+      const propertyType = detectPropertyType(p.type);
+      const mode = p.price.toLowerCase().includes('/ month') ? 'Rent' : (propertyType === 'Commercial' ? 'Commercial' : 'Buy');
+      const budget = parseIndianPriceLabel(p.price);
+      const descLower = (p.desc || '').toLowerCase();
+      const typeLower = (p.type || '').toLowerCase();
+
+      return {
+        ...p,
+        city,
+        propertyType,
+        mode,
+        budget,
+        popularity: p.status === 'Featured' ? 95 : (p.status === 'Premium' ? 92 : (p.status === 'New Launch' ? 88 : 82)),
+        furnished: /furnish|smart home|modular kitchen/.test(descLower + ' ' + typeLower),
+        metro: /metro/.test(descLower),
+        parking: /parking/.test(descLower),
+        gym: /gym|clubhouse/.test(descLower),
+        seaView: /sea|beach/.test(descLower + ' ' + typeLower)
+      };
+    }
+
+    const homeCatalog = homeProperties.map(enrichHomeProperty);
+
+    const homeFilters = {
+      search: document.getElementById('home-filter-search'),
+      city: document.getElementById('home-filter-city'),
+      type: document.getElementById('home-filter-type'),
+      bhk: document.getElementById('home-filter-bhk'),
+      min: document.getElementById('home-filter-min'),
+      max: document.getElementById('home-filter-max'),
+      sort: document.getElementById('home-filter-sort')
+    };
+
+    const homeHeroControls = {
+      search: document.getElementById('home-hero-search'),
+      type: document.getElementById('home-hero-type'),
+      min: document.getElementById('home-hero-min'),
+      max: document.getElementById('home-hero-max'),
+      button: document.getElementById('home-hero-btn')
+    };
+
+    const homeTagFilters = document.querySelectorAll('#home-filter-tags .nexus-filter-tag');
+    const homeCityTags = document.querySelectorAll('#home-city-tags .tag');
+
+    function getActiveHomeTags() {
+      return Array.from(homeTagFilters)
+        .filter(tag => tag.classList.contains('active'))
+        .map(tag => tag.dataset.filter);
+    }
+
+    function renderHomeListings(list = homeCatalog) {
       const grid = document.getElementById('home-listings-grid');
+      const count = document.getElementById('home-results-count');
       if (!grid) return;
       grid.innerHTML = '';
 
-      homeProperties.forEach((p) => {
+      if (count) {
+        count.textContent = `${list.length} properties found`;
+      }
+
+      if (!list.length) {
+        grid.innerHTML = '<div class="card" style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);">No properties match the selected filters. Try changing search, city, budget, or tags.</div>';
+        return;
+      }
+
+      list.forEach((p) => {
         const card = document.createElement('div');
         card.className = 'card property-card';
         card.style.cursor = 'pointer';
@@ -997,6 +1202,44 @@
       });
     }
 
+    function applyHomeFilters() {
+      const search = (homeFilters.search?.value || '').toLowerCase().trim();
+      const city = homeFilters.city?.value || '';
+      const type = homeFilters.type?.value || '';
+      const bhk = homeFilters.bhk?.value || '';
+      const min = parseInt(homeFilters.min?.value || '0', 10);
+      const max = parseInt(homeFilters.max?.value || '0', 10);
+      const tags = getActiveHomeTags();
+
+      let filtered = homeCatalog.filter((p) => {
+        const matchesMode = !currentHomeMode || p.mode === currentHomeMode;
+        const matchesSearch = !search || p.title.toLowerCase().includes(search) || p.location.toLowerCase().includes(search);
+        const matchesCity = !city || p.city === city;
+        const matchesType = !type || p.propertyType === type;
+        const matchesBhk = !bhk || p.bhk === bhk;
+        const matchesMin = !min || p.budget >= min;
+        const matchesMax = !max || p.budget <= max;
+        const matchesTags = tags.every((tag) => p[tag]);
+        return matchesMode && matchesSearch && matchesCity && matchesType && matchesBhk && matchesMin && matchesMax && matchesTags;
+      });
+
+      switch (homeFilters.sort?.value) {
+        case 'low-high':
+          filtered = filtered.sort((a, b) => a.budget - b.budget);
+          break;
+        case 'high-low':
+          filtered = filtered.sort((a, b) => b.budget - a.budget);
+          break;
+        case 'popular':
+          filtered = filtered.sort((a, b) => b.popularity - a.popularity);
+          break;
+        default:
+          break;
+      }
+
+      renderHomeListings(filtered);
+    }
+
     const homeModal = document.getElementById('home-property-modal');
     const homeModalMedia = document.getElementById('home-modal-media');
     const homeModalClose = document.getElementById('home-modal-close');
@@ -1004,7 +1247,7 @@
     let selectedHomeProperty = null;
 
     function openHomePropertyModal(id) {
-      const p = homeProperties.find((i) => i.id === id);
+      const p = homeCatalog.find((i) => i.id === id);
       if (!p || !homeModal) return;
       selectedHomeProperty = p;
 
@@ -1019,7 +1262,7 @@
       homeModalMedia.style.backgroundImage = `url('${p.image}')`;
 
       if (homeTokenBtn) {
-        homeTokenBtn.textContent = `Book Token (₹${p.token.toLocaleString('en-IN')})`;
+        homeTokenBtn.textContent = `Book Token (₹${HOME_BOOKING_AMOUNT.toLocaleString('en-IN')})`;
       }
 
       homeModal.classList.add('active');
@@ -1042,14 +1285,133 @@
       });
     }
 
-    document.querySelectorAll('.tag').forEach(tag => {
-      tag.addEventListener('click', function () {
-        document.querySelectorAll('.tag').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+    Object.values(homeFilters).forEach((control) => {
+      if (!control) return;
+      control.addEventListener('input', applyHomeFilters);
+      control.addEventListener('change', applyHomeFilters);
+    });
+
+    homeTagFilters.forEach((tag) => {
+      tag.addEventListener('click', () => {
+        tag.classList.toggle('active');
+        applyHomeFilters();
       });
     });
 
-    renderHomeListings();
+    homeCityTags.forEach((tag) => {
+      tag.addEventListener('click', () => {
+        homeCityTags.forEach((t) => t.classList.remove('active'));
+        tag.classList.add('active');
+        if (homeFilters.city) homeFilters.city.value = tag.dataset.city || '';
+        applyHomeFilters();
+      });
+    });
+
+    if (homeHeroControls.button) {
+      homeHeroControls.button.addEventListener('click', () => {
+        if (homeFilters.search) homeFilters.search.value = homeHeroControls.search?.value || '';
+        if (homeFilters.type) homeFilters.type.value = homeHeroControls.type?.value || '';
+        if (homeFilters.min) homeFilters.min.value = homeHeroControls.min?.value || '';
+        if (homeFilters.max) homeFilters.max.value = homeHeroControls.max?.value || '';
+        applyHomeFilters();
+        const listingsSection = document.getElementById('listings');
+        if (listingsSection) listingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    const COMMENT_KEY = 'estateiqAppComments';
+
+    function readJsonStore(key, fallback = []) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function writeJsonStore(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function renderHomeComments() {
+      const list = document.getElementById('home-comment-list');
+      if (!list) return;
+      const comments = readJsonStore(COMMENT_KEY, []).slice().reverse().slice(0, 6);
+      list.innerHTML = '';
+
+      if (!comments.length) {
+        list.innerHTML = '<li style="color:var(--muted);">No comments yet. Be the first to share your view.</li>';
+        return;
+      }
+
+      comments.forEach((c) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:8px;align-items:center;">
+            <strong style="color:var(--navy);">${c.name}</strong>
+            <span style="font-size:0.76rem;color:var(--muted);">${c.submittedAt}</span>
+          </div>
+          <div style="margin-top:6px;color:var(--ink);font-size:0.86rem;line-height:1.6;">${c.text}</div>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function submitHomeComment() {
+      const nameEl = document.getElementById('home-comment-name');
+      const textEl = document.getElementById('home-comment-text');
+      const statusEl = document.getElementById('home-comment-status');
+      if (!nameEl || !textEl) return;
+
+      const name = (nameEl.value || '').trim() || 'Anonymous User';
+      const text = (textEl.value || '').trim();
+
+      if (!text) {
+        if (statusEl) statusEl.textContent = 'Please add your feedback before posting.';
+        return;
+      }
+
+      const current = readJsonStore(COMMENT_KEY, []);
+      current.push({
+        name,
+        text,
+        submittedAt: new Date().toISOString().slice(0, 10)
+      });
+      writeJsonStore(COMMENT_KEY, current);
+
+      textEl.value = '';
+      if (statusEl) statusEl.textContent = 'Thanks! Your comment has been posted.';
+      renderHomeComments();
+    }
+
+    const homeCommentSubmitBtn = document.getElementById('home-comment-submit');
+    if (homeCommentSubmitBtn) {
+      homeCommentSubmitBtn.addEventListener('click', submitHomeComment);
+    }
+
+    applyHomeFilters();
+    renderHomeComments();
+  </script>
+  <!-- Auto-scroll to Hand-Picked Properties on first load -->
+  <script>
+    (function() {
+      // Only auto-scroll when there is no hash present (so fragment links or manual navigation continue to work)
+      if (!window.location.hash) {
+        window.addEventListener('load', function() {
+          var el = document.getElementById('listings') || document.querySelector('section#listings') || document.querySelector('.listings-grid');
+          if (el) {
+            // Small delay to allow layout/other scripts to settle and avoid fighting the hero button handler
+            setTimeout(function() {
+              try { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+              catch (e) { el.scrollIntoView(); }
+            }, 160);
+          }
+        });
+      }
+    })();
   </script>
 </body>
 

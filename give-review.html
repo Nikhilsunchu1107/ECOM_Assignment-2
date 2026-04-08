@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Give Review | EstateIQ</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .review-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .review-item {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      background: var(--white);
+    }
+
+    .review-item h4 {
+      margin-bottom: 8px;
+      color: var(--navy);
+      font-size: 0.95rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .review-meta {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .review-result {
+      margin-top: 14px;
+      border: 1px solid var(--border);
+      background: var(--paper);
+      border-radius: 10px;
+      padding: 12px;
+      color: var(--ink);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      .review-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="nexusrent.html">NexusRent</a>
+      <a href="services.html">Services</a>
+      <a href="give-review.html" class="active">Give Review</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
+        <div class="nav-dropdown-menu">
+          <a href="landowner.html">Landowner</a>
+          <a href="client.html">Client (Tenant)</a>
+          <a href="admin.html">Admin</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section" style="padding-top:48px;">
+    <div class="container review-wrap">
+      <div class="section-label">Feedback Form</div>
+      <h1 class="section-title" style="font-size:2.4rem;">Give Your Detailed Review</h1>
+      <p class="section-sub">Rate each question from <strong>1 to 10</strong> where 1 = very unhappy and 10 = very satisfied/happy.</p>
+
+      <div class="dashboard-card" style="margin-top:16px;">
+        <div class="review-meta">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input type="text" class="form-input" id="review-user-name" placeholder="Enter your name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (optional)</label>
+            <input type="email" class="form-input" id="review-user-email" placeholder="you@email.com" />
+          </div>
+        </div>
+
+        <div id="review-questions" class="review-grid"></div>
+
+        <div class="form-group" style="margin-top:10px;">
+          <label class="form-label">Any additional comments?</label>
+          <textarea class="form-textarea" id="review-extra" rows="4" placeholder="Share anything else you want us to improve..."></textarea>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <div id="review-live-score" class="metric-sub">Overall score preview: —</div>
+          <button type="button" id="submit-detailed-review" class="btn btn-primary">Submit Review</button>
+        </div>
+
+        <div id="review-submit-status" class="review-result" style="display:none;"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Estate<span>IQ</span></div>
+        <div class="footer-tagline">Thanks for helping us improve the app experience.</div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="nexusrent.html">NexusRent</a></li>
+          <li><a href="give-review.html">Give Review</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Dashboards</h4>
+        <ul>
+          <li><a href="landowner.html">Landowner</a></li>
+          <li><a href="client.html">Client</a></li>
+          <li><a href="admin.html">Admin</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EstateIQ Technologies Pvt. Ltd. All rights reserved.</span>
+      <span>User feedback intelligence enabled</span>
+    </div>
+  </footer>
+
+  <script>
+    const REVIEW_KEY = 'estateiqAppReviews';
+    const COMMENT_KEY = 'estateiqAppComments';
+
+    const reviewQuestions = [
+      'How satisfied are you with property search accuracy?',
+      'How easy is navigation across pages and sections?',
+      'How useful are filters (city, budget, type, BHK, tags)?',
+      'How trustworthy do listings and property details feel?',
+      'How satisfied are you with the design and visual experience?',
+      'How helpful are booking/token/payment flows?',
+      'How confident are you in security and scam protection messaging?',
+      'How responsive and useful is dashboard information?',
+      'How likely are you to recommend EstateIQ to others?',
+      'Overall, how happy are you with EstateIQ?'
+    ];
+
+    function readJsonStore(key, fallback = []) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    function writeJsonStore(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function sentimentFromScore(score) {
+      if (score >= 8.5) return 'Very Happy';
+      if (score >= 7) return 'Happy';
+      if (score >= 5.5) return 'Neutral';
+      if (score >= 4) return 'Dissatisfied';
+      return 'Very Dissatisfied';
+    }
+
+    function questionBucket(score) {
+      if (score >= 8) return 'High';
+      if (score >= 6) return 'Medium';
+      return 'Low';
+    }
+
+    function renderReviewQuestions() {
+      const wrap = document.getElementById('review-questions');
+      wrap.innerHTML = '';
+
+      reviewQuestions.forEach((q, idx) => {
+        const card = document.createElement('div');
+        card.className = 'review-item';
+        card.innerHTML = `
+          <h4>Q${idx + 1}. ${q}</h4>
+          <select class="form-select review-score" data-question-index="${idx}">
+            ${Array.from({ length: 10 }, (_, i) => {
+              const score = i + 1;
+              const mood = score <= 3 ? 'Very Unhappy' : (score <= 5 ? 'Unhappy' : (score <= 7 ? 'Okay' : (score <= 9 ? 'Satisfied' : 'Very Happy')));
+              return `<option value="${score}" ${score === 8 ? 'selected' : ''}>${score} - ${mood}</option>`;
+            }).join('')}
+          </select>
+        `;
+        wrap.appendChild(card);
+      });
+    }
+
+    function getCurrentScores() {
+      return Array.from(document.querySelectorAll('.review-score')).map((s) => Number(s.value || 0));
+    }
+
+    function renderLiveScore() {
+      const scores = getCurrentScores();
+      if (!scores.length) return;
+      const avg = scores.reduce((sum, v) => sum + v, 0) / scores.length;
+      const sentiment = sentimentFromScore(avg);
+      const live = document.getElementById('review-live-score');
+      if (live) {
+        live.textContent = `Overall score preview: ${avg.toFixed(1)}/10 (${sentiment})`;
+      }
+    }
+
+    function submitDetailedReview() {
+      const name = (document.getElementById('review-user-name').value || '').trim() || 'Anonymous User';
+      const email = (document.getElementById('review-user-email').value || '').trim();
+      const extra = (document.getElementById('review-extra').value || '').trim();
+      const scores = getCurrentScores();
+
+      if (scores.length !== 10 || scores.some((v) => !v || v < 1 || v > 10)) {
+        return;
+      }
+
+      const average = scores.reduce((sum, v) => sum + v, 0) / scores.length;
+      const sentiment = sentimentFromScore(average);
+      const weakestQuestionIndex = scores.indexOf(Math.min(...scores));
+      const strongestQuestionIndex = scores.indexOf(Math.max(...scores));
+
+      const payload = {
+        name,
+        email,
+        answers: scores,
+        average: Number(average.toFixed(1)),
+        sentiment,
+        topConcern: reviewQuestions[weakestQuestionIndex],
+        topStrength: reviewQuestions[strongestQuestionIndex],
+        buckets: scores.map(questionBucket),
+        extraComment: extra,
+        submittedAt: new Date().toISOString().slice(0, 10)
+      };
+
+      const existing = readJsonStore(REVIEW_KEY, []);
+      existing.push(payload);
+      writeJsonStore(REVIEW_KEY, existing);
+
+      if (extra) {
+        const comments = readJsonStore(COMMENT_KEY, []);
+        comments.push({ name, text: extra, submittedAt: payload.submittedAt });
+        writeJsonStore(COMMENT_KEY, comments);
+      }
+
+      const status = document.getElementById('review-submit-status');
+      status.style.display = 'block';
+      status.innerHTML = `
+        <strong>Thanks for your review!</strong><br/>
+        Your average score is <strong>${payload.average}/10</strong> (${payload.sentiment}).<br/>
+        Top strength: <strong>${payload.topStrength}</strong><br/>
+        Key improvement area: <strong>${payload.topConcern}</strong>
+      `;
+    }
+
+    renderReviewQuestions();
+    renderLiveScore();
+
+    document.querySelectorAll('.review-score').forEach((el) => {
+      el.addEventListener('change', renderLiveScore);
+      el.addEventListener('input', renderLiveScore);
+    });
+
+    const submitBtn = document.getElementById('submit-detailed-review');
+    if (submitBtn) submitBtn.addEventListener('click', submitDetailedReview);
+  </script>
+</body>
+
+</html>

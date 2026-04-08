@@ -14,6 +14,7 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="nexusrent.html">NexusRent</a>
+      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -260,7 +261,15 @@
               <div class="viz-wrap" id="rev-source-mix"></div>
             </div>
             <div class="dashboard-card">
-              <h4>Monthly Revenue Trend</h4>
+              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+                <h4>Revenue Trend Explorer</h4>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;" id="rev-trend-toggle" aria-label="Revenue trend range toggle">
+                  <button type="button" class="btn btn-outline rev-trend-btn active" data-rev-trend="monthly" style="padding:6px 10px;font-size:0.73rem;">Monthly</button>
+                  <button type="button" class="btn btn-outline rev-trend-btn" data-rev-trend="quarterly" style="padding:6px 10px;font-size:0.73rem;">Quarterly</button>
+                  <button type="button" class="btn btn-outline rev-trend-btn" data-rev-trend="yearly" style="padding:6px 10px;font-size:0.73rem;">Yearly</button>
+                </div>
+              </div>
+              <div class="metric-sub" id="rev-trend-caption" style="margin-top:6px;">Monthly performance across major revenue channels.</div>
               <div class="viz-wrap" id="rev-monthly-trend"></div>
             </div>
           </div>
@@ -581,6 +590,61 @@
               </thead>
               <tbody id="crm-detail-body"></tbody>
             </table>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1.2fr 0.8fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>App Experience Reviews (Fetched from User Review Form)</h4>
+              <table class="dashboard-table mini-table" style="margin-top:8px;">
+                <thead>
+                  <tr>
+                    <th>Reviewer</th>
+                    <th>Score</th>
+                    <th>Sentiment</th>
+                    <th>Top Concern</th>
+                    <th>Date</th>
+                    <th>Source</th>
+                  </tr>
+                </thead>
+                <tbody id="crm-app-review-body"></tbody>
+              </table>
+            </div>
+            <div class="dashboard-card">
+              <h4>Feedback Intelligence Snapshot</h4>
+              <div class="split-stat-wrap">
+                <div class="split-stat"><span>Total Reviews</span><strong id="crm-review-count">0</strong></div>
+                <div class="split-stat"><span>Avg Satisfaction</span><strong id="crm-review-score">0/10</strong></div>
+                <div class="split-stat"><span>Happy / Very Happy</span><strong id="crm-review-happy">0%</strong></div>
+                <div class="split-stat"><span>Watchlist Sentiment</span><strong id="crm-review-watch">0%</strong></div>
+              </div>
+              <h4 style="margin-top:12px;">Top Voice-of-Customer Insights</h4>
+              <ul class="dash-list" id="crm-review-insights" style="margin-top:8px;"></ul>
+            </div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>Question-wise Ratings (10Q Heat View)</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Average score and risk spread for each review question.</div>
+              <div id="crm-review-question-viz" class="viz-wrap"></div>
+            </div>
+            <div class="dashboard-card">
+              <h4>Areas of Concern (Hotspots)</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Frequency-based concentration of friction points from reviews.</div>
+              <div id="crm-review-concern-viz" class="viz-wrap"></div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:0.9fr 1.1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>Satisfaction Trend (Non-Linear)</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Monthly movement with natural ups and downs.</div>
+              <div id="crm-review-trend-viz" class="viz-wrap"></div>
+            </div>
+            <div class="dashboard-card">
+              <h4>User Notes & Verbatim Signals</h4>
+              <ul class="dash-list" id="crm-review-notes-list" style="margin-top:8px;"></ul>
+            </div>
           </div>
         </div>
       </div>
@@ -1057,12 +1121,27 @@
           { label: 'Other Ads', value: 860000, color: '#d4aa6a', yoy: 12, margin: 49 }
         ],
         monthly: [
-          { month: 'Oct', topListingAds: 760000, transactionFees: 980000, affiliate: 430000, displayAdvertising: 390000, subscriptions: 620000, otherAds: 230000 },
-          { month: 'Nov', topListingAds: 820000, transactionFees: 1010000, affiliate: 500000, displayAdvertising: 420000, subscriptions: 710000, otherAds: 260000 },
-          { month: 'Dec', topListingAds: 870000, transactionFees: 1120000, affiliate: 580000, displayAdvertising: 455000, subscriptions: 730000, otherAds: 290000 },
-          { month: 'Jan', topListingAds: 910000, transactionFees: 1180000, affiliate: 620000, displayAdvertising: 470000, subscriptions: 760000, otherAds: 310000 },
-          { month: 'Feb', topListingAds: 980000, transactionFees: 1260000, affiliate: 680000, displayAdvertising: 495000, subscriptions: 810000, otherAds: 345000 },
-          { month: 'Mar', topListingAds: 1030000, transactionFees: 1340000, affiliate: 720000, displayAdvertising: 530000, subscriptions: 860000, otherAds: 380000 }
+          { month: 'Oct', topListingAds: 790000, transactionFees: 1090000, affiliate: 510000, displayAdvertising: 410000, subscriptions: 700000, otherAds: 320000 },
+          { month: 'Nov', topListingAds: 860000, transactionFees: 1030000, affiliate: 450000, displayAdvertising: 390000, subscriptions: 760000, otherAds: 250000 },
+          { month: 'Dec', topListingAds: 810000, transactionFees: 1220000, affiliate: 620000, displayAdvertising: 500000, subscriptions: 690000, otherAds: 360000 },
+          { month: 'Jan', topListingAds: 980000, transactionFees: 1160000, affiliate: 560000, displayAdvertising: 440000, subscriptions: 840000, otherAds: 280000 },
+          { month: 'Feb', topListingAds: 920000, transactionFees: 1320000, affiliate: 730000, displayAdvertising: 560000, subscriptions: 780000, otherAds: 410000 },
+          { month: 'Mar', topListingAds: 1060000, transactionFees: 1270000, affiliate: 650000, displayAdvertising: 490000, subscriptions: 910000, otherAds: 330000 }
+        ],
+        quarterlyTrend: [
+          { month: 'Q2 FY2025', topListingAds: 2140000, transactionFees: 2920000, affiliate: 1320000, displayAdvertising: 1120000, subscriptions: 1910000, otherAds: 760000 },
+          { month: 'Q3 FY2025', topListingAds: 2360000, transactionFees: 2760000, affiliate: 1180000, displayAdvertising: 980000, subscriptions: 2050000, otherAds: 680000 },
+          { month: 'Q4 FY2025', topListingAds: 2250000, transactionFees: 3240000, affiliate: 1490000, displayAdvertising: 1210000, subscriptions: 1860000, otherAds: 840000 },
+          { month: 'Q1 FY2026', topListingAds: 2810000, transactionFees: 3470000, affiliate: 1710000, displayAdvertising: 1330000, subscriptions: 2390000, otherAds: 960000 },
+          { month: 'Q2 FY2026', topListingAds: 2670000, transactionFees: 3310000, affiliate: 1580000, displayAdvertising: 1470000, subscriptions: 2210000, otherAds: 880000 }
+        ],
+        yearlyTrend: [
+          { month: 'FY2021', topListingAds: 5200000, transactionFees: 7440000, affiliate: 2610000, displayAdvertising: 2080000, subscriptions: 4380000, otherAds: 1180000 },
+          { month: 'FY2022', topListingAds: 6070000, transactionFees: 7010000, affiliate: 2380000, displayAdvertising: 1940000, subscriptions: 4890000, otherAds: 1040000 },
+          { month: 'FY2023', topListingAds: 5840000, transactionFees: 8610000, affiliate: 3250000, displayAdvertising: 2730000, subscriptions: 4720000, otherAds: 1510000 },
+          { month: 'FY2024', topListingAds: 6760000, transactionFees: 8190000, affiliate: 2890000, displayAdvertising: 2480000, subscriptions: 5480000, otherAds: 1370000 },
+          { month: 'FY2025', topListingAds: 7390000, transactionFees: 9800000, affiliate: 3710000, displayAdvertising: 3010000, subscriptions: 5960000, otherAds: 1760000 },
+          { month: 'FY2026', topListingAds: 7080000, transactionFees: 9420000, affiliate: 3440000, displayAdvertising: 3340000, subscriptions: 5730000, otherAds: 1620000 }
         ],
         topListingInventory: [
           { placement: 'Homepage Premium Hero', fillRate: 94, ctr: 4.1, avgBid: 18500, revenue: 1120000 },
@@ -1229,6 +1308,16 @@
           { stage: 'Onboarding', program: 'Digital welcome journey + milestone nudges', kpi: 'Time-to-value' },
           { stage: 'Retention', program: 'Quarterly value review + renewal workflows', kpi: 'Renewal %' },
           { stage: 'Advocacy', program: 'Referral rewards + review campaigns', kpi: 'Referral share' }
+        ],
+        mockAppReviews: [
+          { name: 'Priya S.', average: 9.1, sentiment: 'Very Happy', topConcern: 'Need more instant shortlist compare options', submittedAt: '2026-04-03', source: 'Mock', answers: [9, 9, 8, 9, 9, 8, 9, 9, 9, 10], extraComment: 'Loved verified inventory and clean UI. Compare mode would help faster decisions.' },
+          { name: 'Rohan M.', average: 8.3, sentiment: 'Happy', topConcern: 'Would like better saved-search alerts', submittedAt: '2026-04-02', source: 'Mock', answers: [8, 8, 8, 9, 8, 7, 8, 8, 9, 8], extraComment: 'Experience is stable overall. Alerts are delayed during peak hours.' },
+          { name: 'Anjali N.', average: 6.8, sentiment: 'Neutral', topConcern: 'Token payment flow should be faster on mobile', submittedAt: '2026-04-01', source: 'Mock', answers: [7, 7, 7, 7, 7, 5, 7, 6, 7, 6], extraComment: 'Payment success is fine, but loading in mobile checkout feels slow.' },
+          { name: 'Karan P.', average: 7.2, sentiment: 'Happy', topConcern: 'Need clearer property legal-doc summary', submittedAt: '2026-03-30', source: 'Mock', answers: [7, 8, 7, 6, 8, 7, 8, 7, 7, 7], extraComment: 'Would appreciate a one-screen legal summary before booking.' },
+          { name: 'Meera J.', average: 5.9, sentiment: 'Neutral', topConcern: 'Search results need cleaner relevance for rental users', submittedAt: '2026-03-24', source: 'Mock', answers: [5, 6, 5, 6, 6, 6, 6, 6, 7, 6], extraComment: 'Renter-focused filters should be prioritized over buy-heavy listings.' },
+          { name: 'Arvind T.', average: 4.8, sentiment: 'Dissatisfied', topConcern: 'Customer support callbacks are inconsistent', submittedAt: '2026-03-21', source: 'Mock', answers: [5, 5, 5, 5, 5, 4, 5, 4, 5, 5], extraComment: 'Needed support for a booking issue and callback came very late.' },
+          { name: 'Nisha R.', average: 7.9, sentiment: 'Happy', topConcern: 'Map filters should sync with list filters', submittedAt: '2026-03-16', source: 'Mock', answers: [8, 8, 7, 8, 8, 8, 8, 8, 8, 8], extraComment: 'Map and list mismatch caused confusion, otherwise very useful app.' },
+          { name: 'Harsh V.', average: 6.1, sentiment: 'Neutral', topConcern: 'Need stronger fraud-reporting visibility in booking flow', submittedAt: '2026-03-12', source: 'Mock', answers: [6, 6, 6, 6, 6, 6, 5, 6, 7, 7], extraComment: 'Security messaging is present but report options should be one tap.' }
         ]
       };
 
@@ -1459,6 +1548,75 @@
       if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)}Cr`;
       if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
       return fmt(Math.round(n));
+    }
+
+    function readJsonStore(key, fallback = []) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : fallback;
+      } catch (e) {
+        return fallback;
+      }
+    }
+
+    const CRM_REVIEW_QUESTIONS = [
+      'Search accuracy',
+      'Navigation ease',
+      'Filter usefulness',
+      'Listing trust',
+      'Design quality',
+      'Booking/payment flow',
+      'Security confidence',
+      'Dashboard usefulness',
+      'Recommendation intent',
+      'Overall happiness'
+    ];
+
+    function normalizeDateMonth(input) {
+      if (!input || input === '—') return 'Unknown';
+      const d = new Date(input);
+      if (Number.isNaN(d.getTime())) return 'Unknown';
+      return d.toLocaleString('en-US', { month: 'short' });
+    }
+
+    function deterministicJitter(seedText, idx) {
+      const seed = String(seedText || '')
+        .split('')
+        .reduce((s, ch) => s + ch.charCodeAt(0), 0) + (idx * 17);
+      const x = Math.sin(seed * 12.9898) * 43758.5453;
+      const frac = x - Math.floor(x);
+      return (frac * 2) - 1;
+    }
+
+    function clampReviewScore(score) {
+      return Math.max(1, Math.min(10, Math.round(score)));
+    }
+
+    function ensureAnswerVector(row) {
+      if (Array.isArray(row.answers) && row.answers.length === 10) {
+        return row.answers.map((v) => clampReviewScore(Number(v || 0)));
+      }
+      const avg = Number(row.average || 0) || 6.5;
+      return CRM_REVIEW_QUESTIONS.map((_, idx) => {
+        const spread = deterministicJitter(`${row.name || ''}${row.submittedAt || ''}`, idx) * 1.9;
+        return clampReviewScore(avg + spread);
+      });
+    }
+
+    function extractConcernBuckets(row) {
+      const text = `${row.topConcern || ''} ${row.extraComment || ''}`.toLowerCase();
+      const checks = [
+        { key: 'Search relevance', words: ['search', 'shortlist', 'compare', 'relevance'] },
+        { key: 'Payments & checkout', words: ['payment', 'checkout', 'token', 'billing'] },
+        { key: 'Support responsiveness', words: ['support', 'callback', 'response', 'help'] },
+        { key: 'Security & trust', words: ['security', 'fraud', 'scam', 'trust', 'report'] },
+        { key: 'Filters & map UX', words: ['filter', 'map', 'sort', 'city'] },
+        { key: 'Legal/info clarity', words: ['legal', 'doc', 'document', 'summary', 'agreement'] }
+      ];
+      const matched = checks.filter((c) => c.words.some((w) => text.includes(w))).map((c) => c.key);
+      return matched.length ? matched : ['General product quality'];
     }
 
     function renderKPIs() {
@@ -1865,11 +2023,45 @@
       document.getElementById('rev-refund').textContent = `${data.transactionSnapshot.refundRatio}%`;
 
       renderRevenueSourceMix(data.sources, totalRevenue);
-      renderRevenueMonthlyTrend(data.monthly);
+      const currentMode = window.__revTrendMode || 'monthly';
+      renderRevenueTrendByMode(data, currentMode);
       renderTopListingTable(data.topListingInventory);
       renderAffiliateBars(data.affiliatePartners);
       renderEfficiencyBars(data.adPerformance.channels);
       renderRevenueDetailsTable(data.sources, totalRevenue);
+
+      const toggleWrap = document.getElementById('rev-trend-toggle');
+      if (toggleWrap && !toggleWrap.dataset.bound) {
+        toggleWrap.dataset.bound = '1';
+        toggleWrap.addEventListener('click', (ev) => {
+          const btn = ev.target.closest('[data-rev-trend]');
+          if (!btn) return;
+          const mode = btn.getAttribute('data-rev-trend') || 'monthly';
+          window.__revTrendMode = mode;
+          renderRevenueTrendByMode(data, mode);
+        });
+      }
+    }
+
+    function renderRevenueTrendByMode(data, mode) {
+      const normalized = (mode || 'monthly').toLowerCase();
+      const rows = normalized === 'quarterly'
+        ? (data.quarterlyTrend || data.monthly || [])
+        : (normalized === 'yearly' ? (data.yearlyTrend || data.monthly || []) : (data.monthly || []));
+      const caption = document.getElementById('rev-trend-caption');
+      if (caption) {
+        caption.textContent = normalized === 'quarterly'
+          ? 'Quarterly trend showing volatility and channel momentum across fiscal windows.'
+          : (normalized === 'yearly'
+            ? 'Yearly trend for strategic planning and long-range revenue direction.'
+            : 'Monthly performance across major revenue channels.');
+      }
+
+      document.querySelectorAll('.rev-trend-btn').forEach((btn) => {
+        btn.classList.toggle('active', btn.getAttribute('data-rev-trend') === normalized);
+      });
+
+      renderRevenueMonthlyTrend(rows);
     }
 
     function renderRevenueSourceMix(sources, totalRevenue) {
@@ -2372,6 +2564,216 @@
       renderCrmStrategyList(data.strategyPillars);
       renderCrmLifecycleTable(data.lifecyclePrograms);
       renderCrmDetailTable(data.sourceQuality);
+      renderCrmAppReviews(data.mockAppReviews || []);
+    }
+
+    function renderCrmAppReviews(mockRows) {
+      const tbody = document.getElementById('crm-app-review-body');
+      const countEl = document.getElementById('crm-review-count');
+      const avgEl = document.getElementById('crm-review-score');
+      const happyEl = document.getElementById('crm-review-happy');
+      const watchEl = document.getElementById('crm-review-watch');
+      const insightsEl = document.getElementById('crm-review-insights');
+      const questionViz = document.getElementById('crm-review-question-viz');
+      const concernViz = document.getElementById('crm-review-concern-viz');
+      const notesList = document.getElementById('crm-review-notes-list');
+      const trendViz = document.getElementById('crm-review-trend-viz');
+      if (!tbody || !countEl || !avgEl || !happyEl || !watchEl || !insightsEl || !questionViz || !concernViz || !notesList || !trendViz) return;
+
+      const formRows = readJsonStore('estateiqAppReviews', []).map((row) => ({
+        name: row.name || 'Anonymous User',
+        average: Number(row.average || 0),
+        sentiment: row.sentiment || 'Neutral',
+        topConcern: row.topConcern || 'General UX improvements',
+        answers: Array.isArray(row.answers) ? row.answers : [],
+        extraComment: row.extraComment || '',
+        submittedAt: row.submittedAt || '—',
+        source: 'Form'
+      }));
+
+      const data = (formRows.length ? formRows : mockRows)
+        .map((row) => ({ ...row, answers: ensureAnswerVector(row), concerns: extractConcernBuckets(row) }))
+        .slice()
+        .sort((a, b) => (b.submittedAt || '').localeCompare(a.submittedAt || ''))
+        .slice(0, 12);
+
+      const total = data.length;
+      const avg = total ? (data.reduce((s, r) => s + Number(r.average || 0), 0) / total) : 0;
+      const happyPct = total ? ((data.filter((r) => ['Happy', 'Very Happy'].includes(r.sentiment)).length / total) * 100) : 0;
+      const watchPct = total ? ((data.filter((r) => ['Dissatisfied', 'Very Dissatisfied', 'Neutral'].includes(r.sentiment)).length / total) * 100) : 0;
+
+      countEl.textContent = total.toLocaleString('en-IN');
+      avgEl.textContent = `${avg.toFixed(1)}/10`;
+      happyEl.textContent = `${happyPct.toFixed(0)}%`;
+      watchEl.textContent = `${watchPct.toFixed(0)}%`;
+
+      tbody.innerHTML = '';
+      data.forEach((row) => {
+        const tr = document.createElement('tr');
+        const statusClass = ['Very Happy', 'Happy'].includes(row.sentiment) ? 'status-ok' : (row.sentiment === 'Neutral' ? 'status-progress' : 'status-open');
+        tr.innerHTML = `
+          <td>${row.name}</td>
+          <td>${Number(row.average || 0).toFixed(1)}/10</td>
+          <td><span class="status-chip ${statusClass}">${row.sentiment}</span></td>
+          <td>${row.topConcern}</td>
+          <td>${row.submittedAt}</td>
+          <td>${row.source || 'Mock'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const concernCounts = {};
+      data.forEach((r) => {
+        concernCounts[r.topConcern] = (concernCounts[r.topConcern] || 0) + 1;
+      });
+      const topConcerns = Object.entries(concernCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+
+      const qStats = CRM_REVIEW_QUESTIONS.map((label, idx) => {
+        const vals = data.map((r) => Number(r.answers?.[idx] || 0)).filter((v) => v > 0);
+        const qAvg = vals.length ? (vals.reduce((s, v) => s + v, 0) / vals.length) : 0;
+        const lowShare = vals.length ? (vals.filter((v) => v <= 5).length / vals.length) * 100 : 0;
+        return { label, avg: qAvg, lowShare };
+      });
+
+      questionViz.innerHTML = '';
+      qStats.forEach((q, idx) => {
+        const bar = document.createElement('div');
+        bar.className = 'progress-row';
+        const color = q.avg >= 8 ? '#3d7a5c' : (q.avg >= 6.5 ? '#b8924a' : '#a03030');
+        bar.innerHTML = `
+          <div class="progress-label">Q${idx + 1} ${q.label}</div>
+          <div class="progress-track"><div class="progress-fill" style="width:${Math.max(4, q.avg * 10)}%;background:${color}"></div></div>
+          <div class="progress-meta">${q.avg.toFixed(1)}/10 • Low ${q.lowShare.toFixed(0)}%</div>
+        `;
+        questionViz.appendChild(bar);
+      });
+
+      const concernBuckets = {};
+      data.forEach((r) => {
+        (r.concerns || []).forEach((c) => {
+          concernBuckets[c] = (concernBuckets[c] || 0) + 1;
+        });
+      });
+      const concernRows = Object.entries(concernBuckets).sort((a, b) => b[1] - a[1]).slice(0, 6);
+      const maxConcern = Math.max(1, ...concernRows.map((r) => r[1]));
+
+      concernViz.innerHTML = '';
+      concernRows.forEach(([label, count]) => {
+        const row = document.createElement('div');
+        row.className = 'progress-row';
+        row.innerHTML = `
+          <div class="progress-label">${label}</div>
+          <div class="progress-track"><div class="progress-fill" style="width:${(count / maxConcern) * 100}%;background:#1a2540"></div></div>
+          <div class="progress-meta">${count} mention${count > 1 ? 's' : ''}</div>
+        `;
+        concernViz.appendChild(row);
+      });
+
+      if (!concernRows.length) {
+        concernViz.innerHTML = '<div class="metric-sub">No concern hotspots yet.</div>';
+      }
+
+      const notes = data
+        .filter((r) => (r.extraComment || '').trim())
+        .slice(0, 8);
+      notesList.innerHTML = '';
+      if (!notes.length) {
+        notesList.innerHTML = '<li>No additional user notes submitted yet.</li>';
+      } else {
+        notes.forEach((n) => {
+          const cls = ['Very Happy', 'Happy'].includes(n.sentiment) ? 'status-ok' : (n.sentiment === 'Neutral' ? 'status-progress' : 'status-open');
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${n.name}</strong> <span class="status-chip ${cls}" style="margin-left:6px;">${n.sentiment}</span><br><span style="color:var(--muted)">${n.extraComment}</span>`;
+          notesList.appendChild(li);
+        });
+      }
+
+      const monthMap = {};
+      data.forEach((r) => {
+        const month = normalizeDateMonth(r.submittedAt);
+        if (!monthMap[month]) monthMap[month] = [];
+        monthMap[month].push(Number(r.average || 0));
+      });
+      const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const trend = Object.keys(monthMap)
+        .map((m) => ({ month: m, avg: monthMap[m].reduce((s, v) => s + v, 0) / Math.max(1, monthMap[m].length) }))
+        .sort((a, b) => monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month));
+
+      trendViz.innerHTML = '';
+      if (trend.length < 2) {
+        trendViz.innerHTML = '<div class="metric-sub">Need at least 2 monthly points for trend view.</div>';
+      } else {
+        const width = Math.max(360, Math.round(trendViz.getBoundingClientRect().width) || 420);
+        const height = 210;
+        const pad = { t: 14, r: 12, b: 30, l: 34 };
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', height);
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+
+        const xStep = (width - pad.l - pad.r) / Math.max(1, trend.length - 1);
+        const x = (i) => pad.l + (i * xStep);
+        const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / 10)));
+
+        [2, 4, 6, 8, 10].forEach((tick) => {
+          const yy = y(tick);
+          const line = document.createElementNS(svgNS, 'line');
+          line.setAttribute('x1', pad.l);
+          line.setAttribute('x2', width - pad.r);
+          line.setAttribute('y1', yy);
+          line.setAttribute('y2', yy);
+          line.setAttribute('stroke', '#ece6df');
+          svg.appendChild(line);
+        });
+
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', '#1a2540');
+        path.setAttribute('stroke-width', '2.4');
+        path.setAttribute('d', trend.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(p.avg)}`).join(' '));
+        svg.appendChild(path);
+
+        trend.forEach((p, i) => {
+          const dot = document.createElementNS(svgNS, 'circle');
+          dot.setAttribute('cx', x(i));
+          dot.setAttribute('cy', y(p.avg));
+          dot.setAttribute('r', '3.4');
+          dot.setAttribute('fill', p.avg >= 7 ? '#3d7a5c' : (p.avg >= 6 ? '#b8924a' : '#a03030'));
+          dot.addEventListener('mouseenter', (e) => showTooltip(e, `${p.month}: ${p.avg.toFixed(1)}/10`));
+          dot.addEventListener('mousemove', showTooltip);
+          dot.addEventListener('mouseleave', hideTooltip);
+          svg.appendChild(dot);
+
+          const xl = document.createElementNS(svgNS, 'text');
+          xl.setAttribute('x', x(i));
+          xl.setAttribute('y', height - 8);
+          xl.setAttribute('text-anchor', 'middle');
+          xl.setAttribute('font-size', '11');
+          xl.setAttribute('fill', '#58524a');
+          xl.textContent = p.month;
+          svg.appendChild(xl);
+        });
+
+        trendViz.appendChild(svg);
+      }
+
+      insightsEl.innerHTML = '';
+      if (!topConcerns.length) {
+        insightsEl.innerHTML = '<li>No review insights available yet.</li>';
+      } else {
+        topConcerns.forEach(([topic, freq], idx) => {
+          const li = document.createElement('li');
+          li.textContent = `#${idx + 1}: ${topic} (mentioned ${freq} time${freq > 1 ? 's' : ''})`;
+          insightsEl.appendChild(li);
+        });
+        const weakest = qStats.slice().sort((a, b) => a.avg - b.avg).slice(0, 2);
+        weakest.forEach((q) => {
+          const li = document.createElement('li');
+          li.textContent = `Priority action: Improve ${q.label} (current avg ${q.avg.toFixed(1)}/10).`;
+          insightsEl.appendChild(li);
+        });
+      }
     }
 
     function renderCrmFunnel(stages) {
