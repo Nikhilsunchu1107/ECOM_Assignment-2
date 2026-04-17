@@ -14,7 +14,6 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="nexusrent.html">NexusRent</a>
-      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -121,14 +120,6 @@
                   <label class="form-label">Details</label>
                   <textarea id="new-issue-details" class="form-textarea" rows="4"></textarea>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Urgency</label>
-                  <select id="new-issue-urgency" class="form-select">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                  </select>
-                </div>
                 <button class="btn btn-primary" id="add-issue">Submit Issue</button>
               </div>
             </div>
@@ -205,10 +196,43 @@
           { id: 'sh-4', name: 'Nova Lakeview', location: 'Powai', roomType: 'Shared 2BHK', match: 'Sana (Designer)', images: ['https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1200&q=80'], totalSlots:3, occupied:1, genderPreference:'female', rent:38000, size:'—', rooms:'—', deposit:76000, furnished:'Furnished', landlord:{name:'Ritu Verma', phone:'+91 99000 11223', email:'ritu@landlord.com'}, lease:'May 2026 — Apr 2027', agreement:'Standard lease.', amenities:['Lake View','Gym'] }
         ];
 
+        const COMPLAINT_STORE_KEY = 'estateiqComplaints';
+
         const currentIssues = [
           { id: 'is-1', title: 'Kitchen sink leakage', date: '04 Apr 2026', status: 'In Progress', urgency: 'high' },
           { id: 'is-2', title: 'Hall AC service', date: '28 Mar 2026', status: 'Open', urgency: 'medium' }
         ];
+
+        function readComplaintStore() {
+          try {
+            const raw = localStorage.getItem(COMPLAINT_STORE_KEY);
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+          } catch (e) {
+            return [];
+          }
+        }
+
+        function writeComplaintStore(records) {
+          localStorage.setItem(COMPLAINT_STORE_KEY, JSON.stringify(records));
+        }
+
+        function syncIssuesFromStore() {
+          const all = readComplaintStore();
+          const relevant = all.filter(c => c.property === currentRental.property || c.reportedBy === 'Chinmay');
+          relevant.forEach((c) => {
+            const idx = currentIssues.findIndex((i) => i.id === c.id);
+            const normalized = {
+              id: c.id,
+              title: c.title,
+              date: c.date,
+              status: c.status || 'Open',
+              urgency: c.urgency || 'unassigned'
+            };
+            if (idx > -1) currentIssues[idx] = normalized;
+            else currentIssues.unshift(normalized);
+          });
+        }
 
         // Render liked properties
         const likedGrid = document.getElementById('client-liked-grid');
@@ -493,15 +517,27 @@
         if (genderFilterEl) genderFilterEl.addEventListener('change', () => renderShared(genderFilterEl.value));
 
         // Issues rendering and adding
-        function renderIssues(){ const el = document.getElementById('issues-list'); el.innerHTML=''; currentIssues.forEach(i=>{ const item = document.createElement('div'); item.style.marginBottom='8px'; item.innerHTML = `<strong>${i.title}</strong> <div style="color:var(--muted);font-size:0.85rem">${i.date} • <span class="status-chip ${i.status==='In Progress'?'status-progress':i.status==='Open'?'status-open':'status-ok'}">${i.status}</span> • Urgency: ${i.urgency}</div>`; el.appendChild(item); }); }
+        function renderIssues(){ const el = document.getElementById('issues-list'); el.innerHTML=''; currentIssues.forEach(i=>{ const item = document.createElement('div'); item.style.marginBottom='8px'; const urgencyLabel = i.urgency === 'unassigned' ? 'Pending admin triage' : i.urgency; item.innerHTML = `<strong>${i.title}</strong> <div style="color:var(--muted);font-size:0.85rem">${i.date} • <span class="status-chip ${i.status==='In Progress'?'status-progress':i.status==='Open'?'status-open':'status-ok'}">${i.status}</span> • Urgency: ${urgencyLabel}</div>`; el.appendChild(item); }); }
 
         document.getElementById('add-issue').addEventListener('click', ()=>{
           const title = document.getElementById('new-issue-title').value.trim();
           const details = document.getElementById('new-issue-details').value.trim();
-          const urgency = document.getElementById('new-issue-urgency').value;
           if(!title){ alert('Please add an issue title'); return; }
           const id = 'is-'+Date.now();
-          currentIssues.unshift({ id, title, date: new Date().toLocaleDateString('en-GB'), status: 'Open', urgency });
+          const complaintRecord = {
+            id,
+            title,
+            details,
+            date: new Date().toLocaleDateString('en-GB'),
+            status: 'Open',
+            urgency: 'unassigned',
+            reportedBy: 'Chinmay',
+            property: currentRental.property
+          };
+          const existing = readComplaintStore();
+          existing.unshift(complaintRecord);
+          writeComplaintStore(existing);
+          currentIssues.unshift({ id, title, date: complaintRecord.date, status: 'Open', urgency: 'unassigned' });
           renderIssues();
           document.getElementById('new-issue-title').value=''; document.getElementById('new-issue-details').value='';
         });
@@ -520,7 +556,8 @@
         });
 
         // initial render
-        renderLiked(); renderShared(); renderIssues();
+  syncIssuesFromStore();
+  renderLiked(); renderShared(); renderIssues();
         // ensure the controls are visible when starting on Liked view
         if (likedControls) likedControls.style.display = document.getElementById('view-liked').style.display === 'none' ? 'none' : 'flex';
       </script>

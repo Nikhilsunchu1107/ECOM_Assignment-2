@@ -14,7 +14,6 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="nexusrent.html">NexusRent</a>
-      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -40,8 +39,6 @@
         <button class="admin-tab-btn" data-admin-tab="marketing" role="tab" aria-selected="false">Marketing</button>
         <button class="admin-tab-btn" data-admin-tab="crm" role="tab" aria-selected="false">CRM</button>
         <button class="admin-tab-btn" data-admin-tab="security" role="tab" aria-selected="false">Security</button>
-        <button class="admin-tab-btn" data-admin-tab="scm" role="tab" aria-selected="false">SCM</button>
-        <button class="admin-tab-btn" data-admin-tab="tenant-profile" role="tab" aria-selected="false">Tenant Profile</button>
       </div>
 
       <div class="admin-tab-panel active" id="admin-panel-overview" role="tabpanel">
@@ -185,6 +182,25 @@
         </div>
       </div>
 
+      <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:1fr;">
+        <div class="dashboard-card">
+          <h4>Complaint Triage & Resolution</h4>
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Complaint</th>
+                <th>Tenant</th>
+                <th>Property</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="admin-complaints-body"></tbody>
+          </table>
+        </div>
+      </div>
+
       <div class="dashboard-grid" style="margin-top:16px;grid-template-columns:repeat(3,1fr);">
         <div class="dashboard-card">
           <h4>Issue Categories (Share of Total)</h4>
@@ -214,436 +230,96 @@
 
       <div class="admin-tab-panel" id="admin-panel-revenue" role="tabpanel" aria-hidden="true">
         <div class="dashboard-card">
-          <div class="revenue-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">Advanced Revenue Intelligence</h4>
-              <p class="metric-sub">Complete monetization analytics across top listing ads, transactions, affiliate, display media, and subscription plans.</p>
-            </div>
-            <span class="revenue-chip" id="rev-period-chip">Q1 FY2026</span>
+          <h4>Revenue Workspace</h4>
+          <p class="metric-sub" style="margin-bottom:14px;">Monetization overview across subscriptions, ads, affiliate programs, and transaction fees.</p>
+          <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Subscriptions</h4><div class="metric-value" style="font-size:1.5rem;">₹48L</div><div class="metric-sub">41% share</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Advertisements</h4><div class="metric-value" style="font-size:1.5rem;">₹21L</div><div class="metric-sub">18% share</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Affiliate</h4><div class="metric-value" style="font-size:1.5rem;">₹15L</div><div class="metric-sub">13% share</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Transaction Fees</h4><div class="metric-value" style="font-size:1.5rem;">₹32L</div><div class="metric-sub">28% share</div></div>
           </div>
-
-          <div class="dashboard-grid revenue-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Total Revenue</h4>
-              <div class="revenue-big" id="rev-total">₹0</div>
-              <div class="metric-sub" id="rev-total-growth">0% YoY</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Top Listing Ads</h4>
-              <div class="revenue-big" id="rev-top-ads">₹0</div>
-              <div class="metric-sub" id="rev-top-ads-share">0% share</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Transaction Fees</h4>
-              <div class="revenue-big" id="rev-tx-fees">₹0</div>
-              <div class="metric-sub" id="rev-tx-fees-share">0% share</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Affiliate Revenue</h4>
-              <div class="revenue-big" id="rev-affiliate">₹0</div>
-              <div class="metric-sub" id="rev-affiliate-share">0% share</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Ad Inventory Fill</h4>
-              <div class="revenue-big" id="rev-fill-rate">0%</div>
-              <div class="metric-sub" id="rev-ecpm">eCPM ₹0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Net Margin</h4>
-              <div class="revenue-big" id="rev-margin">0%</div>
-              <div class="metric-sub" id="rev-net-profit">Net ₹0</div>
-            </div>
-          </div>
-
           <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
             <div class="dashboard-card">
-              <h4>Revenue Source Mix</h4>
-              <div class="viz-wrap" id="rev-source-mix"></div>
-            </div>
-            <div class="dashboard-card">
-              <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
-                <h4>Revenue Trend Explorer</h4>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;" id="rev-trend-toggle" aria-label="Revenue trend range toggle">
-                  <button type="button" class="btn btn-outline rev-trend-btn active" data-rev-trend="monthly" style="padding:6px 10px;font-size:0.73rem;">Monthly</button>
-                  <button type="button" class="btn btn-outline rev-trend-btn" data-rev-trend="quarterly" style="padding:6px 10px;font-size:0.73rem;">Quarterly</button>
-                  <button type="button" class="btn btn-outline rev-trend-btn" data-rev-trend="yearly" style="padding:6px 10px;font-size:0.73rem;">Yearly</button>
-                </div>
-              </div>
-              <div class="metric-sub" id="rev-trend-caption" style="margin-top:6px;">Monthly performance across major revenue channels.</div>
-              <div class="viz-wrap" id="rev-monthly-trend"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid revenue-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Top Listing Advertisement Performance</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Placement</th>
-                    <th>Fill Rate</th>
-                    <th>CTR</th>
-                    <th>Avg Bid</th>
-                    <th>Revenue</th>
-                  </tr>
-                </thead>
-                <tbody id="rev-toplist-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Transaction Revenue Snapshot</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>GMV Processed</span><strong id="rev-gmv">₹0</strong></div>
-                <div class="split-stat"><span>Closed Transactions</span><strong id="rev-closed">0</strong></div>
-                <div class="split-stat"><span>Avg Ticket Size</span><strong id="rev-ticket">₹0</strong></div>
-                <div class="split-stat"><span>Refund Ratio</span><strong id="rev-refund">0%</strong></div>
+              <h4>Revenue Stream Mix</h4>
+              <div class="dash-list" style="margin-top:8px;">
+                <div class="pie-legend-row"><span class="legend-dot" style="background:#1f77b4"></span><span>Subscriptions</span><strong>41%</strong></div>
+                <div class="pie-legend-row"><span class="legend-dot" style="background:#ff7f0e"></span><span>Advertisements</span><strong>18%</strong></div>
+                <div class="pie-legend-row"><span class="legend-dot" style="background:#2ca02c"></span><span>Affiliate</span><strong>13%</strong></div>
+                <div class="pie-legend-row"><span class="legend-dot" style="background:#9467bd"></span><span>Transaction Fees</span><strong>28%</strong></div>
               </div>
             </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
             <div class="dashboard-card">
-              <h4>Affiliate Partner Contribution</h4>
-              <div id="rev-affiliate-bars" class="viz-wrap"></div>
+              <h4>Pricing Plans</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li><strong>Basic</strong> — ₹999/month • Listing + lead inbox</li>
+                <li><strong>Professional</strong> — ₹2,999/month • CRM + priority exposure</li>
+                <li><strong>Enterprise</strong> — ₹6,999/month • Team workflows + API access</li>
+              </ul>
             </div>
-            <div class="dashboard-card">
-              <h4>Monetization Efficiency by Channel</h4>
-              <div id="rev-efficiency-bars" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-card" style="margin-top:14px;">
-            <h4>Advanced Revenue Details</h4>
-            <table class="dashboard-table mini-table" style="margin-top:8px;">
-              <thead>
-                <tr>
-                  <th>Source</th>
-                  <th>Gross Revenue</th>
-                  <th>Share</th>
-                  <th>YoY Growth</th>
-                  <th>Net Margin</th>
-                </tr>
-              </thead>
-              <tbody id="rev-source-detail-body"></tbody>
-            </table>
           </div>
         </div>
       </div>
 
       <div class="admin-tab-panel" id="admin-panel-marketing" role="tabpanel" aria-hidden="true">
         <div class="dashboard-card">
-          <div class="marketing-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">Marketing Growth Command Center</h4>
-              <p class="metric-sub">Track spend, source-wise audience, banner inventory, social media campaigns, agent discounts, Google listings, and conversion quality from impression to closure.</p>
-            </div>
-            <span class="revenue-chip" id="mkt-period-chip">Q1 FY2026</span>
+          <h4>Marketing Workspace</h4>
+          <p class="metric-sub" style="margin-bottom:14px;">AIDA funnel strategy, channel allocation, and campaign planning consolidated for execution.</p>
+          <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Awareness</h4><div class="metric-value" style="font-size:1.5rem;">2.5M+</div><div class="metric-sub">SEO, social, PR</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Interest</h4><div class="metric-value" style="font-size:1.5rem;">480K</div><div class="metric-sub">Search + retargeting</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Desire</h4><div class="metric-value" style="font-size:1.5rem;">96K</div><div class="metric-sub">Alerts + agent connect</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Action</h4><div class="metric-value" style="font-size:1.5rem;">22K</div><div class="metric-sub">Visits + closures</div></div>
           </div>
-
-          <div class="dashboard-grid marketing-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Total Marketing Spend</h4>
-              <div class="revenue-big" id="mkt-total-spend">₹0</div>
-              <div class="metric-sub" id="mkt-spend-growth">0% vs previous quarter</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Total Audience Reached</h4>
-              <div class="revenue-big" id="mkt-audience">0</div>
-              <div class="metric-sub" id="mkt-cpm">CPM ₹0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Leads Attracted</h4>
-              <div class="revenue-big" id="mkt-leads">0</div>
-              <div class="metric-sub" id="mkt-cpl">CPL ₹0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Customer Conversion</h4>
-              <div class="revenue-big" id="mkt-conversion">0%</div>
-              <div class="metric-sub" id="mkt-acq">CAC ₹0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Google Listing Calls</h4>
-              <div class="revenue-big" id="mkt-gmb-calls">0</div>
-              <div class="metric-sub" id="mkt-gmb-rating">Rating 0.0★</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>ROAS</h4>
-              <div class="revenue-big" id="mkt-roas">0x</div>
-              <div class="metric-sub" id="mkt-roi">ROI 0%</div>
-            </div>
-          </div>
-
           <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
             <div class="dashboard-card">
-              <h4>Spend Allocation by Source</h4>
-              <div id="mkt-spend-mix" class="viz-wrap"></div>
+              <h4>Channel Mix (₹80L Budget)</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>SEO & Content — <strong>35%</strong></li>
+                <li>Social Media Ads — <strong>25%</strong></li>
+                <li>Google PPC — <strong>20%</strong></li>
+                <li>Influencer / PR — <strong>10%</strong></li>
+                <li>Email + Referral — <strong>10%</strong></li>
+              </ul>
             </div>
             <div class="dashboard-card">
-              <h4>Audience Attracted by Source</h4>
-              <div id="mkt-audience-source" class="viz-wrap"></div>
+              <h4>Campaign Calendar</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li><strong>Q1:</strong> Brand awareness + city launch bursts</li>
+                <li><strong>Q2:</strong> Performance optimization + retargeting scale</li>
+                <li><strong>Q3:</strong> Referral push + influencer activation</li>
+                <li><strong>Q4:</strong> Festive offers + high-intent conversion drives</li>
+              </ul>
             </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Paid Media Trend (Spend vs Leads)</h4>
-              <div id="mkt-trend" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Funnel Performance</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>Impressions</span><strong id="mkt-impressions">0</strong></div>
-                <div class="split-stat"><span>Clicks</span><strong id="mkt-clicks">0</strong></div>
-                <div class="split-stat"><span>Qualified Leads</span><strong id="mkt-qualified">0</strong></div>
-                <div class="split-stat"><span>Site Visits</span><strong id="mkt-visits">0</strong></div>
-                <div class="split-stat"><span>Converted Customers</span><strong id="mkt-customers">0</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid marketing-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Advertisement Banner Inventory</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Banner Slot</th>
-                    <th>Fill</th>
-                    <th>CTR</th>
-                    <th>CPC</th>
-                    <th>Spend</th>
-                  </tr>
-                </thead>
-                <tbody id="mkt-banner-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Agent Discount Program</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Program</th>
-                    <th>Discount</th>
-                    <th>Leads</th>
-                    <th>Conversion</th>
-                  </tr>
-                </thead>
-                <tbody id="mkt-agent-body"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Social Media Spend & Reach</h4>
-              <div id="mkt-social-bars" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Google Listings & Local Discovery</h4>
-              <ul class="dash-list" id="mkt-gmb-list" style="margin-top:8px;"></ul>
-            </div>
-          </div>
-
-          <div class="dashboard-card" style="margin-top:14px;">
-            <h4>Commercial Marketing Source Details</h4>
-            <table class="dashboard-table mini-table" style="margin-top:8px;">
-              <thead>
-                <tr>
-                  <th>Source</th>
-                  <th>Spend</th>
-                  <th>Audience</th>
-                  <th>Leads</th>
-                  <th>Conversion</th>
-                  <th>CAC</th>
-                </tr>
-              </thead>
-              <tbody id="mkt-detail-body"></tbody>
-            </table>
           </div>
         </div>
       </div>
 
       <div class="admin-tab-panel" id="admin-panel-crm" role="tabpanel" aria-hidden="true">
         <div class="dashboard-card">
-          <div class="crm-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">CRM Intelligence & Strategy Hub</h4>
-              <p class="metric-sub">Operational, analytical, and collaborative CRM strategy covering lifecycle orchestration, lead scoring, automation, retention, and conversion optimization.</p>
-            </div>
-            <span class="revenue-chip" id="crm-period-chip">Q1 FY2026</span>
+          <h4>CRM Workspace</h4>
+          <p class="metric-sub" style="margin-bottom:14px;">Lead scoring, lifecycle automation, and relationship intelligence from first inquiry to referral.</p>
+          <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Active Leads</h4><div class="metric-value" style="font-size:1.5rem;">47</div><div class="metric-sub">↑ 12 this week</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Site Visits</h4><div class="metric-value" style="font-size:1.5rem;">8</div><div class="metric-sub">Scheduled now</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Pipeline Value</h4><div class="metric-value" style="font-size:1.5rem;">₹4.2Cr</div><div class="metric-sub">Live opportunities</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Conversion</h4><div class="metric-value" style="font-size:1.5rem;">14%</div><div class="metric-sub">↑ 2% MoM</div></div>
           </div>
-
-          <div class="dashboard-grid crm-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Active Leads</h4>
-              <div class="revenue-big" id="crm-active-leads">0</div>
-              <div class="metric-sub" id="crm-active-delta">0 this month</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>MQL → SQL Rate</h4>
-              <div class="revenue-big" id="crm-mql-sql">0%</div>
-              <div class="metric-sub" id="crm-qualified">MQL 0 • SQL 0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Pipeline Value</h4>
-              <div class="revenue-big" id="crm-pipeline">₹0</div>
-              <div class="metric-sub" id="crm-win-rate">Win Rate 0%</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Response SLA</h4>
-              <div class="revenue-big" id="crm-sla">0 min</div>
-              <div class="metric-sub" id="crm-coverage">Automation Coverage 0%</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Retention</h4>
-              <div class="revenue-big" id="crm-retention">0%</div>
-              <div class="metric-sub" id="crm-churn">Churn 0%</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Customer Advocacy</h4>
-              <div class="revenue-big" id="crm-nps">NPS 0</div>
-              <div class="metric-sub" id="crm-referrals">Referrals 0</div>
-            </div>
-          </div>
-
           <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
             <div class="dashboard-card">
-              <h4>Lifecycle Funnel Health</h4>
-              <div id="crm-funnel-viz" class="viz-wrap"></div>
+              <h4>Lifecycle Stages</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>Aware → Prospect → Lead</li>
+                <li>Lead → Negotiating → Customer</li>
+                <li>Customer → Advocate (Referral)</li>
+              </ul>
             </div>
             <div class="dashboard-card">
-              <h4>Lead Pipeline Trend</h4>
-              <div id="crm-pipeline-trend" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Lead Source Quality</h4>
-              <div id="crm-source-quality" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Retention & Success Metrics</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>Renewal Rate</span><strong id="crm-renewal">0%</strong></div>
-                <div class="split-stat"><span>Expansion Revenue</span><strong id="crm-expansion">₹0</strong></div>
-                <div class="split-stat"><span>Avg Resolution Time</span><strong id="crm-resolution">0 hrs</strong></div>
-                <div class="split-stat"><span>At-Risk Accounts</span><strong id="crm-risk">0</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid crm-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Agent Conversion Performance</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Agent Team</th>
-                    <th>Assigned Leads</th>
-                    <th>Qualified</th>
-                    <th>Won Deals</th>
-                    <th>Conversion</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-agent-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>CRM Automation Playbooks</h4>
-              <ul class="dash-list" id="crm-playbook-list" style="margin-top:8px;"></ul>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>CRM Strategy Pillars</h4>
-              <ul class="dash-list" id="crm-strategy-list" style="margin-top:8px;"></ul>
-            </div>
-            <div class="dashboard-card">
-              <h4>Customer Lifecycle Programs</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Stage</th>
-                    <th>Program</th>
-                    <th>Primary KPI</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-lifecycle-body"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="dashboard-card" style="margin-top:14px;">
-            <h4>CRM Source Effectiveness Matrix</h4>
-            <table class="dashboard-table mini-table" style="margin-top:8px;">
-              <thead>
-                <tr>
-                  <th>Source</th>
-                  <th>Leads</th>
-                  <th>Qualified %</th>
-                  <th>Win %</th>
-                  <th>Avg Cycle (days)</th>
-                  <th>Deal Value</th>
-                </tr>
-              </thead>
-              <tbody id="crm-detail-body"></tbody>
-            </table>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1.2fr 0.8fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>App Experience Reviews (Fetched from User Review Form)</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Reviewer</th>
-                    <th>Score</th>
-                    <th>Sentiment</th>
-                    <th>Top Concern</th>
-                    <th>Date</th>
-                    <th>Source</th>
-                  </tr>
-                </thead>
-                <tbody id="crm-app-review-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Feedback Intelligence Snapshot</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>Total Reviews</span><strong id="crm-review-count">0</strong></div>
-                <div class="split-stat"><span>Avg Satisfaction</span><strong id="crm-review-score">0/10</strong></div>
-                <div class="split-stat"><span>Happy / Very Happy</span><strong id="crm-review-happy">0%</strong></div>
-                <div class="split-stat"><span>Watchlist Sentiment</span><strong id="crm-review-watch">0%</strong></div>
-              </div>
-              <h4 style="margin-top:12px;">Top Voice-of-Customer Insights</h4>
-              <ul class="dash-list" id="crm-review-insights" style="margin-top:8px;"></ul>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Question-wise Ratings (10Q Heat View)</h4>
-              <div class="metric-sub" style="margin-bottom:8px;">Average score and risk spread for each review question.</div>
-              <div id="crm-review-question-viz" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Areas of Concern (Hotspots)</h4>
-              <div class="metric-sub" style="margin-bottom:8px;">Frequency-based concentration of friction points from reviews.</div>
-              <div id="crm-review-concern-viz" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:0.9fr 1.1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Satisfaction Trend (Non-Linear)</h4>
-              <div class="metric-sub" style="margin-bottom:8px;">Monthly movement with natural ups and downs.</div>
-              <div id="crm-review-trend-viz" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>User Notes & Verbatim Signals</h4>
-              <ul class="dash-list" id="crm-review-notes-list" style="margin-top:8px;"></ul>
+              <h4>Operational CRM Focus</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>Automated follow-ups via email + WhatsApp</li>
+                <li>Agent response-time & conversion benchmarking</li>
+                <li>Post-sale retention and reactivation campaigns</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -651,381 +327,32 @@
 
       <div class="admin-tab-panel" id="admin-panel-security" role="tabpanel" aria-hidden="true">
         <div class="dashboard-card">
-          <div class="security-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">Security, Trust & Scam Protection Command Center</h4>
-              <p class="metric-sub">End-to-end protection for clients, landlords, sellers, and buyers with anti-scam verification, secure deposit workflows, and deep technical security controls.</p>
-            </div>
-            <span class="revenue-chip" id="sec-period-chip">Q1 FY2026</span>
+          <h4>Security Workspace</h4>
+          <p class="metric-sub" style="margin-bottom:14px;">Security-first architecture with multi-layer protection, compliance controls, and trust posture metrics.</p>
+          <div class="dashboard-grid" style="grid-template-columns:repeat(3,1fr);gap:12px;">
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Transport</h4><div class="metric-sub">TLS 1.3 across all traffic</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Identity</h4><div class="metric-sub">JWT + OTP / 2FA controls</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Compliance</h4><div class="metric-sub">ISO 27001, RERA, privacy-ready controls</div></div>
           </div>
-
-          <div class="dashboard-grid security-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Fraud Attempts Blocked</h4>
-              <div class="revenue-big" id="sec-fraud-blocked">0</div>
-              <div class="metric-sub" id="sec-fraud-rate">Detection rate 0%</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Verified Users</h4>
-              <div class="revenue-big" id="sec-verified-users">0%</div>
-              <div class="metric-sub" id="sec-kyc">KYC pass 0%</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Deposit Escrow Protected</h4>
-              <div class="revenue-big" id="sec-escrow-value">₹0</div>
-              <div class="metric-sub" id="sec-escrow-cases">0 active escrows</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Scam Complaints Resolved</h4>
-              <div class="revenue-big" id="sec-resolved">0%</div>
-              <div class="metric-sub" id="sec-resolution-time">Avg 0 hrs</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Platform Uptime</h4>
-              <div class="revenue-big" id="sec-uptime">0%</div>
-              <div class="metric-sub" id="sec-incidents">Incidents 0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Data Security Posture</h4>
-              <div class="revenue-big" id="sec-posture">0/100</div>
-              <div class="metric-sub" id="sec-compliance">Compliance 0%</div>
-            </div>
-          </div>
-
           <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
             <div class="dashboard-card">
-              <h4>Stakeholder Protection Coverage</h4>
-              <div id="sec-stakeholder-viz" class="viz-wrap"></div>
+              <h4>Security Layers</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>WAF + bot protection</li>
+                <li>TLS encryption in transit</li>
+                <li>RBAC authorization + session policy</li>
+                <li>AES-256 encryption at rest</li>
+                <li>Continuous fraud / anomaly monitoring</li>
+              </ul>
             </div>
             <div class="dashboard-card">
-              <h4>Threat Detection Trend</h4>
-              <div id="sec-threat-trend" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid security-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Anti-Scam Controls</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Control</th>
-                    <th>Coverage</th>
-                    <th>Blocked</th>
-                    <th>Success</th>
-                  </tr>
-                </thead>
-                <tbody id="sec-scam-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Deposit & Escrow Security</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Flow</th>
-                    <th>Protected Value</th>
-                    <th>Disputes</th>
-                    <th>Resolved</th>
-                  </tr>
-                </thead>
-                <tbody id="sec-deposit-body"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Technical Security Controls</h4>
-              <div id="sec-tech-controls" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Incident Response & Recovery</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>Mean Time to Detect</span><strong id="sec-mttd">0 min</strong></div>
-                <div class="split-stat"><span>Mean Time to Respond</span><strong id="sec-mttr">0 min</strong></div>
-                <div class="split-stat"><span>Critical Incidents (Qtr)</span><strong id="sec-critical">0</strong></div>
-                <div class="split-stat"><span>Disaster Recovery Drill</span><strong id="sec-drill">0%</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Trust Programs for Users</h4>
-              <ul class="dash-list" id="sec-trust-list" style="margin-top:8px;"></ul>
-            </div>
-            <div class="dashboard-card">
-              <h4>Technical Security Strategy</h4>
-              <ul class="dash-list" id="sec-tech-strategy-list" style="margin-top:8px;"></ul>
-            </div>
-          </div>
-
-          <div class="dashboard-card" style="margin-top:14px;">
-            <h4>Security Assurance Matrix</h4>
-            <table class="dashboard-table mini-table" style="margin-top:8px;">
-              <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Control Score</th>
-                  <th>SLA Target</th>
-                  <th>Current</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody id="sec-assurance-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-tab-panel" id="admin-panel-scm" role="tabpanel" aria-hidden="true">
-        <div class="dashboard-card">
-          <div class="scm-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">SCM & Inventory Utilization Command Center</h4>
-              <p class="metric-sub">Supply chain management for property inventory: track unsold/unrented stock, idle time, active demand, and fulfillment velocity for faster closures.</p>
-            </div>
-            <span class="revenue-chip" id="scm-period-chip">Q1 FY2026</span>
-          </div>
-
-          <div class="dashboard-grid scm-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Total Unutilized Inventory</h4>
-              <div class="revenue-big" id="scm-unutilized">0</div>
-              <div class="metric-sub" id="scm-unutilized-pct">0% of total stock</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Unsold Units</h4>
-              <div class="revenue-big" id="scm-unsold">0</div>
-              <div class="metric-sub" id="scm-unsold-value">Value ₹0</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Unrented Units</h4>
-              <div class="revenue-big" id="scm-unrented">0</div>
-              <div class="metric-sub" id="scm-unrented-value">Rental potential ₹0/mo</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Avg Idle Time</h4>
-              <div class="revenue-big" id="scm-idle-days">0 days</div>
-              <div class="metric-sub" id="scm-aging-risk">High aging risk 0 units</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Active Search Customers</h4>
-              <div class="revenue-big" id="scm-active-searchers">0</div>
-              <div class="metric-sub" id="scm-demand-delta">0% QoQ</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Demand / Supply Ratio</h4>
-              <div class="revenue-big" id="scm-demand-supply">0.00x</div>
-              <div class="metric-sub" id="scm-utilization">Utilization 0%</div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Inventory Aging Distribution</h4>
-              <div id="scm-aging-viz" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Demand vs Available by City</h4>
-              <div id="scm-city-demand" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid scm-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Idle Inventory Queue</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Property</th>
-                    <th>City</th>
-                    <th>Status</th>
-                    <th>Idle Days</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="scm-idle-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Demand Segments (Active Searchers)</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Budget Segment</th>
-                    <th>Searchers</th>
-                    <th>Inventory</th>
-                    <th>Gap</th>
-                  </tr>
-                </thead>
-                <tbody id="scm-demand-body"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>SCM Strategy Priorities</h4>
-              <ul class="dash-list" id="scm-strategy-list" style="margin-top:8px;"></ul>
-            </div>
-            <div class="dashboard-card">
-              <h4>Fulfillment Efficiency</h4>
-              <div class="split-stat-wrap">
-                <div class="split-stat"><span>Inquiry → Visit</span><strong id="scm-inq-visit">0%</strong></div>
-                <div class="split-stat"><span>Visit → Booking</span><strong id="scm-visit-book">0%</strong></div>
-                <div class="split-stat"><span>Avg Time-to-Close</span><strong id="scm-close-days">0 days</strong></div>
-                <div class="split-stat"><span>Stock Turnover</span><strong id="scm-turnover">0x</strong></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-card" style="margin-top:14px;">
-            <h4>Inventory Risk & Utilization Matrix</h4>
-            <table class="dashboard-table mini-table" style="margin-top:8px;">
-              <thead>
-                <tr>
-                  <th>Inventory Group</th>
-                  <th>Units</th>
-                  <th>Avg Idle</th>
-                  <th>Demand Match</th>
-                  <th>Risk</th>
-                </tr>
-              </thead>
-              <tbody id="scm-risk-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div class="admin-tab-panel" id="admin-panel-tenant-profile" role="tabpanel" aria-hidden="true">
-        <div class="dashboard-card">
-          <div class="tenant-header-row">
-            <div>
-              <h4 style="margin-bottom:4px;">Tenant Risk Profile & Behavior Control Tower</h4>
-              <p class="metric-sub">Classify tenants into red, yellow, and green zones using payment behavior, complaints severity, and trust history to prevent repeat issues.</p>
-            </div>
-            <span class="revenue-chip" id="tenant-period-chip">Q1 FY2026</span>
-          </div>
-
-          <div class="dashboard-grid tenant-kpi-grid" style="margin-top:14px;">
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Total Active Tenants</h4>
-              <div class="revenue-big" id="tenant-total-active">0</div>
-              <div class="metric-sub" id="tenant-review-window">Last 90 days</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Red Zone (Critical)</h4>
-              <div class="revenue-big" style="color:var(--danger)" id="tenant-red-count">0</div>
-              <div class="metric-sub" id="tenant-red-share">0% of tenants</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Yellow Zone (Watchlist)</h4>
-              <div class="revenue-big" style="color:#8d6a2e" id="tenant-yellow-count">0</div>
-              <div class="metric-sub" id="tenant-yellow-share">0% of tenants</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Green Zone (All Clear)</h4>
-              <div class="revenue-big" style="color:var(--success)" id="tenant-green-count">0</div>
-              <div class="metric-sub" id="tenant-green-share">0% of tenants</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>On-Time Rent Rate</h4>
-              <div class="revenue-big" id="tenant-on-time-rate">0%</div>
-              <div class="metric-sub" id="tenant-on-time-delta">0% vs last quarter</div>
-            </div>
-            <div class="dashboard-card revenue-kpi-card">
-              <h4>Complaint Closure SLA</h4>
-              <div class="revenue-big" id="tenant-complaint-sla">0%</div>
-              <div class="metric-sub" id="tenant-avg-resolve">Avg resolve 0 days</div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Tenant Zone Distribution (Red / Yellow / Green)</h4>
-              <div id="tenant-zone-viz" class="viz-wrap"></div>
-            </div>
-            <div class="dashboard-card">
-              <h4>Risk Incident Trend</h4>
-              <div id="tenant-incident-trend" class="viz-wrap"></div>
-            </div>
-          </div>
-
-          <div class="dashboard-grid tenant-split-grid" style="margin-top:14px;">
-            <div class="dashboard-card">
-              <h4>Tenant Risk Register</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Tenant</th>
-                    <th>City</th>
-                    <th>Property</th>
-                    <th>Complaints</th>
-                    <th>Mispayments</th>
-                    <th>Zone</th>
-                    <th>Trust Score</th>
-                  </tr>
-                </thead>
-                <tbody id="tenant-risk-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Priority Intervention Actions</h4>
-              <ul class="dash-list" id="tenant-action-list" style="margin-top:8px;"></ul>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>City Zone Heat Matrix</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>City</th>
-                    <th>Green</th>
-                    <th>Yellow</th>
-                    <th>Red</th>
-                    <th>Risk Index</th>
-                  </tr>
-                </thead>
-                <tbody id="tenant-city-zone-body"></tbody>
-              </table>
-            </div>
-            <div class="dashboard-card">
-              <h4>Critical Watchlist</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Tenant</th>
-                    <th>Issue</th>
-                    <th>Last Incident</th>
-                    <th>Next Action</th>
-                  </tr>
-                </thead>
-                <tbody id="tenant-watch-body"></tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
-            <div class="dashboard-card">
-              <h4>Trust Score Calculation Model</h4>
-              <ul class="dash-list" id="tenant-trust-formula-list" style="margin-top:8px;"></ul>
-            </div>
-            <div class="dashboard-card">
-              <h4>Trust Zone Thresholds</h4>
-              <table class="dashboard-table mini-table" style="margin-top:8px;">
-                <thead>
-                  <tr>
-                    <th>Zone</th>
-                    <th>Score Range</th>
-                    <th>Interpretation</th>
-                  </tr>
-                </thead>
-                <tbody id="tenant-trust-zone-body"></tbody>
-              </table>
+              <h4>Authentication Controls</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>Password hashing + strength validation</li>
+                <li>OTP (SMS / Email) verification</li>
+                <li>Rate-limiting for repeated failures</li>
+                <li>Device trust and secure session handling</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1036,6 +363,128 @@
   <div id="chart-tooltip" class="chart-tooltip"></div>
 
   <script>
+    const COMPLAINT_STORE_KEY = 'estateiqComplaints';
+    const mockComplaints = [
+      {
+        id: 'cmp-1001',
+        title: 'Water leakage in master bedroom',
+        details: 'Ceiling leakage visible after rain near fan wiring.',
+        date: '14/04/2026',
+        status: 'Open',
+        urgency: 'medium',
+        reportedBy: 'Aditi Sharma',
+        property: 'Skyline Residences'
+      },
+      {
+        id: 'cmp-1002',
+        title: 'Lift not working in Tower B',
+        details: 'Elderly residents unable to access upper floors.',
+        date: '15/04/2026',
+        status: 'In Progress',
+        urgency: 'high',
+        reportedBy: 'Rahul Verma',
+        property: 'Metro Edge Residency'
+      },
+      {
+        id: 'cmp-1003',
+        title: 'Balcony sliding door lock jammed',
+        details: 'Door does not close fully, potential safety concern.',
+        date: '16/04/2026',
+        status: 'Open',
+        urgency: 'low',
+        reportedBy: 'Neha Kapoor',
+        property: 'Lakeview Aura'
+      }
+    ];
+
+    function readComplaintStore() {
+      try {
+        const raw = localStorage.getItem(COMPLAINT_STORE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function writeComplaintStore(records) {
+      localStorage.setItem(COMPLAINT_STORE_KEY, JSON.stringify(records));
+    }
+
+    function ensureMockComplaints() {
+      const existing = readComplaintStore();
+      if (!existing.length) {
+        writeComplaintStore(mockComplaints);
+      }
+    }
+
+    function getStatusChipClass(status) {
+      if (status === 'Resolved') return 'status-ok';
+      if (status === 'In Progress') return 'status-progress';
+      return 'status-open';
+    }
+
+    function renderAdminComplaints() {
+      const body = document.getElementById('admin-complaints-body');
+      if (!body) return;
+
+      const complaints = readComplaintStore();
+      body.innerHTML = '';
+
+      if (!complaints.length) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td colspan="6" style="color:var(--muted);text-align:center;">No complaints available.</td>`;
+        body.appendChild(tr);
+        return;
+      }
+
+      complaints.forEach((c) => {
+        const tr = document.createElement('tr');
+        const urgencyValue = c.urgency && c.urgency !== 'unassigned' ? c.urgency : 'medium';
+        const isResolved = c.status === 'Resolved';
+
+        tr.innerHTML = `
+          <td>
+            <strong>${c.title}</strong>
+            <div style="font-size:0.82rem;color:var(--muted);margin-top:4px;">${c.details || 'No details'} • ${c.date || '-'}</div>
+          </td>
+          <td>${c.reportedBy || 'Tenant'}</td>
+          <td>${c.property || '-'}</td>
+          <td>
+            <select class="form-select admin-urgency-select" data-id="${c.id}" style="min-width:120px;" ${isResolved ? 'disabled' : ''}>
+              <option value="low" ${urgencyValue === 'low' ? 'selected' : ''}>Low</option>
+              <option value="medium" ${urgencyValue === 'medium' ? 'selected' : ''}>Medium</option>
+              <option value="high" ${urgencyValue === 'high' ? 'selected' : ''}>High</option>
+            </select>
+          </td>
+          <td><span class="status-chip ${getStatusChipClass(c.status)}">${c.status || 'Open'}</span></td>
+          <td>
+            <button class="btn btn-primary admin-resolve-btn" data-id="${c.id}" style="padding:6px 10px;" ${isResolved ? 'disabled' : ''}>${isResolved ? 'Resolved' : 'Mark Resolved'}</button>
+          </td>
+        `;
+
+        body.appendChild(tr);
+      });
+
+      body.querySelectorAll('.admin-urgency-select').forEach((select) => {
+        select.addEventListener('change', (ev) => {
+          const id = ev.target.dataset.id;
+          const updated = readComplaintStore().map((item) => item.id === id ? { ...item, urgency: ev.target.value, status: item.status === 'Resolved' ? item.status : 'In Progress' } : item);
+          writeComplaintStore(updated);
+          renderAdminComplaints();
+        });
+      });
+
+      body.querySelectorAll('.admin-resolve-btn').forEach((btn) => {
+        btn.addEventListener('click', (ev) => {
+          const id = ev.target.dataset.id;
+          const updated = readComplaintStore().map((item) => item.id === id ? { ...item, status: 'Resolved' } : item);
+          writeComplaintStore(updated);
+          renderAdminComplaints();
+        });
+      });
+    }
+
     const adminData = (function(){
       // generate ~102 properties and scale related datasets to reflect larger platform
       const cities = ['Mumbai','Bangalore','Hyderabad','Pune','Chennai','Noida'];
@@ -1107,426 +556,6 @@
         { label: 'Transaction Fees', value: 3200000, color: '#9467bd' }
       ];
 
-      const revenueWorkspace = {
-        period: 'Q1 FY2026',
-        yoyGrowth: 26,
-        netMargin: 37,
-        netProfit: 5254000,
-        sources: [
-          { label: 'Top Listing Ads', value: 3200000, color: '#b8924a', yoy: 31, margin: 72 },
-          { label: 'Transaction Fees', value: 3980000, color: '#1a2540', yoy: 24, margin: 44 },
-          { label: 'Affiliate', value: 2140000, color: '#3d7a5c', yoy: 19, margin: 38 },
-          { label: 'Display Advertising', value: 1760000, color: '#5d7a94', yoy: 22, margin: 61 },
-          { label: 'Subscriptions', value: 2260000, color: '#9467bd', yoy: 15, margin: 57 },
-          { label: 'Other Ads', value: 860000, color: '#d4aa6a', yoy: 12, margin: 49 }
-        ],
-        monthly: [
-          { month: 'Oct', topListingAds: 790000, transactionFees: 1090000, affiliate: 510000, displayAdvertising: 410000, subscriptions: 700000, otherAds: 320000 },
-          { month: 'Nov', topListingAds: 860000, transactionFees: 1030000, affiliate: 450000, displayAdvertising: 390000, subscriptions: 760000, otherAds: 250000 },
-          { month: 'Dec', topListingAds: 810000, transactionFees: 1220000, affiliate: 620000, displayAdvertising: 500000, subscriptions: 690000, otherAds: 360000 },
-          { month: 'Jan', topListingAds: 980000, transactionFees: 1160000, affiliate: 560000, displayAdvertising: 440000, subscriptions: 840000, otherAds: 280000 },
-          { month: 'Feb', topListingAds: 920000, transactionFees: 1320000, affiliate: 730000, displayAdvertising: 560000, subscriptions: 780000, otherAds: 410000 },
-          { month: 'Mar', topListingAds: 1060000, transactionFees: 1270000, affiliate: 650000, displayAdvertising: 490000, subscriptions: 910000, otherAds: 330000 }
-        ],
-        quarterlyTrend: [
-          { month: 'Q2 FY2025', topListingAds: 2140000, transactionFees: 2920000, affiliate: 1320000, displayAdvertising: 1120000, subscriptions: 1910000, otherAds: 760000 },
-          { month: 'Q3 FY2025', topListingAds: 2360000, transactionFees: 2760000, affiliate: 1180000, displayAdvertising: 980000, subscriptions: 2050000, otherAds: 680000 },
-          { month: 'Q4 FY2025', topListingAds: 2250000, transactionFees: 3240000, affiliate: 1490000, displayAdvertising: 1210000, subscriptions: 1860000, otherAds: 840000 },
-          { month: 'Q1 FY2026', topListingAds: 2810000, transactionFees: 3470000, affiliate: 1710000, displayAdvertising: 1330000, subscriptions: 2390000, otherAds: 960000 },
-          { month: 'Q2 FY2026', topListingAds: 2670000, transactionFees: 3310000, affiliate: 1580000, displayAdvertising: 1470000, subscriptions: 2210000, otherAds: 880000 }
-        ],
-        yearlyTrend: [
-          { month: 'FY2021', topListingAds: 5200000, transactionFees: 7440000, affiliate: 2610000, displayAdvertising: 2080000, subscriptions: 4380000, otherAds: 1180000 },
-          { month: 'FY2022', topListingAds: 6070000, transactionFees: 7010000, affiliate: 2380000, displayAdvertising: 1940000, subscriptions: 4890000, otherAds: 1040000 },
-          { month: 'FY2023', topListingAds: 5840000, transactionFees: 8610000, affiliate: 3250000, displayAdvertising: 2730000, subscriptions: 4720000, otherAds: 1510000 },
-          { month: 'FY2024', topListingAds: 6760000, transactionFees: 8190000, affiliate: 2890000, displayAdvertising: 2480000, subscriptions: 5480000, otherAds: 1370000 },
-          { month: 'FY2025', topListingAds: 7390000, transactionFees: 9800000, affiliate: 3710000, displayAdvertising: 3010000, subscriptions: 5960000, otherAds: 1760000 },
-          { month: 'FY2026', topListingAds: 7080000, transactionFees: 9420000, affiliate: 3440000, displayAdvertising: 3340000, subscriptions: 5730000, otherAds: 1620000 }
-        ],
-        topListingInventory: [
-          { placement: 'Homepage Premium Hero', fillRate: 94, ctr: 4.1, avgBid: 18500, revenue: 1120000 },
-          { placement: 'Search Result Rank #1', fillRate: 91, ctr: 3.6, avgBid: 14300, revenue: 860000 },
-          { placement: 'City Landing Spotlight', fillRate: 88, ctr: 3.3, avgBid: 12100, revenue: 640000 },
-          { placement: 'Builder Campaign Banner', fillRate: 84, ctr: 2.9, avgBid: 10400, revenue: 580000 }
-        ],
-        transactionSnapshot: {
-          gmv: 199000000,
-          closedDeals: 486,
-          avgTicket: 409465,
-          refundRatio: 2.4,
-          feesCollected: 3980000
-        },
-        affiliatePartners: [
-          { name: 'Home Loans Network', revenue: 860000, conversion: 18.2, payoutRate: 22 },
-          { name: 'Interior Partners', revenue: 520000, conversion: 14.4, payoutRate: 27 },
-          { name: 'Legal Assist Desk', revenue: 410000, conversion: 11.1, payoutRate: 19 },
-          { name: 'Packers & Movers', revenue: 350000, conversion: 16.8, payoutRate: 24 }
-        ],
-        adPerformance: {
-          fillRate: 89,
-          eCPM: 468,
-          channels: [
-            { label: 'Top Listing Ads', value: 78, color: '#b8924a' },
-            { label: 'Display Ads', value: 63, color: '#5d7a94' },
-            { label: 'Affiliate Clickouts', value: 56, color: '#3d7a5c' },
-            { label: 'Transaction Upsell', value: 69, color: '#1a2540' },
-            { label: 'Subscriptions', value: 61, color: '#9467bd' }
-          ]
-        }
-      };
-
-      const marketingWorkspace = {
-        period: 'Q1 FY2026',
-        spendGrowth: 18,
-        totalSpend: 8600000,
-        totalAudience: 3280000,
-        totalLeads: 64320,
-        convertedCustomers: 3216,
-        roas: 4.7,
-        roi: 62,
-        cpm: 262,
-        cpl: 134,
-        cac: 2674,
-        gmbCalls: 1820,
-        gmbRating: 4.6,
-        funnel: {
-          impressions: 7560000,
-          clicks: 228400,
-          qualified: 64320,
-          visits: 12840,
-          customers: 3216
-        },
-        sourcePerformance: [
-          { source: 'Instagram Ads', spend: 1680000, audience: 840000, leads: 16800, customers: 720, color: '#C13584' },
-          { source: 'YouTube Ads', spend: 1290000, audience: 620000, leads: 9920, customers: 496, color: '#FF0000' },
-          { source: 'Google Search Ads', spend: 2140000, audience: 690000, leads: 20120, customers: 1280, color: '#4285F4' },
-          { source: 'Google Display / Banners', spend: 910000, audience: 360000, leads: 6020, customers: 250, color: '#34A853' },
-          { source: 'Google Business Listing', spend: 430000, audience: 180000, leads: 4780, customers: 310, color: '#FBBC05' },
-          { source: 'Agent Discount Campaigns', spend: 1260000, audience: 320000, leads: 6680, customers: 160, color: '#7E57C2' },
-          { source: 'Affiliate & Referral', spend: 890000, audience: 270000, leads: 5600, customers: 0, color: '#00897B' }
-        ],
-        monthlyTrend: [
-          { month: 'Oct', spend: 1120000, leads: 7620 },
-          { month: 'Nov', spend: 1280000, leads: 8940 },
-          { month: 'Dec', spend: 1360000, leads: 10240 },
-          { month: 'Jan', spend: 1450000, leads: 11120 },
-          { month: 'Feb', spend: 1580000, leads: 12410 },
-          { month: 'Mar', spend: 1810000, leads: 13990 }
-        ],
-        bannerInventory: [
-          { slot: 'Homepage Hero Banner', fill: 96, ctr: 3.8, cpc: 26, spend: 380000 },
-          { slot: 'Search Result Inline Banner', fill: 92, ctr: 2.9, cpc: 23, spend: 290000 },
-          { slot: 'Property Detail Sticky Banner', fill: 88, ctr: 2.5, cpc: 21, spend: 145000 },
-          { slot: 'Newsletter Showcase Banner', fill: 81, ctr: 2.2, cpc: 18, spend: 95000 }
-        ],
-        agentDiscounts: [
-          { program: 'First Listing Promo', discount: '20%', leads: 1820, conversion: 4.9 },
-          { program: 'Builder Launch Booster', discount: '15%', leads: 2430, conversion: 5.6 },
-          { program: 'High Intent Lead Pack', discount: '10%', leads: 1640, conversion: 6.2 },
-          { program: 'Quarter-End Volume Deal', discount: '18%', leads: 790, conversion: 4.1 }
-        ],
-        socialChannels: [
-          { channel: 'Instagram', spend: 1680000, reach: 840000, engagement: 6.9, conversions: 720, color: '#C13584' },
-          { channel: 'YouTube', spend: 1290000, reach: 620000, engagement: 5.4, conversions: 496, color: '#FF0000' },
-          { channel: 'Google Ads', spend: 2140000, reach: 690000, engagement: 7.6, conversions: 1280, color: '#4285F4' }
-        ],
-        googleListings: [
-          { city: 'Mumbai', calls: 520, directionRequests: 340, profileViews: 15200, rating: 4.7 },
-          { city: 'Bangalore', calls: 390, directionRequests: 270, profileViews: 12180, rating: 4.6 },
-          { city: 'Hyderabad', calls: 330, directionRequests: 220, profileViews: 9870, rating: 4.5 },
-          { city: 'Pune', calls: 290, directionRequests: 185, profileViews: 8520, rating: 4.6 },
-          { city: 'Chennai', calls: 210, directionRequests: 130, profileViews: 7060, rating: 4.4 },
-          { city: 'Noida', calls: 80, directionRequests: 60, profileViews: 3880, rating: 4.3 }
-        ]
-      };
-
-      const crmWorkspace = {
-        period: 'Q1 FY2026',
-        activeLeads: 8420,
-        monthlyLeadDelta: 940,
-        mql: 4680,
-        sql: 2650,
-        pipelineValue: 523000000,
-        winRate: 28.4,
-        responseSlaMins: 17,
-        automationCoverage: 84,
-        retentionRate: 91.2,
-        churnRate: 3.4,
-        nps: 56,
-        referrals: 412,
-        renewalRate: 88,
-        expansionRevenue: 12600000,
-        avgResolutionHours: 8.6,
-        atRiskAccounts: 74,
-        funnel: [
-          { stage: 'Inbound Leads', count: 8420, color: '#5d7a94' },
-          { stage: 'MQL', count: 4680, color: '#b8924a' },
-          { stage: 'SQL', count: 2650, color: '#1a2540' },
-          { stage: 'Site Visits', count: 1320, color: '#3d7a5c' },
-          { stage: 'Won Deals', count: 752, color: '#9467bd' }
-        ],
-        pipelineTrend: [
-          { month: 'Oct', leads: 6120, qualified: 3020, wins: 520 },
-          { month: 'Nov', leads: 6480, qualified: 3300, wins: 560 },
-          { month: 'Dec', leads: 7020, qualified: 3610, wins: 602 },
-          { month: 'Jan', leads: 7440, qualified: 3980, wins: 654 },
-          { month: 'Feb', leads: 7910, qualified: 4320, wins: 701 },
-          { month: 'Mar', leads: 8420, qualified: 4680, wins: 752 }
-        ],
-        sourceQuality: [
-          { source: 'Google Search', leads: 2240, qualifiedPct: 62, winPct: 24, avgCycleDays: 22, avgDealValue: 9800000, color: '#4285F4' },
-          { source: 'Instagram', leads: 1580, qualifiedPct: 47, winPct: 18, avgCycleDays: 28, avgDealValue: 7400000, color: '#C13584' },
-          { source: 'YouTube', leads: 1210, qualifiedPct: 45, winPct: 16, avgCycleDays: 32, avgDealValue: 6900000, color: '#FF0000' },
-          { source: 'Referral', leads: 980, qualifiedPct: 71, winPct: 34, avgCycleDays: 16, avgDealValue: 11200000, color: '#00897B' },
-          { source: 'Agent Network', leads: 1430, qualifiedPct: 58, winPct: 27, avgCycleDays: 24, avgDealValue: 9600000, color: '#7E57C2' },
-          { source: 'Google Listing', leads: 980, qualifiedPct: 55, winPct: 20, avgCycleDays: 26, avgDealValue: 8200000, color: '#FBBC05' }
-        ],
-        agentPerformance: [
-          { team: 'North Zone Pod', assigned: 1620, qualified: 980, won: 302 },
-          { team: 'South Zone Pod', assigned: 1540, qualified: 930, won: 286 },
-          { team: 'Investor Desk', assigned: 1010, qualified: 720, won: 248 },
-          { team: 'Premium Homes Desk', assigned: 1260, qualified: 780, won: 220 },
-          { team: 'Rental & Leasing Desk', assigned: 1150, qualified: 620, won: 146 }
-        ],
-        playbooks: [
-          { name: 'Lead Nurture (Day 0-14)', coverage: 92, trigger: 'New inquiry + no call in 2 hrs', goal: 'MQL conversion' },
-          { name: 'Site Visit Acceleration', coverage: 86, trigger: 'MQL score > 70', goal: 'Visit booking rate' },
-          { name: 'Negotiation Recovery', coverage: 78, trigger: 'Deal stalled > 5 days', goal: 'Win-back SQL' },
-          { name: 'Post-Sale Referral Flow', coverage: 69, trigger: 'Deal closed + NPS > 8', goal: 'Referral pipeline' }
-        ],
-        strategyPillars: [
-          'Operational CRM: SLA-first lead routing, omnichannel follow-ups, and disciplined pipeline hygiene.',
-          'Analytical CRM: lead scoring by source intent, propensity modeling, and weekly conversion diagnostics.',
-          'Collaborative CRM: shared customer timeline across sales, support, legal, and finance touchpoints.',
-          'Retention CRM: proactive churn signals, renewal playbooks, and expansion opportunities by account health.',
-          'Advocacy CRM: NPS-led referral engine, testimonial capture, and loyalty tiers for repeat clients.'
-        ],
-        lifecyclePrograms: [
-          { stage: 'Awareness', program: 'Behavioral segmentation + intent tagging', kpi: 'MQL rate' },
-          { stage: 'Consideration', program: 'Personalized drip + WhatsApp reminders', kpi: 'Visit booking %' },
-          { stage: 'Decision', program: 'Deal desk support + objection handling', kpi: 'SQL → Won %' },
-          { stage: 'Onboarding', program: 'Digital welcome journey + milestone nudges', kpi: 'Time-to-value' },
-          { stage: 'Retention', program: 'Quarterly value review + renewal workflows', kpi: 'Renewal %' },
-          { stage: 'Advocacy', program: 'Referral rewards + review campaigns', kpi: 'Referral share' }
-        ],
-        mockAppReviews: [
-          { name: 'Priya S.', average: 9.1, sentiment: 'Very Happy', topConcern: 'Need more instant shortlist compare options', submittedAt: '2026-04-03', source: 'Mock', answers: [9, 9, 8, 9, 9, 8, 9, 9, 9, 10], extraComment: 'Loved verified inventory and clean UI. Compare mode would help faster decisions.' },
-          { name: 'Rohan M.', average: 8.3, sentiment: 'Happy', topConcern: 'Would like better saved-search alerts', submittedAt: '2026-04-02', source: 'Mock', answers: [8, 8, 8, 9, 8, 7, 8, 8, 9, 8], extraComment: 'Experience is stable overall. Alerts are delayed during peak hours.' },
-          { name: 'Anjali N.', average: 6.8, sentiment: 'Neutral', topConcern: 'Token payment flow should be faster on mobile', submittedAt: '2026-04-01', source: 'Mock', answers: [7, 7, 7, 7, 7, 5, 7, 6, 7, 6], extraComment: 'Payment success is fine, but loading in mobile checkout feels slow.' },
-          { name: 'Karan P.', average: 7.2, sentiment: 'Happy', topConcern: 'Need clearer property legal-doc summary', submittedAt: '2026-03-30', source: 'Mock', answers: [7, 8, 7, 6, 8, 7, 8, 7, 7, 7], extraComment: 'Would appreciate a one-screen legal summary before booking.' },
-          { name: 'Meera J.', average: 5.9, sentiment: 'Neutral', topConcern: 'Search results need cleaner relevance for rental users', submittedAt: '2026-03-24', source: 'Mock', answers: [5, 6, 5, 6, 6, 6, 6, 6, 7, 6], extraComment: 'Renter-focused filters should be prioritized over buy-heavy listings.' },
-          { name: 'Arvind T.', average: 4.8, sentiment: 'Dissatisfied', topConcern: 'Customer support callbacks are inconsistent', submittedAt: '2026-03-21', source: 'Mock', answers: [5, 5, 5, 5, 5, 4, 5, 4, 5, 5], extraComment: 'Needed support for a booking issue and callback came very late.' },
-          { name: 'Nisha R.', average: 7.9, sentiment: 'Happy', topConcern: 'Map filters should sync with list filters', submittedAt: '2026-03-16', source: 'Mock', answers: [8, 8, 7, 8, 8, 8, 8, 8, 8, 8], extraComment: 'Map and list mismatch caused confusion, otherwise very useful app.' },
-          { name: 'Harsh V.', average: 6.1, sentiment: 'Neutral', topConcern: 'Need stronger fraud-reporting visibility in booking flow', submittedAt: '2026-03-12', source: 'Mock', answers: [6, 6, 6, 6, 6, 6, 5, 6, 7, 7], extraComment: 'Security messaging is present but report options should be one tap.' }
-        ]
-      };
-
-      const securityWorkspace = {
-        period: 'Q1 FY2026',
-        fraudBlocked: 1284,
-        fraudDetectionRate: 97.2,
-        verifiedUsersPct: 93.4,
-        kycPassRate: 96.1,
-        escrowValue: 48600000,
-        activeEscrows: 612,
-        scamResolutionRate: 95.6,
-        avgResolutionHours: 7.8,
-        uptime: 99.96,
-        incidents: 4,
-        postureScore: 92,
-        complianceScore: 96,
-        mttdMins: 11,
-        mttrMins: 36,
-        criticalIncidents: 1,
-        drDrillSuccess: 98,
-        stakeholderProtection: [
-          { stakeholder: 'Clients / Tenants', coverage: 94, controls: 'Verified listings + escrow + dispute desk', color: '#1a2540' },
-          { stakeholder: 'Landlords', coverage: 91, controls: 'Identity checks + payout hold + fraud screening', color: '#b8924a' },
-          { stakeholder: 'Buyers', coverage: 93, controls: 'Title doc checks + payment escrow + legal workflow', color: '#3d7a5c' },
-          { stakeholder: 'Sellers', coverage: 89, controls: 'KYC + account takeover protection + settlement guard', color: '#5d7a94' }
-        ],
-        threatTrend: [
-          { month: 'Oct', flagged: 240, blocked: 222, chargeback: 9 },
-          { month: 'Nov', flagged: 226, blocked: 210, chargeback: 8 },
-          { month: 'Dec', flagged: 214, blocked: 201, chargeback: 7 },
-          { month: 'Jan', flagged: 206, blocked: 196, chargeback: 6 },
-          { month: 'Feb', flagged: 193, blocked: 184, chargeback: 5 },
-          { month: 'Mar', flagged: 177, blocked: 171, chargeback: 4 }
-        ],
-        scamControls: [
-          { control: 'KYC + Face Match Verification', coverage: 96, blocked: 342, success: 98.1 },
-          { control: 'Duplicate Listing & Ownership Check', coverage: 92, blocked: 211, success: 96.8 },
-          { control: 'Suspicious Payment Pattern Detection', coverage: 90, blocked: 283, success: 97.3 },
-          { control: 'Conversation Scam Keyword Shield', coverage: 88, blocked: 178, success: 94.7 },
-          { control: 'Device & Account Risk Scoring', coverage: 86, blocked: 270, success: 95.9 }
-        ],
-        depositFlows: [
-          { flow: 'Tenant Security Deposit Escrow', value: 18200000, disputes: 24, resolved: 22 },
-          { flow: 'Buyer Token Advance Escrow', value: 22400000, disputes: 18, resolved: 17 },
-          { flow: 'Seller Settlement Holdback', value: 8000000, disputes: 9, resolved: 8 }
-        ],
-        technicalControls: [
-          { name: 'WAF + Bot Mitigation', score: 94, color: '#1a2540' },
-          { name: 'TLS 1.3 + HSTS Everywhere', score: 99, color: '#3d7a5c' },
-          { name: 'MFA / OTP Authentication', score: 93, color: '#9467bd' },
-          { name: 'RBAC + Session Hardening', score: 91, color: '#5d7a94' },
-          { name: 'AES-256 Data Encryption', score: 98, color: '#b8924a' },
-          { name: 'SIEM + 24x7 SOC Monitoring', score: 89, color: '#8c564b' }
-        ],
-        trustPrograms: [
-          'Verified Property Badge with document-level checks before listing goes live.',
-          'Escrow-backed deposits to prevent direct transfer scams and unauthorized release.',
-          'Buyer-Seller-Landlord dispute mediation with evidence timeline and SLA commitments.',
-          'Payout protection window to detect post-transaction anomaly and reverse suspicious settlements.',
-          'Trust score for every profile based on KYC, complaint history, and transaction behavior.'
-        ],
-        technicalStrategy: [
-          'Zero-trust access with role-based least privilege and periodic access reviews.',
-          'Threat intelligence-driven anomaly detection for fraud, account takeover, and payment abuse.',
-          'Secure software lifecycle with dependency scanning, SAST, and secrets management.',
-          'Immutable audit logs and forensic-ready telemetry for compliance and incident response.',
-          'Backup, recovery, and chaos drills with strict RPO/RTO targets for business continuity.'
-        ],
-        assuranceMatrix: [
-          { domain: 'Identity & Access', score: 93, sla: 'MFA enforced 100%', current: '98.8%', status: 'Strong' },
-          { domain: 'Payment & Escrow Security', score: 95, sla: 'Fraud loss < 0.2%', current: '0.08%', status: 'Strong' },
-          { domain: 'Application Security', score: 90, sla: 'Critical patch < 24h', current: '18h avg', status: 'Strong' },
-          { domain: 'Data Protection', score: 97, sla: 'Encryption at rest/in transit', current: 'Compliant', status: 'Strong' },
-          { domain: 'Incident Response', score: 88, sla: 'P1 respond < 30m', current: '36m', status: 'Watch' },
-          { domain: 'Compliance & Audit', score: 96, sla: 'Quarterly audit pass', current: 'Pass', status: 'Strong' }
-        ]
-      };
-
-      const scmWorkspace = {
-        period: 'Q1 FY2026',
-        totalProperties: 102,
-        unutilizedInventory: 38,
-        unutilizedPct: 37.3,
-        unsoldUnits: 24,
-        unsoldValue: 186000000,
-        unrentedUnits: 14,
-        unrentedRentalPotential: 742000,
-        avgIdleDays: 74,
-        highAgingRiskUnits: 11,
-        activeSearchCustomers: 4860,
-        demandDelta: 16,
-        demandSupplyRatio: 1.42,
-        utilizationRate: 62.7,
-        agingBuckets: [
-          { bucket: '0-30 days', units: 9, color: '#3d7a5c' },
-          { bucket: '31-60 days', units: 10, color: '#b8924a' },
-          { bucket: '61-90 days', units: 8, color: '#5d7a94' },
-          { bucket: '91-120 days', units: 6, color: '#9467bd' },
-          { bucket: '120+ days', units: 5, color: '#a03030' }
-        ],
-        cityDemand: [
-          { city: 'Mumbai', searchers: 1240, available: 820, match: 66, color: '#1a2540' },
-          { city: 'Bangalore', searchers: 980, available: 640, match: 65, color: '#b8924a' },
-          { city: 'Hyderabad', searchers: 820, available: 560, match: 68, color: '#3d7a5c' },
-          { city: 'Pune', searchers: 720, available: 480, match: 67, color: '#5d7a94' },
-          { city: 'Chennai', searchers: 620, available: 420, match: 68, color: '#9467bd' },
-          { city: 'Noida', searchers: 480, available: 340, match: 71, color: '#d4aa6a' }
-        ],
-        idleQueue: [
-          { property: 'Marina Bay Homes - T3', city: 'Chennai', status: 'Unsold', idleDays: 142, action: 'Price correction + premium campaign' },
-          { property: 'Greenline Residences - B9', city: 'Pune', status: 'Unrented', idleDays: 118, action: 'Rental incentive + furnished package' },
-          { property: 'Nexus Horizon - A2', city: 'Noida', status: 'Unsold', idleDays: 103, action: 'Broker co-sell + weekend open house' },
-          { property: 'Skyview Heights - C5', city: 'Bangalore', status: 'Unrented', idleDays: 96, action: 'Corporate lease outreach' },
-          { property: 'Palm Crest - D12', city: 'Mumbai', status: 'Unsold', idleDays: 88, action: 'Investor bundle offer' }
-        ],
-        demandSegments: [
-          { segment: '₹20L - ₹40L', searchers: 1360, inventory: 820 },
-          { segment: '₹40L - ₹80L', searchers: 1580, inventory: 940 },
-          { segment: '₹80L - ₹1.5Cr', searchers: 1120, inventory: 690 },
-          { segment: '₹1.5Cr+', searchers: 800, inventory: 610 }
-        ],
-        strategyPoints: [
-          'Dynamic pricing for units idle beyond 90 days based on micro-market demand elasticity.',
-          'Auto-route high-intent searchers to matching idle inventory with personalized nudges.',
-          'City-level inventory balancing between sale and rental to reduce carrying costs.',
-          'Broker + digital co-selling playbooks for low-velocity premium inventory.',
-          'Weekly SCM war-room tracking aging, demand gaps, and closure velocity by segment.'
-        ],
-        efficiency: {
-          inquiryToVisit: 62,
-          visitToBooking: 36,
-          avgCloseDays: 41,
-          stockTurnover: 1.8
-        },
-        riskMatrix: [
-          { group: 'Premium Sale Units', units: 12, avgIdle: 102, demandMatch: 54, risk: 'High' },
-          { group: 'Mid-Segment Sale Units', units: 14, avgIdle: 68, demandMatch: 72, risk: 'Medium' },
-          { group: 'Premium Rental Units', units: 6, avgIdle: 84, demandMatch: 61, risk: 'Medium' },
-          { group: 'Affordable Rental Units', units: 8, avgIdle: 38, demandMatch: 86, risk: 'Low' }
-        ]
-      };
-
-      const tenantProfileWorkspace = {
-        period: 'Q1 FY2026',
-        reviewWindow: 'Last 90 days',
-        totalActive: 160,
-        redZoneCount: 18,
-        yellowZoneCount: 42,
-        greenZoneCount: 100,
-        onTimeRate: 88,
-        onTimeDelta: 4,
-        complaintSla: 92,
-        avgResolveDays: 3.8,
-        trustModel: {
-          baseScore: 100,
-          weights: {
-            mispaymentPenalty: 14,
-            severeComplaintPenalty: 10,
-            minorComplaintPenalty: 4,
-            delayDayPenalty: 1,
-            kycNotVerifiedPenalty: 8,
-            cooperationBonus: 4
-          },
-          thresholds: {
-            greenMin: 75,
-            yellowMin: 55
-          }
-        },
-        zoneMix: [
-          { zone: 'Red Zone', count: 18, color: '#a03030', note: 'Frequent mispayment / repeated serious complaints' },
-          { zone: 'Yellow Zone', count: 42, color: '#b8924a', note: 'Occasional payment delay or low-severity complaints' },
-          { zone: 'Green Zone', count: 100, color: '#3d7a5c', note: 'Clear payment track + no serious incidents' }
-        ],
-        incidentTrend: [
-          { month: 'Oct', red: 24, yellow: 51, green: 85 },
-          { month: 'Nov', red: 22, yellow: 50, green: 88 },
-          { month: 'Dec', red: 21, yellow: 48, green: 91 },
-          { month: 'Jan', red: 20, yellow: 46, green: 94 },
-          { month: 'Feb', red: 19, yellow: 44, green: 97 },
-          { month: 'Mar', red: 18, yellow: 42, green: 100 }
-        ],
-        tenantRegister: [
-          { tenant: 'Rahul Mehta', city: 'Mumbai', property: 'Palm Crest D-12', complaints: 4, severeComplaints: 3, mispayments: 3, delayedDays: 8, kycVerified: true, cooperative: false, issue: 'Repeated delay + society nuisance', lastIncident: '2026-03-21', nextAction: 'Escalate legal notice + payment plan lock' },
-          { tenant: 'Sneha Iyer', city: 'Bangalore', property: 'Skyview C-5', complaints: 3, severeComplaints: 2, mispayments: 2, delayedDays: 6, kycVerified: true, cooperative: false, issue: 'Unauthorized subletting complaint', lastIncident: '2026-03-25', nextAction: 'Field audit + contract enforcement' },
-          { tenant: 'Aman Verma', city: 'Noida', property: 'Nexus Horizon A-2', complaints: 2, severeComplaints: 1, mispayments: 1, delayedDays: 4, kycVerified: true, cooperative: true, issue: 'Late payment and maintenance dispute', lastIncident: '2026-03-27', nextAction: 'Mediation call + warning' },
-          { tenant: 'Farah Khan', city: 'Pune', property: 'Greenline B-9', complaints: 1, severeComplaints: 0, mispayments: 1, delayedDays: 3, kycVerified: true, cooperative: true, issue: 'Single delayed payment', lastIncident: '2026-03-16', nextAction: 'Auto-reminder + watchlist' },
-          { tenant: 'Kiran Rao', city: 'Hyderabad', property: 'Urban Nest A-4', complaints: 1, severeComplaints: 0, mispayments: 0, delayedDays: 2, kycVerified: true, cooperative: true, issue: 'Minor complaint on common area', lastIncident: '2026-03-11', nextAction: 'Society-level resolution follow-up' },
-          { tenant: 'Nikita Sharma', city: 'Chennai', property: 'Marina Bay T-3', complaints: 0, severeComplaints: 0, mispayments: 0, delayedDays: 0, kycVerified: true, cooperative: true, issue: 'All clear', lastIncident: '—', nextAction: 'No action needed' },
-          { tenant: 'Vikram Patel', city: 'Mumbai', property: 'Aster Heights E-8', complaints: 0, severeComplaints: 0, mispayments: 0, delayedDays: 1, kycVerified: true, cooperative: true, issue: 'All clear', lastIncident: '—', nextAction: 'Eligible for renewal fast track' },
-          { tenant: 'Priya Nair', city: 'Bangalore', property: 'Lakeview F-2', complaints: 0, severeComplaints: 0, mispayments: 0, delayedDays: 0, kycVerified: true, cooperative: true, issue: 'All clear', lastIncident: '—', nextAction: 'Priority loyalty perks' }
-        ],
-        cityZoneMatrix: [
-          { city: 'Mumbai', green: 18, yellow: 10, red: 5 },
-          { city: 'Bangalore', green: 17, yellow: 8, red: 4 },
-          { city: 'Hyderabad', green: 16, yellow: 7, red: 3 },
-          { city: 'Pune', green: 15, yellow: 6, red: 2 },
-          { city: 'Chennai', green: 18, yellow: 5, red: 2 },
-          { city: 'Noida', green: 16, yellow: 6, red: 2 }
-        ],
-        actionPlaybook: [
-          'Red zone tenants: mandatory payment escrow and fortnightly compliance review with legal fallback.',
-          'Yellow zone tenants: automated reminder nudges + proactive relationship call within 48 hours of complaint.',
-          'Green zone tenants: renewal incentive and priority maintenance lane to protect churn and reputation.',
-          'Repeat complaint trigger: auto-escalate to city operations manager if 2+ complaints within 30 days.',
-          'Trust score governance: monthly recalibration using payment timeliness, complaint severity, and verification integrity.'
-        ]
-      };
-
       const resolutionTimes = {
         avg: 4.6,
         best: 1.4,
@@ -1539,85 +568,10 @@
         })()
       };
 
-      return { properties, tenants, orders, onboarding, onboardingMonthly, verificationQueue, delistingRequests, issueCategories, revenueStreams, revenueWorkspace, marketingWorkspace, crmWorkspace, securityWorkspace, scmWorkspace, tenantProfileWorkspace, resolutionTimes };
+      return { properties, tenants, orders, onboarding, onboardingMonthly, verificationQueue, delistingRequests, issueCategories, revenueStreams, resolutionTimes };
     })();
 
     function fmt(n) { return `₹${n.toLocaleString('en-IN')}`; }
-
-    function fmtCompact(n) {
-      if (n >= 10000000) return `₹${(n / 10000000).toFixed(2)}Cr`;
-      if (n >= 100000) return `₹${(n / 100000).toFixed(1)}L`;
-      return fmt(Math.round(n));
-    }
-
-    function readJsonStore(key, fallback = []) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return fallback;
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : fallback;
-      } catch (e) {
-        return fallback;
-      }
-    }
-
-    const CRM_REVIEW_QUESTIONS = [
-      'Search accuracy',
-      'Navigation ease',
-      'Filter usefulness',
-      'Listing trust',
-      'Design quality',
-      'Booking/payment flow',
-      'Security confidence',
-      'Dashboard usefulness',
-      'Recommendation intent',
-      'Overall happiness'
-    ];
-
-    function normalizeDateMonth(input) {
-      if (!input || input === '—') return 'Unknown';
-      const d = new Date(input);
-      if (Number.isNaN(d.getTime())) return 'Unknown';
-      return d.toLocaleString('en-US', { month: 'short' });
-    }
-
-    function deterministicJitter(seedText, idx) {
-      const seed = String(seedText || '')
-        .split('')
-        .reduce((s, ch) => s + ch.charCodeAt(0), 0) + (idx * 17);
-      const x = Math.sin(seed * 12.9898) * 43758.5453;
-      const frac = x - Math.floor(x);
-      return (frac * 2) - 1;
-    }
-
-    function clampReviewScore(score) {
-      return Math.max(1, Math.min(10, Math.round(score)));
-    }
-
-    function ensureAnswerVector(row) {
-      if (Array.isArray(row.answers) && row.answers.length === 10) {
-        return row.answers.map((v) => clampReviewScore(Number(v || 0)));
-      }
-      const avg = Number(row.average || 0) || 6.5;
-      return CRM_REVIEW_QUESTIONS.map((_, idx) => {
-        const spread = deterministicJitter(`${row.name || ''}${row.submittedAt || ''}`, idx) * 1.9;
-        return clampReviewScore(avg + spread);
-      });
-    }
-
-    function extractConcernBuckets(row) {
-      const text = `${row.topConcern || ''} ${row.extraComment || ''}`.toLowerCase();
-      const checks = [
-        { key: 'Search relevance', words: ['search', 'shortlist', 'compare', 'relevance'] },
-        { key: 'Payments & checkout', words: ['payment', 'checkout', 'token', 'billing'] },
-        { key: 'Support responsiveness', words: ['support', 'callback', 'response', 'help'] },
-        { key: 'Security & trust', words: ['security', 'fraud', 'scam', 'trust', 'report'] },
-        { key: 'Filters & map UX', words: ['filter', 'map', 'sort', 'city'] },
-        { key: 'Legal/info clarity', words: ['legal', 'doc', 'document', 'summary', 'agreement'] }
-      ];
-      const matched = checks.filter((c) => c.words.some((w) => text.includes(w))).map((c) => c.key);
-      return matched.length ? matched : ['General product quality'];
-    }
 
     function renderKPIs() {
       const total = adminData.properties.length;
@@ -1992,1517 +946,6 @@
       wrap.appendChild(legend);
     }
 
-    function renderRevenueWorkspace() {
-      const data = adminData.revenueWorkspace;
-      if (!data) return;
-
-      const totalRevenue = data.sources.reduce((sum, src) => sum + src.value, 0);
-      const byLabel = (key) => data.sources.find(s => s.label.toLowerCase().includes(key)) || { value: 0 };
-
-      const topListing = byLabel('top listing');
-      const transaction = byLabel('transaction');
-      const affiliate = byLabel('affiliate');
-
-      document.getElementById('rev-period-chip').textContent = data.period;
-      document.getElementById('rev-total').textContent = fmtCompact(totalRevenue);
-      document.getElementById('rev-total-growth').textContent = `+${data.yoyGrowth}% YoY`;
-      document.getElementById('rev-top-ads').textContent = fmtCompact(topListing.value);
-      document.getElementById('rev-top-ads-share').textContent = `${Math.round((topListing.value / totalRevenue) * 100)}% share`;
-      document.getElementById('rev-tx-fees').textContent = fmtCompact(transaction.value);
-      document.getElementById('rev-tx-fees-share').textContent = `${Math.round((transaction.value / totalRevenue) * 100)}% share`;
-      document.getElementById('rev-affiliate').textContent = fmtCompact(affiliate.value);
-      document.getElementById('rev-affiliate-share').textContent = `${Math.round((affiliate.value / totalRevenue) * 100)}% share`;
-      document.getElementById('rev-fill-rate').textContent = `${data.adPerformance.fillRate}%`;
-      document.getElementById('rev-ecpm').textContent = `eCPM ₹${data.adPerformance.eCPM}`;
-      document.getElementById('rev-margin').textContent = `${data.netMargin}%`;
-      document.getElementById('rev-net-profit').textContent = `Net ${fmtCompact(data.netProfit)}`;
-
-      document.getElementById('rev-gmv').textContent = fmtCompact(data.transactionSnapshot.gmv);
-      document.getElementById('rev-closed').textContent = data.transactionSnapshot.closedDeals.toLocaleString('en-IN');
-      document.getElementById('rev-ticket').textContent = fmtCompact(data.transactionSnapshot.avgTicket);
-      document.getElementById('rev-refund').textContent = `${data.transactionSnapshot.refundRatio}%`;
-
-      renderRevenueSourceMix(data.sources, totalRevenue);
-      const currentMode = window.__revTrendMode || 'monthly';
-      renderRevenueTrendByMode(data, currentMode);
-      renderTopListingTable(data.topListingInventory);
-      renderAffiliateBars(data.affiliatePartners);
-      renderEfficiencyBars(data.adPerformance.channels);
-      renderRevenueDetailsTable(data.sources, totalRevenue);
-
-      const toggleWrap = document.getElementById('rev-trend-toggle');
-      if (toggleWrap && !toggleWrap.dataset.bound) {
-        toggleWrap.dataset.bound = '1';
-        toggleWrap.addEventListener('click', (ev) => {
-          const btn = ev.target.closest('[data-rev-trend]');
-          if (!btn) return;
-          const mode = btn.getAttribute('data-rev-trend') || 'monthly';
-          window.__revTrendMode = mode;
-          renderRevenueTrendByMode(data, mode);
-        });
-      }
-    }
-
-    function renderRevenueTrendByMode(data, mode) {
-      const normalized = (mode || 'monthly').toLowerCase();
-      const rows = normalized === 'quarterly'
-        ? (data.quarterlyTrend || data.monthly || [])
-        : (normalized === 'yearly' ? (data.yearlyTrend || data.monthly || []) : (data.monthly || []));
-      const caption = document.getElementById('rev-trend-caption');
-      if (caption) {
-        caption.textContent = normalized === 'quarterly'
-          ? 'Quarterly trend showing volatility and channel momentum across fiscal windows.'
-          : (normalized === 'yearly'
-            ? 'Yearly trend for strategic planning and long-range revenue direction.'
-            : 'Monthly performance across major revenue channels.');
-      }
-
-      document.querySelectorAll('.rev-trend-btn').forEach((btn) => {
-        btn.classList.toggle('active', btn.getAttribute('data-rev-trend') === normalized);
-      });
-
-      renderRevenueMonthlyTrend(rows);
-    }
-
-    function renderRevenueSourceMix(sources, totalRevenue) {
-      const wrap = document.getElementById('rev-source-mix');
-      wrap.innerHTML = '';
-
-      const size = 220;
-      const radius = 78;
-      const stroke = 26;
-      const circumference = 2 * Math.PI * radius;
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', size);
-      svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-
-      const base = document.createElementNS(svgNS, 'circle');
-      base.setAttribute('cx', size / 2);
-      base.setAttribute('cy', size / 2);
-      base.setAttribute('r', radius);
-      base.setAttribute('fill', 'none');
-      base.setAttribute('stroke', '#e9e4dc');
-      base.setAttribute('stroke-width', stroke);
-      svg.appendChild(base);
-
-      let offset = 0;
-      sources.forEach((src) => {
-        const fraction = src.value / totalRevenue;
-        const len = circumference * fraction;
-        const arc = document.createElementNS(svgNS, 'circle');
-        arc.setAttribute('cx', size / 2);
-        arc.setAttribute('cy', size / 2);
-        arc.setAttribute('r', radius);
-        arc.setAttribute('fill', 'none');
-        arc.setAttribute('stroke', src.color);
-        arc.setAttribute('stroke-width', stroke);
-        arc.setAttribute('stroke-linecap', 'butt');
-        arc.setAttribute('stroke-dasharray', `${len} ${circumference - len}`);
-        arc.setAttribute('stroke-dashoffset', `${-offset + circumference * 0.25}`);
-        arc.addEventListener('mouseenter', (e) => showTooltip(e, `${src.label}: ${fmt(src.value)} (${Math.round(fraction * 100)}%)`));
-        arc.addEventListener('mousemove', showTooltip);
-        arc.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(arc);
-        offset += len;
-      });
-
-      const center = document.createElementNS(svgNS, 'text');
-      center.setAttribute('x', size / 2);
-      center.setAttribute('y', size / 2 + 3);
-      center.setAttribute('text-anchor', 'middle');
-      center.setAttribute('fill', '#1a2540');
-      center.setAttribute('font-size', '14');
-      center.setAttribute('font-weight', '700');
-      center.textContent = fmtCompact(totalRevenue);
-      svg.appendChild(center);
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      sources.forEach((src) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${src.color}"></span><span>${src.label}</span><strong>${Math.round((src.value / totalRevenue) * 100)}%</strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderRevenueMonthlyTrend(monthly) {
-      const wrap = document.getElementById('rev-monthly-trend');
-      wrap.innerHTML = '';
-      const width = Math.max(460, Math.round(wrap.getBoundingClientRect().width) || 520);
-      const height = 230;
-      const pad = { t: 16, r: 16, b: 34, l: 44 };
-      const keys = ['topListingAds', 'transactionFees', 'affiliate', 'displayAdvertising', 'subscriptions'];
-      const colors = {
-        topListingAds: '#b8924a',
-        transactionFees: '#1a2540',
-        affiliate: '#3d7a5c',
-        displayAdvertising: '#5d7a94',
-        subscriptions: '#9467bd'
-      };
-
-      const totals = monthly.map(m => keys.reduce((s, k) => s + (m[k] || 0), 0));
-      const maxVal = Math.max(...totals, 1);
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', height);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-      const xStep = (width - pad.l - pad.r) / Math.max(1, monthly.length - 1);
-      const x = (i) => pad.l + (i * xStep);
-      const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxVal)));
-
-      for (let i = 0; i <= 4; i++) {
-        const val = Math.round((maxVal / 4) * i);
-        const yy = y(val);
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pad.l);
-        line.setAttribute('x2', width - pad.r);
-        line.setAttribute('y1', yy);
-        line.setAttribute('y2', yy);
-        line.setAttribute('stroke', '#ece6df');
-        svg.appendChild(line);
-
-        const lab = document.createElementNS(svgNS, 'text');
-        lab.setAttribute('x', pad.l - 8);
-        lab.setAttribute('y', yy + 4);
-        lab.setAttribute('text-anchor', 'end');
-        lab.setAttribute('font-size', '10');
-        lab.setAttribute('fill', '#6e6860');
-        lab.textContent = `${Math.round(val / 1000)}k`;
-        svg.appendChild(lab);
-      }
-
-      const totalPath = document.createElementNS(svgNS, 'path');
-      totalPath.setAttribute('fill', 'none');
-      totalPath.setAttribute('stroke', '#1a2540');
-      totalPath.setAttribute('stroke-width', '2.6');
-      totalPath.setAttribute('d', totals.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(v)}`).join(' '));
-      svg.appendChild(totalPath);
-
-      keys.forEach((key) => {
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', colors[key]);
-        path.setAttribute('stroke-width', '1.35');
-        path.setAttribute('stroke-opacity', '0.85');
-        path.setAttribute('d', monthly.map((m, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(m[key] || 0)}`).join(' '));
-        svg.appendChild(path);
-      });
-
-      monthly.forEach((m, i) => {
-        const dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', x(i));
-        dot.setAttribute('cy', y(totals[i]));
-        dot.setAttribute('r', '3.4');
-        dot.setAttribute('fill', '#1a2540');
-        dot.addEventListener('mouseenter', (e) => showTooltip(e, `${m.month}: ${fmt(totals[i])}`));
-        dot.addEventListener('mousemove', showTooltip);
-        dot.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(dot);
-
-        const xLab = document.createElementNS(svgNS, 'text');
-        xLab.setAttribute('x', x(i));
-        xLab.setAttribute('y', height - 8);
-        xLab.setAttribute('text-anchor', 'middle');
-        xLab.setAttribute('font-size', '11');
-        xLab.setAttribute('fill', '#58524a');
-        xLab.textContent = m.month;
-        svg.appendChild(xLab);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      [['Total', '#1a2540'], ['Top Listing', colors.topListingAds], ['Transactions', colors.transactionFees], ['Affiliate', colors.affiliate], ['Display Ads', colors.displayAdvertising], ['Subscriptions', colors.subscriptions]].forEach(item => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${item[1]}"></span><span>${item[0]}</span><strong></strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderTopListingTable(rows) {
-      const tbody = document.getElementById('rev-toplist-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.placement}</td>
-          <td>${row.fillRate}%</td>
-          <td>${row.ctr}%</td>
-          <td>${fmt(row.avgBid)}</td>
-          <td><strong>${fmt(row.revenue)}</strong></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderAffiliateBars(partners) {
-      const wrap = document.getElementById('rev-affiliate-bars');
-      const maxVal = Math.max(...partners.map(p => p.revenue), 1);
-      wrap.innerHTML = '';
-
-      partners.forEach((p) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${p.name}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(p.revenue / maxVal) * 100}%;background:linear-gradient(90deg,#3d7a5c,#5aa87d)"></div></div>
-          <div class="progress-meta">${fmtCompact(p.revenue)} • ${p.conversion}% CVR</div>
-        `;
-        row.addEventListener('mouseenter', (e) => showTooltip(e, `${p.name}: ${fmt(p.revenue)} • Payout ${p.payoutRate}%`));
-        row.addEventListener('mousemove', showTooltip);
-        row.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderEfficiencyBars(channels) {
-      const wrap = document.getElementById('rev-efficiency-bars');
-      wrap.innerHTML = '';
-      channels.forEach((c) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${c.label}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${c.value}%;background:${c.color}"></div></div>
-          <div class="progress-meta">${c.value}/100</div>
-        `;
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderRevenueDetailsTable(sources, total) {
-      const tbody = document.getElementById('rev-source-detail-body');
-      tbody.innerHTML = '';
-      sources.forEach((src) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${src.label}</td>
-          <td>${fmt(src.value)}</td>
-          <td>${Math.round((src.value / total) * 100)}%</td>
-          <td style="color:var(--success)">+${src.yoy}%</td>
-          <td>${src.margin}%</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderMarketingWorkspace() {
-      const data = adminData.marketingWorkspace;
-      if (!data) return;
-
-      document.getElementById('mkt-period-chip').textContent = data.period;
-      document.getElementById('mkt-total-spend').textContent = fmtCompact(data.totalSpend);
-      document.getElementById('mkt-spend-growth').textContent = `+${data.spendGrowth}% vs previous quarter`;
-      document.getElementById('mkt-audience').textContent = data.totalAudience.toLocaleString('en-IN');
-      document.getElementById('mkt-cpm').textContent = `CPM ₹${data.cpm}`;
-      document.getElementById('mkt-leads').textContent = data.totalLeads.toLocaleString('en-IN');
-      document.getElementById('mkt-cpl').textContent = `CPL ₹${data.cpl}`;
-
-      const conversion = (data.convertedCustomers / Math.max(1, data.totalLeads)) * 100;
-      document.getElementById('mkt-conversion').textContent = `${conversion.toFixed(1)}%`;
-      document.getElementById('mkt-acq').textContent = `CAC ₹${data.cac}`;
-      document.getElementById('mkt-gmb-calls').textContent = data.gmbCalls.toLocaleString('en-IN');
-      document.getElementById('mkt-gmb-rating').textContent = `Rating ${data.gmbRating.toFixed(1)}★`;
-      document.getElementById('mkt-roas').textContent = `${data.roas.toFixed(1)}x`;
-      document.getElementById('mkt-roi').textContent = `ROI ${data.roi}%`;
-
-      document.getElementById('mkt-impressions').textContent = data.funnel.impressions.toLocaleString('en-IN');
-      document.getElementById('mkt-clicks').textContent = data.funnel.clicks.toLocaleString('en-IN');
-      document.getElementById('mkt-qualified').textContent = data.funnel.qualified.toLocaleString('en-IN');
-      document.getElementById('mkt-visits').textContent = data.funnel.visits.toLocaleString('en-IN');
-      document.getElementById('mkt-customers').textContent = data.funnel.customers.toLocaleString('en-IN');
-
-      renderMarketingSpendMix(data.sourcePerformance);
-      renderMarketingAudienceSources(data.sourcePerformance);
-      renderMarketingTrend(data.monthlyTrend);
-      renderMarketingBannerTable(data.bannerInventory);
-      renderMarketingAgentTable(data.agentDiscounts);
-      renderMarketingSocialBars(data.socialChannels);
-      renderMarketingGmbList(data.googleListings);
-      renderMarketingDetailTable(data.sourcePerformance);
-    }
-
-    function renderMarketingSpendMix(sources) {
-      const wrap = document.getElementById('mkt-spend-mix');
-      wrap.innerHTML = '';
-      const total = sources.reduce((s, i) => s + i.spend, 0) || 1;
-
-      const stack = document.createElement('div');
-      stack.className = 'revenue-stack';
-      stack.style.height = '18px';
-      sources.forEach((src) => {
-        const part = document.createElement('div');
-        part.className = 'revenue-segment';
-        part.style.width = `${(src.spend / total) * 100}%`;
-        part.style.background = src.color;
-        part.addEventListener('mouseenter', (e) => showTooltip(e, `${src.source}: ${fmt(src.spend)} (${Math.round((src.spend / total) * 100)}%)`));
-        part.addEventListener('mousemove', showTooltip);
-        part.addEventListener('mouseleave', hideTooltip);
-        stack.appendChild(part);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      sources.forEach((src) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${src.color}"></span><span>${src.source}</span><strong>${Math.round((src.spend / total) * 100)}%</strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(stack);
-      wrap.appendChild(legend);
-    }
-
-    function renderMarketingAudienceSources(sources) {
-      const wrap = document.getElementById('mkt-audience-source');
-      wrap.innerHTML = '';
-      const maxAudience = Math.max(...sources.map(s => s.audience), 1);
-
-      sources.forEach((src) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${src.source}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(src.audience / maxAudience) * 100}%;background:${src.color}"></div></div>
-          <div class="progress-meta">${(src.audience / 1000).toFixed(0)}k</div>
-        `;
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderMarketingTrend(monthly) {
-      const wrap = document.getElementById('mkt-trend');
-      wrap.innerHTML = '';
-      const width = Math.max(420, Math.round(wrap.getBoundingClientRect().width) || 520);
-      const height = 230;
-      const pad = { t: 14, r: 16, b: 34, l: 44 };
-      const maxSpend = Math.max(...monthly.map(m => m.spend), 1);
-      const maxLeads = Math.max(...monthly.map(m => m.leads), 1);
-
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', height);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-      const xStep = (width - pad.l - pad.r) / Math.max(1, monthly.length - 1);
-      const x = (i) => pad.l + (i * xStep);
-      const ySpend = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxSpend)));
-      const yLeads = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxLeads)));
-
-      for (let i = 0; i <= 4; i++) {
-        const yy = pad.t + ((height - pad.t - pad.b) * (i / 4));
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pad.l);
-        line.setAttribute('x2', width - pad.r);
-        line.setAttribute('y1', yy);
-        line.setAttribute('y2', yy);
-        line.setAttribute('stroke', '#ece6df');
-        svg.appendChild(line);
-      }
-
-      const spendPath = document.createElementNS(svgNS, 'path');
-      spendPath.setAttribute('fill', 'none');
-      spendPath.setAttribute('stroke', '#b8924a');
-      spendPath.setAttribute('stroke-width', '2.5');
-      spendPath.setAttribute('d', monthly.map((m, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${ySpend(m.spend)}`).join(' '));
-      svg.appendChild(spendPath);
-
-      const leadsPath = document.createElementNS(svgNS, 'path');
-      leadsPath.setAttribute('fill', 'none');
-      leadsPath.setAttribute('stroke', '#1a2540');
-      leadsPath.setAttribute('stroke-width', '2.2');
-      leadsPath.setAttribute('stroke-dasharray', '5 4');
-      leadsPath.setAttribute('d', monthly.map((m, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${yLeads(m.leads)}`).join(' '));
-      svg.appendChild(leadsPath);
-
-      monthly.forEach((m, i) => {
-        const d = document.createElementNS(svgNS, 'circle');
-        d.setAttribute('cx', x(i));
-        d.setAttribute('cy', ySpend(m.spend));
-        d.setAttribute('r', '3.2');
-        d.setAttribute('fill', '#b8924a');
-        d.addEventListener('mouseenter', (e) => showTooltip(e, `${m.month} • Spend ${fmt(m.spend)} • Leads ${m.leads.toLocaleString('en-IN')}`));
-        d.addEventListener('mousemove', showTooltip);
-        d.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(d);
-
-        const xLab = document.createElementNS(svgNS, 'text');
-        xLab.setAttribute('x', x(i));
-        xLab.setAttribute('y', height - 8);
-        xLab.setAttribute('text-anchor', 'middle');
-        xLab.setAttribute('font-size', '11');
-        xLab.setAttribute('fill', '#58524a');
-        xLab.textContent = m.month;
-        svg.appendChild(xLab);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      [['Spend', '#b8924a'], ['Leads', '#1a2540']].forEach((entry) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${entry[1]}"></span><span>${entry[0]}</span><strong></strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderMarketingBannerTable(rows) {
-      const tbody = document.getElementById('mkt-banner-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.slot}</td><td>${row.fill}%</td><td>${row.ctr}%</td><td>₹${row.cpc}</td><td><strong>${fmt(row.spend)}</strong></td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderMarketingAgentTable(rows) {
-      const tbody = document.getElementById('mkt-agent-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.program}</td><td>${row.discount}</td><td>${row.leads.toLocaleString('en-IN')}</td><td>${row.conversion}%</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderMarketingSocialBars(channels) {
-      const wrap = document.getElementById('mkt-social-bars');
-      const maxSpend = Math.max(...channels.map(c => c.spend), 1);
-      wrap.innerHTML = '';
-      channels.forEach((c) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${c.channel}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(c.spend / maxSpend) * 100}%;background:${c.color}"></div></div>
-          <div class="progress-meta">${fmtCompact(c.spend)} • ${c.conversions} conv</div>
-        `;
-        row.addEventListener('mouseenter', (e) => showTooltip(e, `${c.channel}: Reach ${c.reach.toLocaleString('en-IN')} • ER ${c.engagement}%`));
-        row.addEventListener('mousemove', showTooltip);
-        row.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderMarketingGmbList(rows) {
-      const list = document.getElementById('mkt-gmb-list');
-      list.innerHTML = '';
-      rows.forEach((row) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${row.city}</strong> — Calls: ${row.calls}, Directions: ${row.directionRequests}, Profile Views: ${row.profileViews.toLocaleString('en-IN')} <span style="color:var(--success);font-weight:600;">★ ${row.rating.toFixed(1)}</span>`;
-        list.appendChild(li);
-      });
-    }
-
-    function renderMarketingDetailTable(rows) {
-      const tbody = document.getElementById('mkt-detail-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const conversion = row.leads ? (row.customers / row.leads) * 100 : 0;
-        const cac = row.customers ? Math.round(row.spend / row.customers) : 0;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.source}</td>
-          <td>${fmt(row.spend)}</td>
-          <td>${row.audience.toLocaleString('en-IN')}</td>
-          <td>${row.leads.toLocaleString('en-IN')}</td>
-          <td>${conversion.toFixed(1)}%</td>
-          <td>${cac ? `₹${cac.toLocaleString('en-IN')}` : '—'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCrmWorkspace() {
-      const data = adminData.crmWorkspace;
-      if (!data) return;
-
-      document.getElementById('crm-period-chip').textContent = data.period;
-      document.getElementById('crm-active-leads').textContent = data.activeLeads.toLocaleString('en-IN');
-      document.getElementById('crm-active-delta').textContent = `+${data.monthlyLeadDelta.toLocaleString('en-IN')} this month`;
-
-      const mqlSql = data.mql ? (data.sql / data.mql) * 100 : 0;
-      document.getElementById('crm-mql-sql').textContent = `${mqlSql.toFixed(1)}%`;
-      document.getElementById('crm-qualified').textContent = `MQL ${data.mql.toLocaleString('en-IN')} • SQL ${data.sql.toLocaleString('en-IN')}`;
-
-      document.getElementById('crm-pipeline').textContent = fmtCompact(data.pipelineValue);
-      document.getElementById('crm-win-rate').textContent = `Win Rate ${data.winRate.toFixed(1)}%`;
-      document.getElementById('crm-sla').textContent = `${data.responseSlaMins} min`;
-      document.getElementById('crm-coverage').textContent = `Automation Coverage ${data.automationCoverage}%`;
-      document.getElementById('crm-retention').textContent = `${data.retentionRate.toFixed(1)}%`;
-      document.getElementById('crm-churn').textContent = `Churn ${data.churnRate.toFixed(1)}%`;
-      document.getElementById('crm-nps').textContent = `NPS ${data.nps}`;
-      document.getElementById('crm-referrals').textContent = `Referrals ${data.referrals.toLocaleString('en-IN')}`;
-
-      document.getElementById('crm-renewal').textContent = `${data.renewalRate}%`;
-      document.getElementById('crm-expansion').textContent = fmtCompact(data.expansionRevenue);
-      document.getElementById('crm-resolution').textContent = `${data.avgResolutionHours} hrs`;
-      document.getElementById('crm-risk').textContent = data.atRiskAccounts.toLocaleString('en-IN');
-
-      renderCrmFunnel(data.funnel);
-      renderCrmPipelineTrend(data.pipelineTrend);
-      renderCrmSourceQuality(data.sourceQuality);
-      renderCrmAgentTable(data.agentPerformance);
-      renderCrmPlaybookList(data.playbooks);
-      renderCrmStrategyList(data.strategyPillars);
-      renderCrmLifecycleTable(data.lifecyclePrograms);
-      renderCrmDetailTable(data.sourceQuality);
-      renderCrmAppReviews(data.mockAppReviews || []);
-    }
-
-    function renderCrmAppReviews(mockRows) {
-      const tbody = document.getElementById('crm-app-review-body');
-      const countEl = document.getElementById('crm-review-count');
-      const avgEl = document.getElementById('crm-review-score');
-      const happyEl = document.getElementById('crm-review-happy');
-      const watchEl = document.getElementById('crm-review-watch');
-      const insightsEl = document.getElementById('crm-review-insights');
-      const questionViz = document.getElementById('crm-review-question-viz');
-      const concernViz = document.getElementById('crm-review-concern-viz');
-      const notesList = document.getElementById('crm-review-notes-list');
-      const trendViz = document.getElementById('crm-review-trend-viz');
-      if (!tbody || !countEl || !avgEl || !happyEl || !watchEl || !insightsEl || !questionViz || !concernViz || !notesList || !trendViz) return;
-
-      const formRows = readJsonStore('estateiqAppReviews', []).map((row) => ({
-        name: row.name || 'Anonymous User',
-        average: Number(row.average || 0),
-        sentiment: row.sentiment || 'Neutral',
-        topConcern: row.topConcern || 'General UX improvements',
-        answers: Array.isArray(row.answers) ? row.answers : [],
-        extraComment: row.extraComment || '',
-        submittedAt: row.submittedAt || '—',
-        source: 'Form'
-      }));
-
-      const data = (formRows.length ? formRows : mockRows)
-        .map((row) => ({ ...row, answers: ensureAnswerVector(row), concerns: extractConcernBuckets(row) }))
-        .slice()
-        .sort((a, b) => (b.submittedAt || '').localeCompare(a.submittedAt || ''))
-        .slice(0, 12);
-
-      const total = data.length;
-      const avg = total ? (data.reduce((s, r) => s + Number(r.average || 0), 0) / total) : 0;
-      const happyPct = total ? ((data.filter((r) => ['Happy', 'Very Happy'].includes(r.sentiment)).length / total) * 100) : 0;
-      const watchPct = total ? ((data.filter((r) => ['Dissatisfied', 'Very Dissatisfied', 'Neutral'].includes(r.sentiment)).length / total) * 100) : 0;
-
-      countEl.textContent = total.toLocaleString('en-IN');
-      avgEl.textContent = `${avg.toFixed(1)}/10`;
-      happyEl.textContent = `${happyPct.toFixed(0)}%`;
-      watchEl.textContent = `${watchPct.toFixed(0)}%`;
-
-      tbody.innerHTML = '';
-      data.forEach((row) => {
-        const tr = document.createElement('tr');
-        const statusClass = ['Very Happy', 'Happy'].includes(row.sentiment) ? 'status-ok' : (row.sentiment === 'Neutral' ? 'status-progress' : 'status-open');
-        tr.innerHTML = `
-          <td>${row.name}</td>
-          <td>${Number(row.average || 0).toFixed(1)}/10</td>
-          <td><span class="status-chip ${statusClass}">${row.sentiment}</span></td>
-          <td>${row.topConcern}</td>
-          <td>${row.submittedAt}</td>
-          <td>${row.source || 'Mock'}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      const concernCounts = {};
-      data.forEach((r) => {
-        concernCounts[r.topConcern] = (concernCounts[r.topConcern] || 0) + 1;
-      });
-      const topConcerns = Object.entries(concernCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
-
-      const qStats = CRM_REVIEW_QUESTIONS.map((label, idx) => {
-        const vals = data.map((r) => Number(r.answers?.[idx] || 0)).filter((v) => v > 0);
-        const qAvg = vals.length ? (vals.reduce((s, v) => s + v, 0) / vals.length) : 0;
-        const lowShare = vals.length ? (vals.filter((v) => v <= 5).length / vals.length) * 100 : 0;
-        return { label, avg: qAvg, lowShare };
-      });
-
-      questionViz.innerHTML = '';
-      qStats.forEach((q, idx) => {
-        const bar = document.createElement('div');
-        bar.className = 'progress-row';
-        const color = q.avg >= 8 ? '#3d7a5c' : (q.avg >= 6.5 ? '#b8924a' : '#a03030');
-        bar.innerHTML = `
-          <div class="progress-label">Q${idx + 1} ${q.label}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${Math.max(4, q.avg * 10)}%;background:${color}"></div></div>
-          <div class="progress-meta">${q.avg.toFixed(1)}/10 • Low ${q.lowShare.toFixed(0)}%</div>
-        `;
-        questionViz.appendChild(bar);
-      });
-
-      const concernBuckets = {};
-      data.forEach((r) => {
-        (r.concerns || []).forEach((c) => {
-          concernBuckets[c] = (concernBuckets[c] || 0) + 1;
-        });
-      });
-      const concernRows = Object.entries(concernBuckets).sort((a, b) => b[1] - a[1]).slice(0, 6);
-      const maxConcern = Math.max(1, ...concernRows.map((r) => r[1]));
-
-      concernViz.innerHTML = '';
-      concernRows.forEach(([label, count]) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${label}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(count / maxConcern) * 100}%;background:#1a2540"></div></div>
-          <div class="progress-meta">${count} mention${count > 1 ? 's' : ''}</div>
-        `;
-        concernViz.appendChild(row);
-      });
-
-      if (!concernRows.length) {
-        concernViz.innerHTML = '<div class="metric-sub">No concern hotspots yet.</div>';
-      }
-
-      const notes = data
-        .filter((r) => (r.extraComment || '').trim())
-        .slice(0, 8);
-      notesList.innerHTML = '';
-      if (!notes.length) {
-        notesList.innerHTML = '<li>No additional user notes submitted yet.</li>';
-      } else {
-        notes.forEach((n) => {
-          const cls = ['Very Happy', 'Happy'].includes(n.sentiment) ? 'status-ok' : (n.sentiment === 'Neutral' ? 'status-progress' : 'status-open');
-          const li = document.createElement('li');
-          li.innerHTML = `<strong>${n.name}</strong> <span class="status-chip ${cls}" style="margin-left:6px;">${n.sentiment}</span><br><span style="color:var(--muted)">${n.extraComment}</span>`;
-          notesList.appendChild(li);
-        });
-      }
-
-      const monthMap = {};
-      data.forEach((r) => {
-        const month = normalizeDateMonth(r.submittedAt);
-        if (!monthMap[month]) monthMap[month] = [];
-        monthMap[month].push(Number(r.average || 0));
-      });
-      const monthOrder = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      const trend = Object.keys(monthMap)
-        .map((m) => ({ month: m, avg: monthMap[m].reduce((s, v) => s + v, 0) / Math.max(1, monthMap[m].length) }))
-        .sort((a, b) => monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month));
-
-      trendViz.innerHTML = '';
-      if (trend.length < 2) {
-        trendViz.innerHTML = '<div class="metric-sub">Need at least 2 monthly points for trend view.</div>';
-      } else {
-        const width = Math.max(360, Math.round(trendViz.getBoundingClientRect().width) || 420);
-        const height = 210;
-        const pad = { t: 14, r: 12, b: 30, l: 34 };
-        const svgNS = 'http://www.w3.org/2000/svg';
-        const svg = document.createElementNS(svgNS, 'svg');
-        svg.setAttribute('width', '100%');
-        svg.setAttribute('height', height);
-        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-        const xStep = (width - pad.l - pad.r) / Math.max(1, trend.length - 1);
-        const x = (i) => pad.l + (i * xStep);
-        const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / 10)));
-
-        [2, 4, 6, 8, 10].forEach((tick) => {
-          const yy = y(tick);
-          const line = document.createElementNS(svgNS, 'line');
-          line.setAttribute('x1', pad.l);
-          line.setAttribute('x2', width - pad.r);
-          line.setAttribute('y1', yy);
-          line.setAttribute('y2', yy);
-          line.setAttribute('stroke', '#ece6df');
-          svg.appendChild(line);
-        });
-
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', '#1a2540');
-        path.setAttribute('stroke-width', '2.4');
-        path.setAttribute('d', trend.map((p, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(p.avg)}`).join(' '));
-        svg.appendChild(path);
-
-        trend.forEach((p, i) => {
-          const dot = document.createElementNS(svgNS, 'circle');
-          dot.setAttribute('cx', x(i));
-          dot.setAttribute('cy', y(p.avg));
-          dot.setAttribute('r', '3.4');
-          dot.setAttribute('fill', p.avg >= 7 ? '#3d7a5c' : (p.avg >= 6 ? '#b8924a' : '#a03030'));
-          dot.addEventListener('mouseenter', (e) => showTooltip(e, `${p.month}: ${p.avg.toFixed(1)}/10`));
-          dot.addEventListener('mousemove', showTooltip);
-          dot.addEventListener('mouseleave', hideTooltip);
-          svg.appendChild(dot);
-
-          const xl = document.createElementNS(svgNS, 'text');
-          xl.setAttribute('x', x(i));
-          xl.setAttribute('y', height - 8);
-          xl.setAttribute('text-anchor', 'middle');
-          xl.setAttribute('font-size', '11');
-          xl.setAttribute('fill', '#58524a');
-          xl.textContent = p.month;
-          svg.appendChild(xl);
-        });
-
-        trendViz.appendChild(svg);
-      }
-
-      insightsEl.innerHTML = '';
-      if (!topConcerns.length) {
-        insightsEl.innerHTML = '<li>No review insights available yet.</li>';
-      } else {
-        topConcerns.forEach(([topic, freq], idx) => {
-          const li = document.createElement('li');
-          li.textContent = `#${idx + 1}: ${topic} (mentioned ${freq} time${freq > 1 ? 's' : ''})`;
-          insightsEl.appendChild(li);
-        });
-        const weakest = qStats.slice().sort((a, b) => a.avg - b.avg).slice(0, 2);
-        weakest.forEach((q) => {
-          const li = document.createElement('li');
-          li.textContent = `Priority action: Improve ${q.label} (current avg ${q.avg.toFixed(1)}/10).`;
-          insightsEl.appendChild(li);
-        });
-      }
-    }
-
-    function renderCrmFunnel(stages) {
-      const wrap = document.getElementById('crm-funnel-viz');
-      wrap.innerHTML = '';
-      const max = Math.max(...stages.map(s => s.count), 1);
-
-      stages.forEach((s) => {
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${s.stage}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(s.count / max) * 100}%;background:${s.color}"></div></div>
-          <div class="progress-meta">${s.count.toLocaleString('en-IN')}</div>
-        `;
-        row.addEventListener('mouseenter', (e) => showTooltip(e, `${s.stage}: ${s.count.toLocaleString('en-IN')}`));
-        row.addEventListener('mousemove', showTooltip);
-        row.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderCrmPipelineTrend(monthly) {
-      const wrap = document.getElementById('crm-pipeline-trend');
-      wrap.innerHTML = '';
-
-      const width = Math.max(430, Math.round(wrap.getBoundingClientRect().width) || 520);
-      const height = 230;
-      const pad = { t: 14, r: 16, b: 34, l: 42 };
-      const maxVal = Math.max(...monthly.flatMap(m => [m.leads, m.qualified, m.wins]), 1);
-
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', height);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-      const xStep = (width - pad.l - pad.r) / Math.max(1, monthly.length - 1);
-      const x = (i) => pad.l + (i * xStep);
-      const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxVal)));
-
-      for (let i = 0; i <= 4; i++) {
-        const yy = pad.t + ((height - pad.t - pad.b) * (i / 4));
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pad.l);
-        line.setAttribute('x2', width - pad.r);
-        line.setAttribute('y1', yy);
-        line.setAttribute('y2', yy);
-        line.setAttribute('stroke', '#ece6df');
-        svg.appendChild(line);
-      }
-
-      const series = [
-        { key: 'leads', color: '#5d7a94' },
-        { key: 'qualified', color: '#b8924a' },
-        { key: 'wins', color: '#1a2540' }
-      ];
-
-      series.forEach((s) => {
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', s.color);
-        path.setAttribute('stroke-width', '2.1');
-        path.setAttribute('d', monthly.map((m, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(m[s.key])}`).join(' '));
-        svg.appendChild(path);
-      });
-
-      monthly.forEach((m, i) => {
-        const dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', x(i));
-        dot.setAttribute('cy', y(m.wins));
-        dot.setAttribute('r', '3.4');
-        dot.setAttribute('fill', '#1a2540');
-        dot.addEventListener('mouseenter', (e) => showTooltip(e, `${m.month}: Leads ${m.leads.toLocaleString('en-IN')} • Qualified ${m.qualified.toLocaleString('en-IN')} • Wins ${m.wins.toLocaleString('en-IN')}`));
-        dot.addEventListener('mousemove', showTooltip);
-        dot.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(dot);
-
-        const xLab = document.createElementNS(svgNS, 'text');
-        xLab.setAttribute('x', x(i));
-        xLab.setAttribute('y', height - 8);
-        xLab.setAttribute('text-anchor', 'middle');
-        xLab.setAttribute('font-size', '11');
-        xLab.setAttribute('fill', '#58524a');
-        xLab.textContent = m.month;
-        svg.appendChild(xLab);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      [['Leads', '#5d7a94'], ['Qualified', '#b8924a'], ['Wins', '#1a2540']].forEach((entry) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${entry[1]}"></span><span>${entry[0]}</span><strong></strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderCrmSourceQuality(rows) {
-      const wrap = document.getElementById('crm-source-quality');
-      wrap.innerHTML = '';
-      const maxScore = Math.max(...rows.map(r => r.qualifiedPct + r.winPct), 1);
-
-      rows.forEach((r) => {
-        const score = r.qualifiedPct + r.winPct;
-        const row = document.createElement('div');
-        row.className = 'progress-row';
-        row.innerHTML = `
-          <div class="progress-label">${r.source}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(score / maxScore) * 100}%;background:${r.color}"></div></div>
-          <div class="progress-meta">Q ${r.qualifiedPct}% • W ${r.winPct}%</div>
-        `;
-        row.addEventListener('mouseenter', (e) => showTooltip(e, `${r.source}: ${r.leads.toLocaleString('en-IN')} leads • ${r.avgCycleDays} day cycle`));
-        row.addEventListener('mousemove', showTooltip);
-        row.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(row);
-      });
-    }
-
-    function renderCrmAgentTable(rows) {
-      const tbody = document.getElementById('crm-agent-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const conversion = row.assigned ? ((row.won / row.assigned) * 100) : 0;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.team}</td><td>${row.assigned.toLocaleString('en-IN')}</td><td>${row.qualified.toLocaleString('en-IN')}</td><td>${row.won.toLocaleString('en-IN')}</td><td>${conversion.toFixed(1)}%</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCrmPlaybookList(rows) {
-      const list = document.getElementById('crm-playbook-list');
-      list.innerHTML = '';
-      rows.forEach((row) => {
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${row.name}</strong> — Trigger: ${row.trigger}<br><span style="color:var(--muted)">Goal: ${row.goal} • Coverage: ${row.coverage}%</span>`;
-        list.appendChild(li);
-      });
-    }
-
-    function renderCrmStrategyList(rows) {
-      const list = document.getElementById('crm-strategy-list');
-      list.innerHTML = '';
-      rows.forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-    }
-
-    function renderCrmLifecycleTable(rows) {
-      const tbody = document.getElementById('crm-lifecycle-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.stage}</td><td>${row.program}</td><td>${row.kpi}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderCrmDetailTable(rows) {
-      const tbody = document.getElementById('crm-detail-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.source}</td>
-          <td>${row.leads.toLocaleString('en-IN')}</td>
-          <td>${row.qualifiedPct}%</td>
-          <td>${row.winPct}%</td>
-          <td>${row.avgCycleDays}</td>
-          <td>${fmtCompact(row.avgDealValue)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderSecurityWorkspace() {
-      const data = adminData.securityWorkspace;
-      if (!data) return;
-
-      document.getElementById('sec-period-chip').textContent = data.period;
-      document.getElementById('sec-fraud-blocked').textContent = data.fraudBlocked.toLocaleString('en-IN');
-      document.getElementById('sec-fraud-rate').textContent = `Detection rate ${data.fraudDetectionRate.toFixed(1)}%`;
-      document.getElementById('sec-verified-users').textContent = `${data.verifiedUsersPct.toFixed(1)}%`;
-      document.getElementById('sec-kyc').textContent = `KYC pass ${data.kycPassRate.toFixed(1)}%`;
-      document.getElementById('sec-escrow-value').textContent = fmtCompact(data.escrowValue);
-      document.getElementById('sec-escrow-cases').textContent = `${data.activeEscrows.toLocaleString('en-IN')} active escrows`;
-      document.getElementById('sec-resolved').textContent = `${data.scamResolutionRate.toFixed(1)}%`;
-      document.getElementById('sec-resolution-time').textContent = `Avg ${data.avgResolutionHours} hrs`;
-      document.getElementById('sec-uptime').textContent = `${data.uptime.toFixed(2)}%`;
-      document.getElementById('sec-incidents').textContent = `Incidents ${data.incidents}`;
-      document.getElementById('sec-posture').textContent = `${data.postureScore}/100`;
-      document.getElementById('sec-compliance').textContent = `Compliance ${data.complianceScore}%`;
-
-      document.getElementById('sec-mttd').textContent = `${data.mttdMins} min`;
-      document.getElementById('sec-mttr').textContent = `${data.mttrMins} min`;
-      document.getElementById('sec-critical').textContent = `${data.criticalIncidents}`;
-      document.getElementById('sec-drill').textContent = `${data.drDrillSuccess}%`;
-
-      renderSecurityStakeholderCoverage(data.stakeholderProtection);
-      renderSecurityThreatTrend(data.threatTrend);
-      renderSecurityScamTable(data.scamControls);
-      renderSecurityDepositTable(data.depositFlows);
-      renderSecurityTechControls(data.technicalControls);
-      renderSecurityTrustList(data.trustPrograms);
-      renderSecurityTechStrategyList(data.technicalStrategy);
-      renderSecurityAssuranceTable(data.assuranceMatrix);
-    }
-
-    function renderSecurityStakeholderCoverage(rows) {
-      const wrap = document.getElementById('sec-stakeholder-viz');
-      wrap.innerHTML = '';
-      rows.forEach((row) => {
-        const item = document.createElement('div');
-        item.className = 'progress-row';
-        item.innerHTML = `
-          <div class="progress-label">${row.stakeholder}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${row.coverage}%;background:${row.color}"></div></div>
-          <div class="progress-meta">${row.coverage}%</div>
-        `;
-        item.addEventListener('mouseenter', (e) => showTooltip(e, `${row.stakeholder}: ${row.controls}`));
-        item.addEventListener('mousemove', showTooltip);
-        item.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(item);
-      });
-    }
-
-    function renderSecurityThreatTrend(rows) {
-      const wrap = document.getElementById('sec-threat-trend');
-      wrap.innerHTML = '';
-
-      const width = Math.max(430, Math.round(wrap.getBoundingClientRect().width) || 520);
-      const height = 230;
-      const pad = { t: 14, r: 16, b: 34, l: 42 };
-      const maxVal = Math.max(...rows.flatMap(r => [r.flagged, r.blocked]), 1);
-
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', height);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-      const xStep = (width - pad.l - pad.r) / Math.max(1, rows.length - 1);
-      const x = (i) => pad.l + (i * xStep);
-      const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxVal)));
-
-      for (let i = 0; i <= 4; i++) {
-        const yy = pad.t + ((height - pad.t - pad.b) * (i / 4));
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pad.l);
-        line.setAttribute('x2', width - pad.r);
-        line.setAttribute('y1', yy);
-        line.setAttribute('y2', yy);
-        line.setAttribute('stroke', '#ece6df');
-        svg.appendChild(line);
-      }
-
-      const series = [
-        { key: 'flagged', color: '#5d7a94' },
-        { key: 'blocked', color: '#1a2540' }
-      ];
-      series.forEach((s) => {
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', s.color);
-        path.setAttribute('stroke-width', '2.2');
-        path.setAttribute('d', rows.map((r, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(r[s.key])}`).join(' '));
-        svg.appendChild(path);
-      });
-
-      rows.forEach((r, i) => {
-        const dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', x(i));
-        dot.setAttribute('cy', y(r.blocked));
-        dot.setAttribute('r', '3.4');
-        dot.setAttribute('fill', '#1a2540');
-        dot.addEventListener('mouseenter', (e) => showTooltip(e, `${r.month}: Flagged ${r.flagged}, Blocked ${r.blocked}, Chargebacks ${r.chargeback}`));
-        dot.addEventListener('mousemove', showTooltip);
-        dot.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(dot);
-
-        const xLab = document.createElementNS(svgNS, 'text');
-        xLab.setAttribute('x', x(i));
-        xLab.setAttribute('y', height - 8);
-        xLab.setAttribute('text-anchor', 'middle');
-        xLab.setAttribute('font-size', '11');
-        xLab.setAttribute('fill', '#58524a');
-        xLab.textContent = r.month;
-        svg.appendChild(xLab);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      [['Flagged', '#5d7a94'], ['Blocked', '#1a2540']].forEach((entry) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${entry[1]}"></span><span>${entry[0]}</span><strong></strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderSecurityScamTable(rows) {
-      const tbody = document.getElementById('sec-scam-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.control}</td><td>${row.coverage}%</td><td>${row.blocked}</td><td>${row.success}%</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderSecurityDepositTable(rows) {
-      const tbody = document.getElementById('sec-deposit-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.flow}</td><td>${fmt(row.value)}</td><td>${row.disputes}</td><td>${row.resolved}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderSecurityTechControls(rows) {
-      const wrap = document.getElementById('sec-tech-controls');
-      wrap.innerHTML = '';
-      rows.forEach((row) => {
-        const item = document.createElement('div');
-        item.className = 'progress-row';
-        item.innerHTML = `
-          <div class="progress-label">${row.name}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${row.score}%;background:${row.color}"></div></div>
-          <div class="progress-meta">${row.score}/100</div>
-        `;
-        wrap.appendChild(item);
-      });
-    }
-
-    function renderSecurityTrustList(rows) {
-      const list = document.getElementById('sec-trust-list');
-      list.innerHTML = '';
-      rows.forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-    }
-
-    function renderSecurityTechStrategyList(rows) {
-      const list = document.getElementById('sec-tech-strategy-list');
-      list.innerHTML = '';
-      rows.forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-    }
-
-    function renderSecurityAssuranceTable(rows) {
-      const tbody = document.getElementById('sec-assurance-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const statusClass = row.status === 'Strong' ? 'status-ok' : (row.status === 'Watch' ? 'status-progress' : 'status-open');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.domain}</td>
-          <td>${row.score}/100</td>
-          <td>${row.sla}</td>
-          <td>${row.current}</td>
-          <td><span class="status-chip ${statusClass}">${row.status}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderScmWorkspace() {
-      const data = adminData.scmWorkspace;
-      if (!data) return;
-
-      document.getElementById('scm-period-chip').textContent = data.period;
-      document.getElementById('scm-unutilized').textContent = data.unutilizedInventory.toLocaleString('en-IN');
-      document.getElementById('scm-unutilized-pct').textContent = `${data.unutilizedPct}% of total stock`;
-      document.getElementById('scm-unsold').textContent = data.unsoldUnits.toLocaleString('en-IN');
-      document.getElementById('scm-unsold-value').textContent = `Value ${fmtCompact(data.unsoldValue)}`;
-      document.getElementById('scm-unrented').textContent = data.unrentedUnits.toLocaleString('en-IN');
-      document.getElementById('scm-unrented-value').textContent = `Rental potential ${fmtCompact(data.unrentedRentalPotential)}/mo`;
-      document.getElementById('scm-idle-days').textContent = `${data.avgIdleDays} days`;
-      document.getElementById('scm-aging-risk').textContent = `High aging risk ${data.highAgingRiskUnits} units`;
-      document.getElementById('scm-active-searchers').textContent = data.activeSearchCustomers.toLocaleString('en-IN');
-      document.getElementById('scm-demand-delta').textContent = `+${data.demandDelta}% QoQ`;
-      document.getElementById('scm-demand-supply').textContent = `${data.demandSupplyRatio.toFixed(2)}x`;
-      document.getElementById('scm-utilization').textContent = `Utilization ${data.utilizationRate}%`;
-
-      document.getElementById('scm-inq-visit').textContent = `${data.efficiency.inquiryToVisit}%`;
-      document.getElementById('scm-visit-book').textContent = `${data.efficiency.visitToBooking}%`;
-      document.getElementById('scm-close-days').textContent = `${data.efficiency.avgCloseDays} days`;
-      document.getElementById('scm-turnover').textContent = `${data.efficiency.stockTurnover}x`;
-
-      renderScmAgingViz(data.agingBuckets);
-      renderScmCityDemand(data.cityDemand);
-      renderScmIdleQueue(data.idleQueue);
-      renderScmDemandSegments(data.demandSegments);
-      renderScmStrategy(data.strategyPoints);
-      renderScmRiskMatrix(data.riskMatrix);
-    }
-
-    function renderScmAgingViz(rows) {
-      const wrap = document.getElementById('scm-aging-viz');
-      wrap.innerHTML = '';
-      const maxVal = Math.max(...rows.map(r => r.units), 1);
-      rows.forEach((row) => {
-        const item = document.createElement('div');
-        item.className = 'progress-row';
-        item.innerHTML = `
-          <div class="progress-label">${row.bucket}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(row.units / maxVal) * 100}%;background:${row.color}"></div></div>
-          <div class="progress-meta">${row.units} units</div>
-        `;
-        wrap.appendChild(item);
-      });
-    }
-
-    function renderScmCityDemand(rows) {
-      const wrap = document.getElementById('scm-city-demand');
-      wrap.innerHTML = '';
-      const maxSearch = Math.max(...rows.map(r => r.searchers), 1);
-      rows.forEach((row) => {
-        const item = document.createElement('div');
-        item.className = 'progress-row';
-        item.innerHTML = `
-          <div class="progress-label">${row.city}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(row.searchers / maxSearch) * 100}%;background:${row.color}"></div></div>
-          <div class="progress-meta">${row.searchers} demand • ${row.available} supply</div>
-        `;
-        item.addEventListener('mouseenter', (e) => showTooltip(e, `${row.city}: Demand-match ${row.match}%`));
-        item.addEventListener('mousemove', showTooltip);
-        item.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(item);
-      });
-    }
-
-    function renderScmIdleQueue(rows) {
-      const tbody = document.getElementById('scm-idle-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.property}</td><td>${row.city}</td><td>${row.status}</td><td>${row.idleDays}</td><td>${row.action}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderScmDemandSegments(rows) {
-      const tbody = document.getElementById('scm-demand-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const gap = row.searchers - row.inventory;
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.segment}</td><td>${row.searchers.toLocaleString('en-IN')}</td><td>${row.inventory.toLocaleString('en-IN')}</td><td>${gap > 0 ? '+' : ''}${gap.toLocaleString('en-IN')}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderScmStrategy(rows) {
-      const list = document.getElementById('scm-strategy-list');
-      list.innerHTML = '';
-      rows.forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-    }
-
-    function renderScmRiskMatrix(rows) {
-      const tbody = document.getElementById('scm-risk-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const statusClass = row.risk === 'Low' ? 'status-ok' : (row.risk === 'Medium' ? 'status-progress' : 'status-open');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.group}</td><td>${row.units}</td><td>${row.avgIdle} days</td><td>${row.demandMatch}%</td><td><span class="status-chip ${statusClass}">${row.risk}</span></td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderTenantProfileWorkspace() {
-      const data = adminData.tenantProfileWorkspace;
-      if (!data) return;
-
-      const pct = (value) => `${((value / Math.max(1, data.totalActive)) * 100).toFixed(1)}% of tenants`;
-
-      document.getElementById('tenant-period-chip').textContent = data.period;
-      document.getElementById('tenant-total-active').textContent = data.totalActive.toLocaleString('en-IN');
-      document.getElementById('tenant-review-window').textContent = data.reviewWindow;
-      document.getElementById('tenant-red-count').textContent = data.redZoneCount.toLocaleString('en-IN');
-      document.getElementById('tenant-red-share').textContent = pct(data.redZoneCount);
-      document.getElementById('tenant-yellow-count').textContent = data.yellowZoneCount.toLocaleString('en-IN');
-      document.getElementById('tenant-yellow-share').textContent = pct(data.yellowZoneCount);
-      document.getElementById('tenant-green-count').textContent = data.greenZoneCount.toLocaleString('en-IN');
-      document.getElementById('tenant-green-share').textContent = pct(data.greenZoneCount);
-      document.getElementById('tenant-on-time-rate').textContent = `${data.onTimeRate}%`;
-      document.getElementById('tenant-on-time-delta').textContent = `+${data.onTimeDelta}% vs last quarter`;
-      document.getElementById('tenant-complaint-sla').textContent = `${data.complaintSla}%`;
-      document.getElementById('tenant-avg-resolve').textContent = `Avg resolve ${data.avgResolveDays} days`;
-
-      renderTenantZoneDistribution(data.zoneMix);
-      renderTenantIncidentTrend(data.incidentTrend);
-      renderTenantRiskTable(data.tenantRegister, data.trustModel);
-      renderTenantActionList(data.actionPlaybook);
-      renderTenantCityZoneMatrix(data.cityZoneMatrix);
-      renderTenantWatchlist(data.tenantRegister, data.trustModel);
-      renderTenantTrustFormula(data.trustModel);
-    }
-
-    function calculateTenantTrustScore(row, model) {
-      const base = model?.baseScore ?? 100;
-      const weights = model?.weights || {};
-      const severe = row.severeComplaints ?? 0;
-      const minor = Math.max(0, (row.complaints ?? 0) - severe);
-      const penalty =
-        ((row.mispayments ?? 0) * (weights.mispaymentPenalty ?? 0)) +
-        (severe * (weights.severeComplaintPenalty ?? 0)) +
-        (minor * (weights.minorComplaintPenalty ?? 0)) +
-        ((row.delayedDays ?? 0) * (weights.delayDayPenalty ?? 0)) +
-        ((row.kycVerified === false) ? (weights.kycNotVerifiedPenalty ?? 0) : 0);
-      const bonus = (row.cooperative ? (weights.cooperationBonus ?? 0) : 0);
-      return Math.max(0, Math.min(100, Math.round(base - penalty + bonus)));
-    }
-
-    function trustZoneFromScore(score, model) {
-      const t = model?.thresholds || {};
-      if (score >= (t.greenMin ?? 75)) return 'Green';
-      if (score >= (t.yellowMin ?? 55)) return 'Yellow';
-      return 'Red';
-    }
-
-    function renderTenantZoneDistribution(rows) {
-      const wrap = document.getElementById('tenant-zone-viz');
-      wrap.innerHTML = '';
-      const maxVal = Math.max(...rows.map(r => r.count), 1);
-
-      rows.forEach((row) => {
-        const item = document.createElement('div');
-        item.className = 'progress-row';
-        item.innerHTML = `
-          <div class="progress-label">${row.zone}</div>
-          <div class="progress-track"><div class="progress-fill" style="width:${(row.count / maxVal) * 100}%;background:${row.color}"></div></div>
-          <div class="progress-meta">${row.count}</div>
-        `;
-        item.addEventListener('mouseenter', (e) => showTooltip(e, `${row.zone}: ${row.note}`));
-        item.addEventListener('mousemove', showTooltip);
-        item.addEventListener('mouseleave', hideTooltip);
-        wrap.appendChild(item);
-      });
-    }
-
-    function renderTenantIncidentTrend(rows) {
-      const wrap = document.getElementById('tenant-incident-trend');
-      wrap.innerHTML = '';
-
-      const width = Math.max(430, Math.round(wrap.getBoundingClientRect().width) || 520);
-      const height = 230;
-      const pad = { t: 14, r: 16, b: 34, l: 42 };
-      const maxVal = Math.max(...rows.flatMap(r => [r.red, r.yellow, r.green]), 1);
-
-      const svgNS = 'http://www.w3.org/2000/svg';
-      const svg = document.createElementNS(svgNS, 'svg');
-      svg.setAttribute('width', '100%');
-      svg.setAttribute('height', height);
-      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
-
-      const xStep = (width - pad.l - pad.r) / Math.max(1, rows.length - 1);
-      const x = (i) => pad.l + (i * xStep);
-      const y = (v) => pad.t + ((height - pad.t - pad.b) * (1 - (v / maxVal)));
-
-      for (let i = 0; i <= 4; i++) {
-        const yy = pad.t + ((height - pad.t - pad.b) * (i / 4));
-        const line = document.createElementNS(svgNS, 'line');
-        line.setAttribute('x1', pad.l);
-        line.setAttribute('x2', width - pad.r);
-        line.setAttribute('y1', yy);
-        line.setAttribute('y2', yy);
-        line.setAttribute('stroke', '#ece6df');
-        svg.appendChild(line);
-      }
-
-      const series = [
-        { key: 'red', color: '#a03030', label: 'Red' },
-        { key: 'yellow', color: '#b8924a', label: 'Yellow' },
-        { key: 'green', color: '#3d7a5c', label: 'Green' }
-      ];
-
-      series.forEach((s) => {
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('fill', 'none');
-        path.setAttribute('stroke', s.color);
-        path.setAttribute('stroke-width', '2.2');
-        path.setAttribute('d', rows.map((r, i) => `${i === 0 ? 'M' : 'L'}${x(i)},${y(r[s.key])}`).join(' '));
-        svg.appendChild(path);
-      });
-
-      rows.forEach((r, i) => {
-        const xLab = document.createElementNS(svgNS, 'text');
-        xLab.setAttribute('x', x(i));
-        xLab.setAttribute('y', height - 8);
-        xLab.setAttribute('text-anchor', 'middle');
-        xLab.setAttribute('font-size', '11');
-        xLab.setAttribute('fill', '#58524a');
-        xLab.textContent = r.month;
-        svg.appendChild(xLab);
-
-        const dot = document.createElementNS(svgNS, 'circle');
-        dot.setAttribute('cx', x(i));
-        dot.setAttribute('cy', y(r.red));
-        dot.setAttribute('r', '3.2');
-        dot.setAttribute('fill', '#a03030');
-        dot.addEventListener('mouseenter', (e) => showTooltip(e, `${r.month}: Red ${r.red} • Yellow ${r.yellow} • Green ${r.green}`));
-        dot.addEventListener('mousemove', showTooltip);
-        dot.addEventListener('mouseleave', hideTooltip);
-        svg.appendChild(dot);
-      });
-
-      const legend = document.createElement('div');
-      legend.className = 'pie-legend';
-      series.forEach((s) => {
-        const row = document.createElement('div');
-        row.className = 'pie-legend-row';
-        row.innerHTML = `<span class="legend-dot" style="background:${s.color}"></span><span>${s.label}</span><strong></strong>`;
-        legend.appendChild(row);
-      });
-
-      wrap.appendChild(svg);
-      wrap.appendChild(legend);
-    }
-
-    function renderTenantRiskTable(rows, model) {
-      const tbody = document.getElementById('tenant-risk-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const trustScore = calculateTenantTrustScore(row, model);
-        const zone = trustZoneFromScore(trustScore, model);
-        const statusClass = zone === 'Green' ? 'status-ok' : (zone === 'Yellow' ? 'status-progress' : 'status-open');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.tenant}</td>
-          <td>${row.city}</td>
-          <td>${row.property}</td>
-          <td>${row.complaints}</td>
-          <td>${row.mispayments}</td>
-          <td><span class="status-chip ${statusClass}">${zone}</span></td>
-          <td>${trustScore}/100</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderTenantTrustFormula(model) {
-      const list = document.getElementById('tenant-trust-formula-list');
-      const zoneBody = document.getElementById('tenant-trust-zone-body');
-      if (!list || !zoneBody || !model) return;
-
-      const w = model.weights;
-      list.innerHTML = '';
-      [
-        `Base score starts at ${model.baseScore}.`,
-        `- ${w.mispaymentPenalty} points for every mispayment event.`,
-        `- ${w.severeComplaintPenalty} points per severe complaint (harassment, damage, fraud risk).`,
-        `- ${w.minorComplaintPenalty} points per minor complaint (noise, delayed maintenance response).`,
-        `- ${w.delayDayPenalty} point per late-payment day in review window.`,
-        `- ${w.kycNotVerifiedPenalty} points if KYC/verification is incomplete.`,
-        `+ ${w.cooperationBonus} points if tenant cooperates with dispute resolution.`
-      ].forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-
-      zoneBody.innerHTML = '';
-      [
-        { zone: 'Green', range: `${model.thresholds.greenMin}-100`, meaning: 'All clear; standard support and renewal priority.' },
-        { zone: 'Yellow', range: `${model.thresholds.yellowMin}-${model.thresholds.greenMin - 1}`, meaning: 'Watchlist; proactive reminder and monitoring.' },
-        { zone: 'Red', range: `0-${model.thresholds.yellowMin - 1}`, meaning: 'Critical; immediate intervention and escalation.' }
-      ].forEach((row) => {
-        const statusClass = row.zone === 'Green' ? 'status-ok' : (row.zone === 'Yellow' ? 'status-progress' : 'status-open');
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td><span class="status-chip ${statusClass}">${row.zone}</span></td><td>${row.range}</td><td>${row.meaning}</td>`;
-        zoneBody.appendChild(tr);
-      });
-    }
-
-    function renderTenantActionList(rows) {
-      const list = document.getElementById('tenant-action-list');
-      list.innerHTML = '';
-      rows.forEach((text) => {
-        const li = document.createElement('li');
-        li.textContent = text;
-        list.appendChild(li);
-      });
-    }
-
-    function renderTenantCityZoneMatrix(rows) {
-      const tbody = document.getElementById('tenant-city-zone-body');
-      tbody.innerHTML = '';
-      rows.forEach((row) => {
-        const index = Math.round(((row.red * 3) + (row.yellow * 1.5) + (row.green * 0.5)) / Math.max(1, row.green + row.yellow + row.red) * 100);
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.city}</td><td>${row.green}</td><td>${row.yellow}</td><td>${row.red}</td><td>${index}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function renderTenantWatchlist(rows, model) {
-      const tbody = document.getElementById('tenant-watch-body');
-      tbody.innerHTML = '';
-      rows
-        .map((row) => ({ ...row, trustScore: calculateTenantTrustScore(row, model) }))
-        .filter((row) => row.trustScore < (model?.thresholds?.yellowMin ?? 55))
-        .sort((a, b) => a.trustScore - b.trustScore)
-        .slice(0, 5)
-        .forEach((row) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${row.tenant}</td><td>${row.issue} (Trust ${row.trustScore}/100)</td><td>${row.lastIncident}</td><td>${row.nextAction}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
-
     function renderResolutionTimes() {
       const wrap = document.getElementById('resolution-chart');
       const summary = document.getElementById('resolution-summary');
@@ -3617,18 +1060,6 @@
         renderRevenueShare();
         renderResolutionTimes();
         renderProfitMix();
-      } else if (normalized === 'revenue') {
-        renderRevenueWorkspace();
-      } else if (normalized === 'marketing') {
-        renderMarketingWorkspace();
-      } else if (normalized === 'crm') {
-        renderCrmWorkspace();
-      } else if (normalized === 'security') {
-        renderSecurityWorkspace();
-      } else if (normalized === 'scm') {
-        renderScmWorkspace();
-      } else if (normalized === 'tenant-profile') {
-        renderTenantProfileWorkspace();
       }
     }
 
@@ -3636,9 +1067,11 @@
       btn.addEventListener('click', () => setAdminTab(btn.dataset.adminTab));
     });
 
+    ensureMockComplaints();
     renderKPIs();
     renderQueues();
     renderVerificationAndDelist();
+    renderAdminComplaints();
     setAdminTab('overview');
   </script>
 

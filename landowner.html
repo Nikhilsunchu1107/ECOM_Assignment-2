@@ -14,7 +14,6 @@
     <div class="nav-links">
       <a href="index.html">Home</a>
       <a href="nexusrent.html">NexusRent</a>
-      <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
@@ -122,26 +121,6 @@
           </ul>
         </div>
       </div>
-
-      <div style="margin-top:16px;">
-        <div class="dashboard-card">
-          <h3>Tenant Review Center (By Property)</h3>
-          <p class="metric-sub">Review each tenant from each property, assign behavior score, and auto-map trust zone (Green / Yellow / Red).</p>
-          <table class="dashboard-table" style="margin-top:10px;">
-            <thead>
-              <tr>
-                <th>Property</th>
-                <th>Tenant</th>
-                <th>Last Review</th>
-                <th>Trust Score</th>
-                <th>Zone</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="owner-tenant-review-body"></tbody>
-          </table>
-        </div>
-      </div>
       
       <!-- Properties list for owner -->
       <div style="margin-top:18px;">
@@ -222,70 +201,6 @@
         </div>
       </div>
     </div>
-
-    <div class="owner-review-modal" id="tenant-review-modal" aria-hidden="true">
-      <div class="owner-review-modal-card">
-        <button id="tenant-review-close" class="owner-review-close" aria-label="Close">✕</button>
-        <div class="owner-review-content">
-          <div class="section-label">Tenant Review</div>
-          <h3 id="tenant-review-title">Review Tenant</h3>
-          <div style="color:var(--muted);margin-bottom:12px;" id="tenant-review-sub"></div>
-
-          <div class="owner-review-form-grid">
-            <div class="form-group">
-              <label class="form-label">Payment Discipline (1-5)</label>
-              <select id="review-payment" class="form-select">
-                <option value="5">5 - Always on time</option>
-                <option value="4">4 - Mostly on time</option>
-                <option value="3">3 - Occasional delays</option>
-                <option value="2">2 - Frequent delay</option>
-                <option value="1">1 - Chronic delay/default</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Complaint Severity (1-5)</label>
-              <select id="review-complaint" class="form-select">
-                <option value="1">1 - No serious complaints</option>
-                <option value="2">2 - Minor concerns</option>
-                <option value="3">3 - Moderate issues</option>
-                <option value="4">4 - Repeated major issues</option>
-                <option value="5">5 - Critical / legal risk</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Property Care (1-5)</label>
-              <select id="review-care" class="form-select">
-                <option value="5">5 - Excellent care</option>
-                <option value="4">4 - Good</option>
-                <option value="3">3 - Average</option>
-                <option value="2">2 - Poor</option>
-                <option value="1">1 - Damage-prone</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Communication & Cooperation (1-5)</label>
-              <select id="review-communication" class="form-select">
-                <option value="5">5 - Very cooperative</option>
-                <option value="4">4 - Cooperative</option>
-                <option value="3">3 - Neutral</option>
-                <option value="2">2 - Difficult</option>
-                <option value="1">1 - Uncooperative</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-top:8px;">
-            <label class="form-label">Owner Notes</label>
-            <textarea id="review-notes" class="form-textarea" rows="4" placeholder="Add review details for future reference..."></textarea>
-          </div>
-
-          <div class="owner-review-footer">
-            <div id="review-preview" style="font-size:0.9rem;color:var(--muted);">Trust Score Preview: —</div>
-            <button id="save-tenant-review" class="btn btn-primary">Save Tenant Review</button>
-          </div>
-        </div>
-      </div>
-    </div>
     </div>
   </section>
 
@@ -349,80 +264,9 @@
       }
     ];
 
-    const ownerTenantReviews = {
-      'p1::Amit Kumar': { payment: 5, complaintSeverity: 1, propertyCare: 5, communication: 4, notes: 'Consistent and cooperative.', reviewedOn: '2026-04-03' },
-      'p2::Vikram Singh': { payment: 4, complaintSeverity: 2, propertyCare: 4, communication: 4, notes: 'Good profile, minor follow-ups.', reviewedOn: '2026-04-02' },
-      'p3::Sana Kapoor': { payment: 2, complaintSeverity: 3, propertyCare: 3, communication: 2, notes: 'Payment delay observed in Feb.', reviewedOn: '2026-04-01' },
-      'p3::Riya Mehta': { payment: 3, complaintSeverity: 2, propertyCare: 3, communication: 3, notes: 'Average risk, monitor.', reviewedOn: '2026-03-28' }
-    };
-
-    let activeReviewContext = null;
-    let activeFloatingPropertyId = null;
-
     const ownerContainer = document.getElementById('owner-properties');
     const modal = document.getElementById('owner-prop-modal');
     const modalClose = document.getElementById('owner-prop-close');
-    const reviewModal = document.getElementById('tenant-review-modal');
-    const reviewClose = document.getElementById('tenant-review-close');
-
-    function getTenantKey(propertyId, tenantName) {
-      return `${propertyId}::${tenantName}`;
-    }
-
-    function calculateOwnerTrustScore(review) {
-      if (!review) return null;
-      const payment = Number(review.payment || 3);
-      const complaintSeverity = Number(review.complaintSeverity || 3);
-      const propertyCare = Number(review.propertyCare || 3);
-      const communication = Number(review.communication || 3);
-      const complaintPositive = 6 - complaintSeverity;
-      const score = Math.round(
-        (payment / 5) * 35 +
-        (propertyCare / 5) * 25 +
-        (communication / 5) * 20 +
-        (complaintPositive / 5) * 20
-      );
-      return Math.max(0, Math.min(100, score));
-    }
-
-    function ownerTrustZone(score) {
-      if (score == null) return { label: 'Not Rated', className: 'status-progress' };
-      if (score >= 80) return { label: 'Green', className: 'status-ok' };
-      if (score >= 60) return { label: 'Yellow', className: 'status-progress' };
-      return { label: 'Red', className: 'status-open' };
-    }
-
-    function getTenantReview(propertyId, tenantName) {
-      return ownerTenantReviews[getTenantKey(propertyId, tenantName)] || null;
-    }
-
-    function renderOwnerTenantReviewTable() {
-      const body = document.getElementById('owner-tenant-review-body');
-      if (!body) return;
-      body.innerHTML = '';
-
-      ownerProperties.forEach((property) => {
-        property.tenants.forEach((tenant) => {
-          const review = getTenantReview(property.id, tenant.name);
-          const score = calculateOwnerTrustScore(review);
-          const zone = ownerTrustZone(score);
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td>${property.name}</td>
-            <td>${tenant.name}</td>
-            <td>${review?.reviewedOn || 'Not reviewed'}</td>
-            <td>${score == null ? '—' : `${score}/100`}</td>
-            <td><span class="status-chip ${zone.className}">${zone.label}</span></td>
-            <td><button class="btn btn-outline owner-review-btn" data-prop="${property.id}" data-tenant="${tenant.name}">Review</button></td>
-          `;
-          body.appendChild(tr);
-        });
-      });
-
-      body.querySelectorAll('.owner-review-btn').forEach((btn) => {
-        btn.addEventListener('click', () => openTenantReview(btn.dataset.prop, btn.dataset.tenant));
-      });
-    }
 
     function renderOwnerProperties(){
       ownerContainer.innerHTML = '';
@@ -430,82 +274,11 @@
         const row = document.createElement('div');
         row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.padding='8px 0';
         row.innerHTML = `<div><strong>${p.name}</strong><div style="font-size:0.9rem;color:var(--muted)"> ${p.location} • Rent: ₹${p.rent.toLocaleString('en-IN')}</div></div>`;
-        const actions = document.createElement('div');
-        actions.style.display = 'flex';
-        actions.style.gap = '8px';
-        const btn = document.createElement('button'); btn.className='btn btn-outline'; btn.textContent='View Details';
-        btn.addEventListener('click', ()=> openOwnerFloating(p.id));
-        const reviewBtn = document.createElement('button'); reviewBtn.className='btn btn-primary'; reviewBtn.textContent='Review Tenants';
-        reviewBtn.addEventListener('click', ()=> openOwnerFloating(p.id));
-        actions.appendChild(btn);
-        actions.appendChild(reviewBtn);
-        row.appendChild(actions);
+  const btn = document.createElement('button'); btn.className='btn btn-outline'; btn.textContent='View Details';
+  btn.addEventListener('click', ()=> openOwnerFloating(p.id));
+        row.appendChild(btn);
         ownerContainer.appendChild(row);
       });
-    }
-
-    function openTenantReview(propertyId, tenantName) {
-      const property = ownerProperties.find((p) => p.id === propertyId);
-      if (!property || !reviewModal) return;
-      const existing = getTenantReview(propertyId, tenantName) || {};
-      activeReviewContext = { propertyId, tenantName };
-
-      document.getElementById('tenant-review-title').textContent = `Review: ${tenantName}`;
-      document.getElementById('tenant-review-sub').textContent = `${property.name} • ${property.location}`;
-
-      document.getElementById('review-payment').value = String(existing.payment || 3);
-      document.getElementById('review-complaint').value = String(existing.complaintSeverity || 3);
-      document.getElementById('review-care').value = String(existing.propertyCare || 3);
-      document.getElementById('review-communication').value = String(existing.communication || 3);
-      document.getElementById('review-notes').value = existing.notes || '';
-
-      refreshReviewPreview();
-      reviewModal.classList.add('active');
-      reviewModal.setAttribute('aria-hidden', 'false');
-    }
-
-    function closeTenantReview() {
-      if (reviewModal) {
-        reviewModal.classList.remove('active');
-        reviewModal.setAttribute('aria-hidden', 'true');
-      }
-      activeReviewContext = null;
-    }
-
-    function refreshReviewPreview() {
-      const preview = document.getElementById('review-preview');
-      if (!preview) return;
-      const simulated = {
-        payment: Number(document.getElementById('review-payment').value),
-        complaintSeverity: Number(document.getElementById('review-complaint').value),
-        propertyCare: Number(document.getElementById('review-care').value),
-        communication: Number(document.getElementById('review-communication').value)
-      };
-      const score = calculateOwnerTrustScore(simulated);
-      const zone = ownerTrustZone(score);
-      preview.innerHTML = `Trust Score Preview: <strong>${score}/100</strong> • <span class="status-chip ${zone.className}">${zone.label}</span>`;
-    }
-
-    function saveTenantReview() {
-      if (!activeReviewContext) return;
-      const property = ownerProperties.find((p) => p.id === activeReviewContext.propertyId);
-      if (!property) return;
-
-      const review = {
-        payment: Number(document.getElementById('review-payment').value),
-        complaintSeverity: Number(document.getElementById('review-complaint').value),
-        propertyCare: Number(document.getElementById('review-care').value),
-        communication: Number(document.getElementById('review-communication').value),
-        notes: document.getElementById('review-notes').value.trim(),
-        reviewedOn: new Date().toISOString().slice(0, 10)
-      };
-
-      ownerTenantReviews[getTenantKey(activeReviewContext.propertyId, activeReviewContext.tenantName)] = review;
-      closeTenantReview();
-      renderOwnerTenantReviewTable();
-      if (activeFloatingPropertyId) {
-        openOwnerFloating(activeFloatingPropertyId);
-      }
     }
 
     function openOwnerModal(id){
@@ -556,7 +329,6 @@
     function openOwnerFloating(id){
       const p = ownerProperties.find(x=>x.id===id);
       if(!p) return;
-      activeFloatingPropertyId = id;
       document.getElementById('floating-title').textContent = p.name;
       document.getElementById('floating-location').textContent = p.location || '';
       document.getElementById('floating-agreement').textContent = p.agreement || '—';
@@ -564,29 +336,9 @@
 
       const tEl = document.getElementById('floating-tenants'); tEl.innerHTML='';
       p.tenants.forEach(t => {
-        const review = getTenantReview(p.id, t.name);
-        const score = calculateOwnerTrustScore(review);
-        const zone = ownerTrustZone(score);
         const d = document.createElement('div'); d.style.padding='6px 0';
-        d.style.borderBottom = '1px solid var(--border)';
-        d.innerHTML = `
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
-            <div>
-              <strong style="display:block;color:var(--navy)">${t.name}</strong>
-              <div style="color:var(--muted);font-size:0.9rem;margin-top:6px">${t.email||''} • ${t.phone||''}</div>
-              <div style="margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-                <span class="status-chip ${zone.className}">${zone.label}</span>
-                <span style="font-size:0.82rem;color:var(--muted)">Trust: ${score == null ? 'Not Rated' : `${score}/100`}</span>
-              </div>
-            </div>
-            <button class="btn btn-outline floating-review-btn" data-prop="${p.id}" data-tenant="${t.name}">Review</button>
-          </div>
-        `;
+        d.innerHTML = `<strong style="display:block;color:var(--navy)">${t.name}</strong><div style="color:var(--muted);font-size:0.9rem;margin-top:6px">${t.email||''} • ${t.phone||''}</div>`;
         tEl.appendChild(d);
-      });
-
-      tEl.querySelectorAll('.floating-review-btn').forEach((btn) => {
-        btn.addEventListener('click', () => openTenantReview(btn.dataset.prop, btn.dataset.tenant));
       });
 
       const payEl = document.getElementById('floating-payments'); payEl.innerHTML='';
@@ -614,17 +366,8 @@
     }
 
     function closeOwnerFloating(){ if(floating){ floating.classList.remove('active'); floating.setAttribute('aria-hidden','true'); } }
-    if(reviewClose) reviewClose.addEventListener('click', closeTenantReview);
     if(floatingClose) floatingClose.addEventListener('click', closeOwnerFloating);
     if(floating) floating.addEventListener('click', (ev)=>{ if(ev.target===floating) closeOwnerFloating(); });
-    if(reviewModal) reviewModal.addEventListener('click', (ev)=>{ if(ev.target===reviewModal) closeTenantReview(); });
-
-    ['review-payment','review-complaint','review-care','review-communication'].forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) el.addEventListener('change', refreshReviewPreview);
-    });
-    const saveTenantReviewBtn = document.getElementById('save-tenant-review');
-    if (saveTenantReviewBtn) saveTenantReviewBtn.addEventListener('click', saveTenantReview);
 
     function closeOwnerModal(){ modal.classList.remove('active'); }
     if(modalClose) modalClose.addEventListener('click', closeOwnerModal);
@@ -649,7 +392,6 @@
     if(dlAllBtn) dlAllBtn.addEventListener('click', ()=>{ ownerProperties.forEach(p=> p.bills.forEach(b=> generateInvoiceForOwner(p,b))); alert('Downloaded invoices (as .txt)'); });
 
     renderOwnerProperties();
-    renderOwnerTenantReviewTable();
   </script>
 
   <footer>

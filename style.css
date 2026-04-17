@@ -901,80 +901,6 @@ nav {
   .owner-floating-body { grid-template-columns: 1fr; }
 }
 
-/* Dedicated text-only modal for owner tenant reviews (no image pane) */
-.owner-review-modal {
-  position: fixed;
-  inset: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(13,13,13,0.45);
-  z-index: 850;
-  padding: 20px;
-}
-
-.owner-review-modal.active {
-  display: flex;
-}
-
-.owner-review-modal-card {
-  position: relative;
-  width: min(680px, 94vw);
-  max-height: 88vh;
-  overflow: auto;
-  background: var(--white);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 70px rgba(10,10,10,0.25);
-}
-
-.owner-review-content {
-  padding: 24px;
-}
-
-.owner-review-close {
-  position: absolute;
-  right: 12px;
-  top: 12px;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(26,37,64,0.08);
-  color: var(--navy);
-  cursor: pointer;
-  font-size: 1rem;
-}
-
-.owner-review-form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.owner-review-footer {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px;
-}
-
-@media (max-width: 700px) {
-  .owner-review-content {
-    padding: 16px;
-  }
-
-  .owner-review-form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .owner-review-footer {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
 /* DASHBOARDS */
 .dashboard-hero {
   background: linear-gradient(135deg, var(--navy) 0%, #2b3d69 100%);
@@ -1001,198 +927,6 @@ nav {
   border-radius: 12px;
   padding: 18px;
   box-shadow: var(--card-shadow);
-}
-
-.revenue-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.revenue-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(26,37,64,0.16);
-  background: rgba(26,37,64,0.05);
-  color: var(--navy);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.revenue-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.revenue-kpi-card h4 {
-  margin-bottom: 6px;
-}
-
-.revenue-big {
-  font-family: 'Cormorant Garamond', serif;
-  color: var(--navy);
-  font-size: 1.65rem;
-  line-height: 1.1;
-  margin-bottom: 2px;
-}
-
-.revenue-split-grid {
-  grid-template-columns: 1.25fr 0.75fr;
-  gap: 14px;
-}
-
-.split-stat-wrap {
-  display: grid;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.split-stat {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--paper);
-  font-size: 0.84rem;
-  color: var(--muted);
-}
-
-.split-stat strong {
-  color: var(--navy);
-  font-weight: 700;
-  font-size: 0.95rem;
-}
-
-.mini-table td strong {
-  color: var(--navy);
-}
-
-.progress-row {
-  display: grid;
-  grid-template-columns: 150px 1fr auto;
-  gap: 10px;
-  align-items: center;
-}
-
-.progress-label {
-  font-size: 0.8rem;
-  color: var(--ink);
-}
-
-.progress-track {
-  height: 10px;
-  border-radius: 999px;
-  background: rgba(26,37,64,0.1);
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 999px;
-}
-
-.progress-meta {
-  font-size: 0.78rem;
-  color: var(--muted);
-  white-space: nowrap;
-}
-
-.marketing-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.marketing-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.marketing-split-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.crm-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.crm-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.crm-split-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.security-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.security-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.security-split-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.scm-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.scm-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.scm-split-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-
-.tenant-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.tenant-kpi-grid {
-  grid-template-columns: repeat(6, 1fr);
-  gap: 12px;
-}
-
-.tenant-split-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
 }
 
 .admin-section-tabs {
@@ -1417,62 +1151,16 @@ nav {
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
-
-  .revenue-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .marketing-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .crm-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .security-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .scm-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .tenant-kpi-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .revenue-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .marketing-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .crm-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .security-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .scm-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .tenant-split-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .progress-row {
-    grid-template-columns: 1fr;
-    gap: 6px;
-  }
 }
 
 /* CARDS */
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+  margin-top: 18px;
+}
+
 .card {
   background: var(--white);
   border-radius: 8px;
@@ -1611,3 +1299,43 @@ tr:hover td { background: rgba(247,244,239,0.6); }
 .timeline-item::before { content: ''; position: absolute; left: -28px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--paper); }
 .timeline-item h4 { font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; }
 .timeline-item p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+/* TIME SLOT BUTTONS */
+.time-slot-btn {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 100px;
+  text-align: center;
+}
+
+.time-slot-btn.available:hover {
+  border-color: var(--gold);
+  background: rgba(184,146,74,0.06);
+  color: var(--gold);
+}
+
+.time-slot-btn.selected {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--white);
+}
+
+.time-slot-btn.booked {
+  background: var(--light-bg);
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.time-slot-btn.booked::after {
+  content: ' (Booked)';
+  font-size: 0.75rem;
+  font-weight: normal;
+}

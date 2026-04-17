@@ -104,6 +104,44 @@
       font-family: 'Cormorant Garamond', serif;
     }
 
+    /* TIME SLOT STYLES */
+    .time-slot-btn {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--white);
+      color: var(--navy);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .time-slot-btn.available:hover {
+      background: var(--gold-light);
+      border-color: var(--gold);
+      color: var(--navy);
+    }
+
+    .time-slot-btn.selected {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: var(--white);
+    }
+
+    .time-slot-btn.booked {
+      background: var(--muted-bg);
+      color: var(--muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .time-slot-btn.booked::after {
+      content: ' (Booked)';
+      font-size: 0.75rem;
+    }
+
     /* SEARCH BOX */
     .search-box {
       background: rgba(255, 255, 255, 0.06);
@@ -453,43 +491,21 @@
       }
     }
   </style>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-  <script>
-    var HOME_BOOKING_AMOUNT = 10000;
-
-    function initTokenPayment(propertyName, tokenAmount) {
-      var safeName = propertyName || "Selected Property";
-      var amount = HOME_BOOKING_AMOUNT;
-      var options = {
-        "key": "rzp_test_SZLsFwKR6ceM6J", // <-- Add your test key here!
-        "amount": amount * 100,
-        "currency": "INR",
-        "name": "EstateIQ",
-        "description": "Token Deposit - " + safeName,
-        "theme": { "color": "#1a2540" },
-        "handler": function (response) {
-          window.location.href = "payment-success.html";
-        }
-      };
-      var rzp = new Razorpay(options);
-      rzp.open();
-    }
-  </script>
 </head>
 
 <body>
 
   <!-- NAV -->
   <nav>
-    <a href="index.html" class="nav-logo">Estate<span>IQ</span></a>
+    <a href="landing.html" class="nav-logo">Estate<span>IQ</span></a>
     <div class="nav-links">
-      <a href="home.html" class="active">Home</a>
+      <a href="index.html" id="nav-home" class="active">Home</a>
       <a href="nexusrent.html">NexusRent</a>
       <a href="services.html">Services</a>
       <div class="nav-dropdown">
         <a href="#" class="nav-cta nav-dropdown-toggle">Dashboard</a>
         <div class="nav-dropdown-menu">
-          <a href="landowner.html">Landowner</a>
+          <a href="landowner.html">Landlord</a>
           <a href="client.html">Client (Tenant)</a>
           <a href="admin.html">Admin</a>
         </div>
@@ -503,14 +519,13 @@
     <div class="hero-grid-overlay"></div>
     <div class="hero-content">
       <div class="fade-up">
-        <div class="hero-eyebrow">India's Premium Property Platform</div>
-        <h1>Find the <em>Home</em> You've Always Imagined</h1>
-        <p class="hero-sub">EstateIQ connects buyers, sellers, and renters with verified listings, smart AI-powered
-          recommendations, and trusted agents — all in one place.</p>
+        <div class="hero-eyebrow">India's Trusted Property Platform</div>
+        <h1>Your <em>Smart</em> Real Estate Marketplace</h1>
+        <p class="hero-sub">Buy, sell, or rent homes with confidence. Verified listings, transparent pricing, and verified agents — all on one trusted platform designed for you.</p>
         <div class="hero-actions">
           <a href="#listings" class="btn btn-primary">Browse Listings</a>
-          <a href="security.html" class="btn btn-outline"
-            style="color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.25);">List Property</a>
+          <button class="btn btn-outline"
+            style="color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.25);" onclick="alert('List your property easily! Go to Dashboard → Landlord to get started.')">List Your Property</button>
         </div>
         <div style="display:flex;gap:40px;margin-top:48px;">
           <div class="hero-stat"><strong>12,400+</strong>Active Listings</div>
@@ -572,28 +587,28 @@
   <!-- CATEGORIES -->
   <section class="section">
     <div class="container">
-      <div class="section-label">Browse By Type</div>
-      <h2 class="section-title">What Are You Looking For?</h2>
+      <div class="section-label">Why EstateIQ</div>
+      <h2 class="section-title">Why Millions Trust Us</h2>
       <div class="cat-grid">
         <div class="cat-card">
-          <div class="cat-icon">🏢</div>
-          <div class="cat-title">Apartments</div>
-          <div class="cat-count">4,200+ listings</div>
+          <div class="cat-icon">✅</div>
+          <div class="cat-title">Verified Properties</div>
+          <div class="cat-count">100% RERA & legally checked</div>
         </div>
         <div class="cat-card">
-          <div class="cat-icon">🏡</div>
-          <div class="cat-title">Independent Houses</div>
-          <div class="cat-count">1,800+ listings</div>
+          <div class="cat-icon">🔒</div>
+          <div class="cat-title">Secure Transactions</div>
+          <div class="cat-count">Bank-grade encryption & escrow</div>
         </div>
         <div class="cat-card">
-          <div class="cat-icon">🏗️</div>
-          <div class="cat-title">Plots & Land</div>
-          <div class="cat-count">2,900+ listings</div>
+          <div class="cat-icon">💰</div>
+          <div class="cat-title">Transparent Pricing</div>
+          <div class="cat-count">No hidden charges, no middlemen</div>
         </div>
         <div class="cat-card">
-          <div class="cat-icon">🏬</div>
-          <div class="cat-title">Commercial</div>
-          <div class="cat-count">1,100+ listings</div>
+          <div class="cat-icon">🤝</div>
+          <div class="cat-title">Verified Agents</div>
+          <div class="cat-count">Local experts ready to help</div>
         </div>
       </div>
     </div>
@@ -606,8 +621,8 @@
     <div class="container">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;">
         <div>
-          <div class="section-label">Featured</div>
-          <h2 class="section-title">Hand-Picked Properties</h2>
+          <div class="section-label">Discover</div>
+          <h2 class="section-title">Properties Across India</h2>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;" id="home-city-tags">
           <span class="tag active" data-city="">All</span>
@@ -665,7 +680,35 @@
       </div>
       <div id="home-results-count" style="margin-top:10px;color:var(--muted);font-size:0.84rem;"></div>
 
-      <div class="listings-grid" id="home-listings-grid"></div>
+      <div class="listings-grid" id="home-listings-grid">
+        <div class="card property-card" style="cursor:pointer;">
+          <div class="prop-img" style="position:relative;background-image:url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80');background-size:cover;background-position:center;"></div>
+          <div class="prop-body">
+            <div class="prop-price">₹2.4 Cr onwards</div>
+            <div class="prop-title">Skyline Residences, Worli</div>
+            <div class="prop-location">📍 Worli, Mumbai</div>
+            <div class="prop-meta"><span>🛏 3 BHK</span><span>🚿 2 Bath</span><span>📐 1,450 sqft</span></div>
+          </div>
+        </div>
+        <div class="card property-card" style="cursor:pointer;">
+          <div class="prop-img" style="position:relative;background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80');background-size:cover;background-position:center;"></div>
+          <div class="prop-body">
+            <div class="prop-price">₹1.1 Cr onwards</div>
+            <div class="prop-title">Green Palms Villa, Koregaon Park</div>
+            <div class="prop-location">📍 Koregaon Park, Pune</div>
+            <div class="prop-meta"><span>🛏 4 BHK</span><span>🚿 3 Bath</span><span>📐 2,200 sqft</span></div>
+          </div>
+        </div>
+        <div class="card property-card" style="cursor:pointer;">
+          <div class="prop-img" style="position:relative;background-image:url('https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80');background-size:cover;background-position:center;"></div>
+          <div class="prop-body">
+            <div class="prop-price">₹85 L onwards</div>
+            <div class="prop-title">Nexus Heights, Whitefield</div>
+            <div class="prop-location">📍 Whitefield, Bangalore</div>
+            <div class="prop-meta"><span>🛏 2 BHK</span><span>🚿 2 Bath</span><span>📐 980 sqft</span></div>
+          </div>
+        </div>
+      </div>
 
       <div style="text-align:center;margin-top:40px;">
         <a href="#" class="btn btn-outline">View All Listings →</a>
@@ -674,9 +717,15 @@
   </section>
 
   <div class="nexus-modal" id="home-property-modal" style="z-index:450;">
-    <div class="nexus-modal-card" style="width:86vw;max-width:1040px;">
-      <div class="nexus-modal-media" id="home-modal-media">
+    <div class="nexus-modal-card" style="width:90vw;max-width:1200px;max-height:90vh;overflow-y:auto;">
+      <div class="nexus-modal-media" id="home-modal-media" style="position:relative;">
         <button class="nexus-modal-close" id="home-modal-close" type="button">✕</button>
+        <!-- Photo Navigation -->
+        <button id="home-photo-prev" style="position:absolute;left:20px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.7);color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;z-index:10;">‹</button>
+        <button id="home-photo-next" style="position:absolute;right:20px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.7);color:white;border:none;border-radius:50%;width:40px;height:40px;font-size:18px;cursor:pointer;z-index:10;">›</button>
+        <div id="home-modal-photo-gallery" style="position:absolute;bottom:20px;left:20px;right:20px;display:flex;gap:8px;overflow-x:auto;padding:8px;background:rgba(0,0,0,0.7);border-radius:8px;">
+          <!-- Photo thumbnails will be inserted here -->
+        </div>
       </div>
       <div class="nexus-modal-content">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
@@ -687,19 +736,78 @@
           <span class="badge badge-green" id="home-modal-verified">Verified ✓</span>
         </div>
 
-        <div style="margin-top:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
+        <div style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;">
           <div class="nexus-metric"><div class="metric-sub">Price</div><div id="home-modal-price" style="font-weight:700;color:var(--navy);"></div></div>
           <div class="nexus-metric"><div class="metric-sub">Area</div><div id="home-modal-area" style="font-weight:700;color:var(--navy);"></div></div>
           <div class="nexus-metric"><div class="metric-sub">Type</div><div id="home-modal-type" style="font-weight:700;color:var(--navy);"></div></div>
           <div class="nexus-metric"><div class="metric-sub">Price / sqft</div><div id="home-modal-psf" style="font-weight:700;color:var(--navy);"></div></div>
+          <div class="nexus-metric"><div class="metric-sub">Floor</div><div id="home-modal-floor" style="font-weight:700;color:var(--navy);"></div></div>
+          <div class="nexus-metric"><div class="metric-sub">Furnishing</div><div id="home-modal-furnishing" style="font-weight:700;color:var(--navy);"></div></div>
+          <div class="nexus-metric"><div class="metric-sub">Facing</div><div id="home-modal-facing" style="font-weight:700;color:var(--navy);"></div></div>
+          <div class="nexus-metric"><div class="metric-sub">Parking</div><div id="home-modal-parking" style="font-weight:700;color:var(--navy);"></div></div>
         </div>
 
         <div id="home-modal-specs" style="margin-top:14px;display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);"></div>
         <p id="home-modal-desc" style="margin-top:14px;color:var(--muted);line-height:1.7;"></p>
 
+        <div style="margin-top:16px;">
+          <h4 style="color:var(--navy);margin-bottom:8px;">Amenities</h4>
+          <div id="home-modal-amenities" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+        </div>
+
+        <div style="margin-top:16px;">
+          <h4 style="color:var(--navy);margin-bottom:8px;">Property Details</h4>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;font-size:0.9rem;">
+            <div><strong>Owner:</strong> <span id="home-modal-owner"></span></div>
+            <div><strong>Year Built:</strong> <span id="home-modal-year"></span></div>
+            <div><strong>Age:</strong> <span id="home-modal-age"></span></div>
+          </div>
+        </div>
+
         <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;">
           <button class="btn btn-primary" id="home-modal-token-btn" type="button">Book Token</button>
-          <button class="btn btn-outline" type="button">Schedule Visit</button>
+          <button class="btn btn-outline" id="home-modal-schedule-btn" type="button">Schedule Visit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCHEDULE VISIT MODAL -->
+  <div class="nexus-modal" id="schedule-visit-modal" style="z-index:460;">
+    <div class="nexus-modal-card" style="width:90vw;max-width:600px;max-height:80vh;overflow-y:auto;">
+      <div class="nexus-modal-header">
+        <h3 style="margin:0;color:var(--navy);">Schedule Property Visit</h3>
+        <button class="nexus-modal-close" id="schedule-modal-close" type="button">✕</button>
+      </div>
+      <div class="nexus-modal-content">
+        <div id="schedule-property-info" style="margin-bottom:20px;padding:16px;background:var(--light-bg);border-radius:8px;">
+          <!-- Property info will be populated here -->
+        </div>
+        
+        <div style="margin-bottom:20px;">
+          <h4 style="color:var(--navy);margin-bottom:12px;">Select Date</h4>
+          <input type="date" id="visit-date" class="form-input" min="" style="width:100%;" />
+        </div>
+        
+        <div style="margin-bottom:20px;">
+          <h4 style="color:var(--navy);margin-bottom:12px;">Available Time Slots (1-hour slots)</h4>
+          <div id="time-slots" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;">
+            <!-- Time slots will be populated here -->
+          </div>
+        </div>
+        
+        <div style="margin-bottom:20px;">
+          <h4 style="color:var(--navy);margin-bottom:12px;">Your Details</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <input type="text" id="visitor-name" class="form-input" placeholder="Full Name" />
+            <input type="tel" id="visitor-phone" class="form-input" placeholder="Phone Number" />
+          </div>
+          <input type="email" id="visitor-email" class="form-input" placeholder="Email Address" style="margin-top:12px;" />
+        </div>
+        
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="confirm-visit-btn" type="button">Confirm Visit</button>
+          <button class="btn btn-outline" onclick="closeScheduleVisitModal()" type="button">Cancel</button>
         </div>
       </div>
     </div>
@@ -708,34 +816,62 @@
   <!-- HOW IT WORKS -->
   <section class="section how-section">
     <div class="container">
-      <div class="section-label" style="color:var(--gold-light)">Simple Process</div>
-      <h2 class="section-title" style="color:var(--white)">How EstateIQ Works</h2>
+      <div class="section-label" style="color:var(--gold-light)">Simple & Fast</div>
+      <h2 class="section-title" style="color:var(--white)">How It Works — For Everyone</h2>
       <div class="steps-grid">
         <div class="step">
           <div class="step-num">01</div>
           <div class="step-icon">🔍</div>
-          <h4>Search & Discover</h4>
-          <p>Use our smart filters — city, budget, BHK, amenities — to find properties that match exactly what you need.
-          </p>
+          <h4>Search Smart</h4>
+          <p>Filter by location, budget, amenities, and property type. AI-powered recommendations help you find your perfect match in seconds.</p>
         </div>
         <div class="step">
           <div class="step-num">02</div>
           <div class="step-icon">✅</div>
-          <h4>Verified Listings</h4>
-          <p>Every listing is RERA-verified and checked by our agents. No fake listings, no hidden surprises.</p>
+          <h4>Verify & Trust</h4>
+          <p>Every property is RERA-verified with legal docs checked. See real photos, virtual tours, and honest landlord/agent reviews.</p>
         </div>
         <div class="step">
           <div class="step-num">03</div>
-          <div class="step-icon">🤝</div>
-          <h4>Connect with Agent</h4>
-          <p>Schedule a site visit or video call with a local verified agent directly from the listing page.</p>
+          <div class="step-icon">📞</div>
+          <h4>Connect Directly</h4>
+          <p>Message verified landlords and agents instantly. Book site visits, video calls, or inspections—all on one platform.</p>
         </div>
         <div class="step">
           <div class="step-num">04</div>
           <div class="step-icon">🏠</div>
-          <h4>Move In</h4>
-          <p>Get legal documentation support, home loan assistance, and post-purchase concierge services.</p>
+          <h4>Close Hassle-Free</h4>
+          <p>Secure escrow, transparent contracts, legal assistance—we handle it all so you can move in with peace of mind.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHARED RENTALS -->
+  <section class="section" style="background:linear-gradient(135deg, #1a3d4d 0%, #0d2635 100%);padding:60px 20px;">
+    <div class="container">
+      <div class="section-label" style="color:var(--gold-light)">Budget-Friendly Living</div>
+      <h2 class="section-title" style="color:var(--white)">Find Your Ideal Room in Shared Homes</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.8);max-width:600px;margin:0 auto 40px;">Split rent, split costs, build community. Find verified roommates and shared rentals in premium locations—save 30-50% on rent while living in prime neighborhoods.</p>
+      
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:40px;">
+        <div class="dashboard-card" style="border-left:3px solid var(--gold-light);padding:24px;">
+          <h4 style="color:var(--primary);margin-bottom:8px;">💰 Save Big</h4>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Share rent in your dream city. Average savings: ₹8,000-15,000/month. Room for everyone's budget.</p>
+        </div>
+        <div class="dashboard-card" style="border-left:3px solid var(--gold-light);padding:24px;">
+          <h4 style="color:var(--primary);margin-bottom:8px;">🤝 Smart Matching</h4>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">AI recommends compatible roommates based on lifestyle, work schedules, and preferences. No surprises.</p>
+        </div>
+        <div class="dashboard-card" style="border-left:3px solid var(--gold-light);padding:24px;">
+          <h4 style="color:var(--primary);margin-bottom:8px;">✅ Verified & Safe</h4>
+          <p style="color:rgba(255,255,255,0.8);font-size:0.9rem;">Every roommate and property is verified. Legal agreements, deposit protection, 24/7 support included.</p>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn btn-gold" onclick="alert('🏠 Explore Shared Rentals — Feature Coming Soon!\n\nYou\'ll be able to:\n✓ Filter rooms by location, budget & amenities\n✓ View verified roommate profiles\n✓ Schedule tours and connect instantly\n✓ Sign agreements digitally')">Find Shared Rental Rooms</button>
+        <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-top:12px;">Perfect for students, young professionals, and budget-conscious renters</p>
       </div>
     </div>
   </section>
@@ -790,13 +926,71 @@
   <div class="cta-band">
     <div class="container">
       <h2>Ready to Find Your Dream Property?</h2>
-      <p>Join over 50,000 happy homeowners who found their perfect space on EstateIQ.</p>
+      <p>Join over 50,000 happy homeowners who found their perfect space on EstateIQ. Start searching now—it takes just 30 seconds.</p>
       <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn btn-white">Get Started Free</button>
-        <button class="btn" style="background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.5)">View Demo CRM</button>
+        <button class="btn btn-white" onclick="document.getElementById('search-location').focus()">Search Properties Free</button>
+        <button class="btn btn-outline" style="background:transparent;color:white;border:1.5px solid rgba(255,255,255,0.7);" onclick="alert('📞 Schedule a Call\n\nOur real estate experts will guide you through the entire process.\n\nAvailable 9 AM - 9 PM IST, 7 days a week.')">Talk to an Expert</button>
       </div>
     </div>
   </div>
+
+  <!-- SELL YOUR HOME CTA -->
+  <section class="section" style="background:linear-gradient(135deg, #d4af37 0%, #b8941f 100%);padding:60px 20px;margin:0;">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;">
+        <div>
+          <div class="section-label" style="color:#2c2c2c;">Want to Sell?</div>
+          <h2 class="section-title" style="color:#1a1a1a;margin:12px 0 20px;">Get the Best Price for Your Property</h2>
+          <p style="color:#333;font-size:1rem;line-height:1.6;margin-bottom:24px;">
+            List your property on EstateIQ and reach thousands of verified buyers. Our transparent pricing and expert agents ensure you get the best deal without any hidden charges.
+          </p>
+          
+          <ul style="list-style:none;padding:0;margin-bottom:32px;">
+            <li style="margin:12px 0;color:#333;display:flex;align-items:center;gap:10px;">
+              <span style="background:#2c2c2c;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;">✓</span>
+              Maximum buyer visibility across all major Indian cities
+            </li>
+            <li style="margin:12px 0;color:#333;display:flex;align-items:center;gap:10px;">
+              <span style="background:#2c2c2c;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;">✓</span>
+              AI-powered pricing recommendations based on market data
+            </li>
+            <li style="margin:12px 0;color:#333;display:flex;align-items:center;gap:10px;">
+              <span style="background:#2c2c2c;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;">✓</span>
+              Expert agents & legal support included at no extra cost
+            </li>
+            <li style="margin:12px 0;color:#333;display:flex;align-items:center;gap:10px;">
+              <span style="background:#2c2c2c;color:white;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:bold;">✓</span>
+              Fast closing — average 30-45 days from listing to deal
+            </li>
+          </ul>
+
+          <button class="btn" style="background:#1a1a1a;color:white;padding:12px 32px;font-weight:600;" onclick="alert('📋 Start Selling on EstateIQ!\n\nNavigating to Landowner Dashboard...\n\nYou\'ll be able to:\n✓ List your property in minutes\n✓ Upload photos and documents\n✓ Set asking price with AI suggestions\n✓ Respond to buyer inquiries instantly')">List Your Property Now</button>
+        </div>
+        
+        <div style="text-align:center;">
+          <div style="background:#f5f5f5;padding:40px;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.1);">
+            <div style="font-size:3rem;margin-bottom:16px;">🏡</div>
+            <h3 style="color:#1a1a1a;margin-bottom:12px;">Ready to Sell?</h3>
+            <p style="color:#666;margin-bottom:20px;">Join thousands of sellers who've successfully listed their properties on EstateIQ.</p>
+            <div style="background:#d4af37;padding:16px;border-radius:6px;margin:20px 0;">
+              <div style="font-size:1.8rem;font-weight:bold;color:#1a1a1a;">500+</div>
+              <div style="color:#333;font-size:0.9rem;">Properties Sold Monthly</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="background:#f9f9f9;padding:12px;border-radius:4px;">
+                <div style="font-size:1.4rem;font-weight:bold;color:#1a1a1a;">30-45</div>
+                <div style="color:#666;font-size:0.8rem;">Avg Days to Close</div>
+              </div>
+              <div style="background:#f9f9f9;padding:12px;border-radius:4px;">
+                <div style="font-size:1.4rem;font-weight:bold;color:#1a1a1a;">10x+</div>
+                <div style="color:#666;font-size:0.8rem;">More Buyers Reach</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section class="section" style="padding-top:44px;" id="community-feedback">
     <div class="container">
@@ -876,6 +1070,58 @@
 
   <script>
     let currentHomeMode = 'Buy';
+    const HOME_BOOKING_AMOUNT = 500; // ₹500 fully refundable token
+
+    function initTokenPayment(propertyTitle, tokenAmount) {
+      // Load Razorpay script if not already loaded
+      if (!window.Razorpay) {
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => processPayment(propertyTitle, tokenAmount);
+        script.onerror = () => alert('Payment system is currently unavailable. Please try again later.');
+        document.head.appendChild(script);
+      } else {
+        processPayment(propertyTitle, tokenAmount);
+      }
+    }
+
+    function processPayment(propertyTitle, tokenAmount) {
+      const options = {
+        key: 'rzp_test_YOUR_KEY_HERE', // Replace with your actual Razorpay key
+        amount: tokenAmount * 100, // Amount in paisa
+        currency: 'INR',
+        name: 'EstateIQ',
+        description: `Token booking for ${propertyTitle}`,
+        image: 'https://via.placeholder.com/100x100?text=EstateIQ',
+        handler: function (response) {
+          // Payment successful
+          alert(`🎉 Payment Successful!\n\nPayment ID: ${response.razorpay_payment_id}\n\nYour token has been booked for ${propertyTitle}.\nYou can now schedule a visit or contact the property owner.\n\n📧 Confirmation email sent to your registered email.`);
+          
+          // Here you would typically send the payment details to your backend
+          console.log('Payment successful:', response);
+        },
+        prefill: {
+          name: '',
+          email: '',
+          contact: ''
+        },
+        notes: {
+          property: propertyTitle,
+          token_type: 'fully_refundable'
+        },
+        theme: {
+          color: '#b8941f'
+        },
+        modal: {
+          ondismiss: function() {
+            console.log('Payment modal dismissed');
+          }
+        }
+      };
+
+      const rzp = new Razorpay(options);
+      rzp.open();
+    }
 
     function setTab(el, type) {
       document.querySelectorAll('.search-tab').forEach(t => t.classList.remove('active'));
@@ -897,8 +1143,25 @@
         bath: '2 Bath',
         psf: '₹16,550/sqft',
         status: 'Featured',
-        image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Premium sea-facing apartment with deck balcony, modular kitchen, and access to clubhouse, pool, and concierge.'
+        image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Premium sea-facing apartment with deck balcony, modular kitchen, and access to clubhouse, pool, and concierge.',
+        photos: [
+          'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '15th Floor (Total 25 Floors)',
+        amenities: ['Swimming Pool', 'Gym', 'Clubhouse', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking', 'Garden', 'Kids Play Area'],
+        owner: 'Rajesh Properties Pvt Ltd',
+        yearBuilt: 2022,
+        facing: 'East Facing',
+        parking: '2 Covered Parking',
+        age: 'New Construction'
       },
       {
         id: 2,
@@ -913,7 +1176,24 @@
         psf: '₹5,000/sqft',
         status: 'Verified',
         image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Independent villa in gated community with private lawn, 2 car parks, and smart home automation ready wiring.'
+        desc: 'Independent villa in gated community with private lawn, 2 car parks, and smart home automation ready wiring.',
+        photos: [
+          'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Unfurnished',
+        floor: 'Ground Floor',
+        amenities: ['Private Garden', '2 Car Parking', 'Gated Community', '24/7 Security', 'Power Backup', 'Intercom', 'Water Supply', 'Sewage Treatment', 'Kids Play Area', 'Jogging Track'],
+        owner: 'Green Palms Developers',
+        yearBuilt: 2021,
+        facing: 'North Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
       },
       {
         id: 3,
@@ -928,7 +1208,24 @@
         psf: '₹8,670/sqft',
         status: 'New Launch',
         image: 'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Close to IT parks with metro connectivity, optimized floor plan, and EV-enabled parking bay.'
+        desc: 'Close to IT parks with metro connectivity, optimized floor plan, and EV-enabled parking bay.',
+        photos: [
+          'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '8th Floor (Total 20 Floors)',
+        amenities: ['Smart Home Automation', 'EV Charging', 'Metro Connectivity', 'Gym', 'Swimming Pool', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking'],
+        owner: 'Nexus Realty Group',
+        yearBuilt: 2023,
+        facing: 'South Facing',
+        parking: '1 Covered Parking',
+        age: 'New Construction'
       },
       {
         id: 4,
@@ -943,7 +1240,24 @@
         psf: '₹11,700/sqft',
         status: 'Premium',
         image: 'https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Duplex penthouse with private terrace, skyline view, home office zone, and high-end interior finish.'
+        desc: 'Duplex penthouse with private terrace, skyline view, home office zone, and high-end interior finish.',
+        photos: [
+          'https://images.unsplash.com/photo-1613977257365-aaae5a9817ff?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: 'Penthouse (Total 18 Floors)',
+        amenities: ['Private Terrace', 'Skyline View', 'Home Office', 'Premium Finishes', 'Jacuzzi', 'Gym', 'Swimming Pool', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking'],
+        owner: 'DLF Properties',
+        yearBuilt: 2020,
+        facing: 'West Facing',
+        parking: '3 Covered Parking',
+        age: '3 Years Old'
       },
       {
         id: 5,
@@ -958,7 +1272,24 @@
         psf: '₹30/sqft (rent)',
         status: 'Rental',
         image: 'https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Fully furnished rental with modular kitchen, balcony, and flexible 11-month lease options.'
+        desc: 'Fully furnished rental with modular kitchen, balcony, and flexible 11-month lease options.',
+        photos: [
+          'https://images.unsplash.com/photo-1616046229478-9901c5536a45?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '12th Floor (Total 20 Floors)',
+        amenities: ['Modular Kitchen', 'Balcony', 'Fully Furnished', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking', 'Gym', 'Swimming Pool'],
+        owner: 'Comfort Living Rentals',
+        yearBuilt: 2019,
+        facing: 'North Facing',
+        parking: '1 Covered Parking',
+        age: '4 Years Old'
       },
       {
         id: 6,
@@ -973,7 +1304,24 @@
         psf: '₹7,300/sqft',
         status: 'Verified',
         image: 'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Sports-centric township with landscaped greens, jogging track, and school + hospital in 5 km radius.'
+        desc: 'Sports-centric township with landscaped greens, jogging track, and school + hospital in 5 km radius.',
+        photos: [
+          'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '5th Floor (Total 15 Floors)',
+        amenities: ['Sports Facilities', 'Jogging Track', 'Landscaped Greens', 'School Nearby', 'Hospital Nearby', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking'],
+        owner: 'Urban Crest Developers',
+        yearBuilt: 2021,
+        facing: 'East Facing',
+        parking: '1 Covered Parking',
+        age: '2 Years Old'
       },
       {
         id: 7,
@@ -988,7 +1336,24 @@
         psf: '₹7,850/sqft',
         status: 'Featured',
         image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Corner unit with lake-facing windows, utility balcony, and premium clubhouse with co-working lounge.'
+        desc: 'Corner unit with lake-facing windows, utility balcony, and premium clubhouse with co-working lounge.',
+        photos: [
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: 'Corner Unit, 10th Floor (Total 22 Floors)',
+        amenities: ['Lake View', 'Utility Balcony', 'Co-working Lounge', 'Premium Clubhouse', 'Gym', 'Swimming Pool', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking'],
+        owner: 'Lakeview Properties',
+        yearBuilt: 2022,
+        facing: 'Lake Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
       },
       {
         id: 8,
@@ -1003,7 +1368,24 @@
         psf: '₹6,785/sqft',
         status: 'New Launch',
         image: 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Modern apartment near OMR corridor with reliable rental demand and high connectivity to IT parks.'
+        desc: 'Modern apartment near OMR corridor with reliable rental demand and high connectivity to IT parks.',
+        photos: [
+          'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Unfurnished',
+        floor: '3rd Floor (Total 12 Floors)',
+        amenities: ['IT Park Connectivity', 'High Rental Demand', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking', 'Garden', 'Kids Play Area'],
+        owner: 'Marina Blue Builders',
+        yearBuilt: 2023,
+        facing: 'South Facing',
+        parking: '1 Covered Parking',
+        age: 'New Construction'
       },
       {
         id: 9,
@@ -1017,8 +1399,25 @@
         bath: '3 Bath',
         psf: '₹7,980/sqft',
         status: 'Premium',
-        image: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Spacious duplex layout with double-height living and dedicated work-from-home room.'
+        image: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=800&q=80',
+        desc: 'Spacious duplex layout with double-height living and dedicated work-from-home room.',
+        photos: [
+          'https://images.unsplash.com/photo-1600210492493-0946911123ea?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: 'Duplex (Ground + First Floor)',
+        amenities: ['Double Height Living', 'Work-from-Home Room', 'Private Courtyard', '24/7 Security', 'Power Backup', 'Intercom', 'Parking', 'Garden', 'Kids Play Area', 'Jogging Track'],
+        owner: 'Prestige Group',
+        yearBuilt: 2021,
+        facing: 'North-East Facing',
+        parking: '2 Covered Parking',
+        age: '2 Years Old'
       },
       {
         id: 10,
@@ -1033,7 +1432,24 @@
         psf: '₹14,350/sqft',
         status: 'Verified',
         image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Minutes from metro and airport corridor, ideal for professionals seeking premium city access.'
+        desc: 'Minutes from metro and airport corridor, ideal for professionals seeking premium city access.',
+        photos: [
+          'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '18th Floor (Total 25 Floors)',
+        amenities: ['Metro Connectivity', 'Airport Access', 'Business District', 'Premium Finishes', 'Gym', 'Swimming Pool', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking'],
+        owner: 'Imperial Realty',
+        yearBuilt: 2020,
+        facing: 'City View',
+        parking: '1 Covered Parking',
+        age: '3 Years Old'
       },
       {
         id: 11,
@@ -1048,7 +1464,24 @@
         psf: '₹7,955/sqft',
         status: 'Featured',
         image: 'https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Beach-facing premium villa community with private garden, rooftop deck, and clubhouse access.'
+        desc: 'Beach-facing premium villa community with private garden, rooftop deck, and clubhouse access.',
+        photos: [
+          'https://images.unsplash.com/photo-1600566753151-384129cf4e3e?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: 'Ground Floor',
+        amenities: ['Beach Access', 'Private Garden', 'Rooftop Deck', 'Clubhouse', 'Swimming Pool', '24/7 Security', 'Power Backup', 'Intercom', 'Parking', 'Kids Play Area'],
+        owner: 'Sunset Boulevard Developers',
+        yearBuilt: 2022,
+        facing: 'Beach Facing',
+        parking: '3 Covered Parking',
+        age: '1 Year Old'
       },
       {
         id: 12,
@@ -1063,7 +1496,607 @@
         psf: '₹8,220/sqft',
         status: 'Verified',
         image: 'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80',
-        desc: 'Family-focused project with school bus bay, multiple parks, and strong long-term appreciation corridor.'
+        desc: 'Family-focused project with school bus bay, multiple parks, and strong long-term appreciation corridor.',
+        photos: [
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-1c3e3e2f4e5e?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80'
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '7th Floor (Total 14 Floors)',
+        amenities: ['School Bus Bay', 'Multiple Parks', 'Family Friendly', '24/7 Security', 'Power Backup', 'Intercom', 'Elevator', 'Parking', 'Kids Play Area', 'Jogging Track'],
+        owner: 'Metro Edge Builders',
+        yearBuilt: 2021,
+        facing: 'Park Facing',
+        parking: '1 Covered Parking',
+        age: '2 Years Old'
+      },
+      {
+        id: 13,
+        title: 'Emerald Bay Residences',
+        location: 'Juhu, Mumbai',
+        price: '₹5.5 Cr onwards',
+        token: 250000,
+        area: '2,100 sqft',
+        type: '4 BHK Luxury Apartment',
+        bhk: '4 BHK',
+        bath: '4 Bath',
+        psf: '₹26,190/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1512914890251-25979ad0cbcb?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Unobstructed sea views with a spacious balcony, premium Italian marble, and private elevator access.',
+        photos: [
+          'https://images.unsplash.com/photo-1512914890251-25979ad0cbcb?w=800',
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800', // Living Room
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '10th Floor (Total 18 Floors)',
+        amenities: ['Sea View', 'Gym', 'Private Elevator', 'Balcony', '24/7 Security'],
+        owner: 'Emerald Developers',
+        yearBuilt: 2022,
+        facing: 'West Facing',
+        parking: '3 Covered Parking',
+        age: '1 Year Old'
+      },
+      {
+        id: 14,
+        title: 'Golden Residency',
+        location: 'Electronic City, Bangalore',
+        price: '₹75 L onwards',
+        token: 50000,
+        area: '1,050 sqft',
+        type: '2 BHK Apartment',
+        bhk: '2 BHK',
+        bath: '2 Bath',
+        psf: '₹7,142/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1493809842364-78817add7ffb?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Proximity to major tech parks, modern interiors with a fully equipped bedroom and sunny balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '5th Floor (Total 12 Floors)',
+        amenities: ['Tech Park Access', 'Balcony', 'Swimming Pool', 'Gym'],
+        owner: 'Silicon Realty',
+        yearBuilt: 2020,
+        facing: 'East Facing',
+        parking: '1 Covered Parking',
+        age: '3 Years Old'
+      },
+      {
+        id: 15,
+        title: 'The Elite Towers',
+        location: 'Gachibowli, Hyderabad',
+        price: '₹1.1 Cr onwards',
+        token: 75000,
+        area: '1,400 sqft',
+        type: '3 BHK Apartment',
+        bhk: '3 BHK',
+        bath: '3 Bath',
+        psf: '₹7,857/sqft',
+        status: 'New Launch',
+        image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Newly launched project with massive bedrooms, designer bathrooms, and sprawling club amenities.',
+        photos: [
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Bedroom main
+          'https://images.unsplash.com/photo-1484154218962-a197022b5858?w=800', // Living
+          'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Unfurnished',
+        floor: '8th Floor (Total 20 Floors)',
+        amenities: ['Clubhouse', 'Gym', 'Kids Play Area', 'Sports Court'],
+        owner: 'Elite Buildcon',
+        yearBuilt: 2023,
+        facing: 'North-East Facing',
+        parking: '2 Covered Parking',
+        age: 'New Construction'
+      },
+      {
+        id: 16,
+        title: 'Sapphire Meadows',
+        location: 'Salt Lake, Kolkata',
+        price: '₹1.6 Cr onwards',
+        token: 100000,
+        area: '1,950 sqft',
+        type: '3.5 BHK Apartment',
+        bhk: '3.5 BHK',
+        bath: '3 Bath',
+        psf: '₹8,205/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1502672260266-1c1de2d96674?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Serene lakeside environment featuring large living spaces, customized master bedrooms, and attached balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1502672260266-1c1de2d96674?w=800', // Living
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '4th Floor (Total 10 Floors)',
+        amenities: ['Lake View', 'Jogging Track', 'Intercom', 'Power Backup'],
+        owner: 'Sapphire Infra',
+        yearBuilt: 2018,
+        facing: 'South-East Facing',
+        parking: '2 Covered Parking',
+        age: '5 Years Old'
+      },
+      {
+        id: 17,
+        title: 'Pearl Gardens',
+        location: 'Vastrapur, Ahmedabad',
+        price: '₹95 L onwards',
+        token: 60000,
+        area: '1,350 sqft',
+        type: '3 BHK Apartment',
+        bhk: '3 BHK',
+        bath: '2 Bath',
+        psf: '₹7,037/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Located in the heart of Ahmedabad, with beautiful garden views, modular kitchen, and modern bedroom fittings.',
+        photos: [
+          'https://images.unsplash.com/photo-1494526585095-c41746248156?w=800', // Interior
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1556909114-1c3e3e2f4e5e?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800'  // Restroom
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '3rd Floor (Total 7 Floors)',
+        amenities: ['Garden View', 'Modular Kitchen', 'Gym', 'Parking'],
+        owner: 'Pearl Group',
+        yearBuilt: 2019,
+        facing: 'East Facing',
+        parking: '1 Covered Parking',
+        age: '4 Years Old'
+      },
+      {
+        id: 18,
+        title: 'Ruby Towers',
+        location: 'Bandra East, Mumbai',
+        price: '₹2.8 Cr onwards',
+        token: 150000,
+        area: '1,100 sqft',
+        type: '2 BHK Premium Flat',
+        bhk: '2 BHK',
+        bath: '2 Bath',
+        psf: '₹25,454/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Highly accessible location featuring high-end fixtures, grand bedrooms, and panoramic city views from the balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800', // Exterior/Living
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '14th Floor (Total 20 Floors)',
+        amenities: ['City View', 'Balcony', 'Gym', 'High Speed Elevators'],
+        owner: 'Ruby Infrastructure',
+        yearBuilt: 2021,
+        facing: 'West Facing',
+        parking: '1 Covered Parking',
+        age: '2 Years Old'
+      },
+      {
+        id: 19,
+        title: 'Oasis Greens',
+        location: 'Kalyani Nagar, Pune',
+        price: '₹1.05 Cr onwards',
+        token: 70000,
+        area: '1,500 sqft',
+        type: '3 BHK Apartment',
+        bhk: '3 BHK',
+        bath: '3 Bath',
+        psf: '₹7,000/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1501183638710-841dd1904471?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Spacious bedrooms, well-ventilated living rooms, and an attached terrace balcony overlooking the greens.',
+        photos: [
+          'https://images.unsplash.com/photo-1501183638710-841dd1904471?w=800', // Interior
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Unfurnished',
+        floor: '6th Floor (Total 11 Floors)',
+        amenities: ['Terrace Balcony', 'Parks', 'Jogging Track', 'Security'],
+        owner: 'Oasis Homes',
+        yearBuilt: 2022,
+        facing: 'North Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
+      },
+      {
+        id: 20,
+        title: 'Platinum Suites',
+        location: 'Banjara Hills, Hyderabad',
+        price: '₹2.1 Cr onwards',
+        token: 100000,
+        area: '2,200 sqft',
+        type: '4 BHK Duplex',
+        bhk: '4 BHK',
+        bath: '4 Bath',
+        psf: '₹9,545/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Premium duplex suites with oversized bedrooms, massive balconies, and premium smart home technology.',
+        photos: [
+          'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800', // Interior Duplex
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Main Bedroom
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Second Bedroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: 'Duplex (Ground + 1)',
+        amenities: ['Smart Home', 'Oversized Balconies', 'Private Garden', 'Clubhouse'],
+        owner: 'Platinum Builders',
+        yearBuilt: 2021,
+        facing: 'East Facing',
+        parking: '2 Covered Parking',
+        age: '2 Years Old'
+      },
+      {
+        id: 21,
+        title: 'Trident Galaxy',
+        location: 'Kharadi, Pune',
+        price: '₹1.8 Cr onwards',
+        token: 100000,
+        area: '1,800 sqft',
+        type: '3.5 BHK Apartment',
+        bhk: '3.5 BHK',
+        bath: '3 Bath',
+        psf: '₹10,000/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1583847268964-b28ce8f3121b?auto=format&fit=crop&w=1200&q=80',
+        desc: 'High-end residential complex featuring bespoke bedroom designs, wrap-around balconies, and luxury fittings.',
+        photos: [
+          'https://images.unsplash.com/photo-1583847268964-b28ce8f3121b?w=800', // Living setup
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '9th Floor (Total 15 Floors)',
+        amenities: ['Wrap-around Balcony', 'Gym', 'Swimming Pool', 'Security'],
+        owner: 'Trident Realty',
+        yearBuilt: 2020,
+        facing: 'West Facing',
+        parking: '2 Covered Parking',
+        age: '3 Years Old'
+      },
+      {
+        id: 22,
+        title: 'Sunrise Estates',
+        location: 'OMR, Chennai',
+        price: '₹65 L onwards',
+        token: 40000,
+        area: '1,100 sqft',
+        type: '2 BHK Apartment',
+        bhk: '2 BHK',
+        bath: '2 Bath',
+        psf: '₹5,909/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Affordable modern living close to IT hubs, with cozy bedrooms, modular kitchen, and a private balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1593696140826-c58b021acf8b?w=800', // Main
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1560185007-cde436f6a4d0?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '4th Floor (Total 8 Floors)',
+        amenities: ['Private Balcony', 'Power Backup', 'Kids Play Area', 'Security'],
+        owner: 'Sunrise Groups',
+        yearBuilt: 2019,
+        facing: 'South Facing',
+        parking: '1 Covered Parking',
+        age: '4 Years Old'
+      },
+      {
+        id: 23,
+        title: 'Zenith Square',
+        location: 'Sector 62, Gurgaon',
+        price: '₹3.2 Cr onwards',
+        token: 150000,
+        area: '2,800 sqft',
+        type: '4 BHK Luxury Flat',
+        bhk: '4 BHK',
+        bath: '4 Bath',
+        psf: '₹11,428/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1600607688969-a5bfcd64bdfc?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Expansive luxury apartments with high-ceiling living rooms, grand master bedrooms, and an oversized deck/balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1600607688969-a5bfcd64bdfc?w=800', // Living
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Master Bedroom
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Guest Bedroom
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony Deck
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '12th Floor (Total 25 Floors)',
+        amenities: ['Oversized Deck', 'High Ceilings', 'Clubhouse', 'Gym', 'Concierge'],
+        owner: 'Zenith Holdings',
+        yearBuilt: 2023,
+        facing: 'North-West Facing',
+        parking: '3 Covered Parking',
+        age: 'New Construction'
+      },
+      {
+        id: 24,
+        title: 'Aurora Park',
+        location: 'Rajarhat, Kolkata',
+        price: '₹1.15 Cr onwards',
+        token: 70000,
+        area: '1,450 sqft',
+        type: '3 BHK Apartment',
+        bhk: '3 BHK',
+        bath: '2 Bath',
+        psf: '₹7,931/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1515263487990-61b07816b324?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Nature-friendly township offering bright bedrooms, contemporary kitchen, and well-lit balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1515263487990-61b07816b324?w=800', // Apartment view
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1556909114-1c3e3e2f4e5e?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '7th Floor (Total 14 Floors)',
+        amenities: ['Nature Park', 'Balcony', 'Gym', 'Security'],
+        owner: 'Aurora Infra',
+        yearBuilt: 2020,
+        facing: 'South-East Facing',
+        parking: '1 Covered Parking',
+        age: '3 Years Old'
+      },
+      {
+        id: 25,
+        title: 'Majestic Villas',
+        location: 'Yelahanka, Bangalore',
+        price: '₹3.5 Cr onwards',
+        token: 200000,
+        area: '3,200 sqft',
+        type: '4 BHK Villa',
+        bhk: '4 BHK',
+        bath: '4 Bath',
+        psf: '₹10,937/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Independent villa with private garden, plush bedrooms, majestic living areas, and huge terrace balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?w=800', // Villa exterior
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Master Suite
+          'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Terrace Balcony
+        ],
+        furnishing: 'Unfurnished',
+        floor: 'Ground + 1',
+        amenities: ['Private Garden', 'Terrace Balcony', 'Gated Community', 'Swimming Pool'],
+        owner: 'Majestic Developers',
+        yearBuilt: 2022,
+        facing: 'East Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
+      },
+      {
+        id: 26,
+        title: 'Skywalk Residences',
+        location: 'Lower Parel, Mumbai',
+        price: '₹4.2 Cr onwards',
+        token: 250000,
+        area: '1,650 sqft',
+        type: '3 BHK Apartment',
+        bhk: '3 BHK',
+        bath: '3 Bath',
+        psf: '₹25,454/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Experience pure luxury with sky-high balconies, bespoke bedroom finishing, and spectacular skyline views.',
+        photos: [
+          'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800', // Interior
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800', // Bath
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '28th Floor (Total 40 Floors)',
+        amenities: ['Skyline Views', 'Gym', 'High Speed Elevators', 'Concierge'],
+        owner: 'Skywalk Buildcon',
+        yearBuilt: 2023,
+        facing: 'West Facing',
+        parking: '2 Covered Parking',
+        age: 'New Construction'
+      },
+      {
+        id: 27,
+        title: 'Lumina Apartments',
+        location: 'Thaltej, Ahmedabad',
+        price: '₹1.08 Cr onwards',
+        token: 70000,
+        area: '1,420 sqft',
+        type: '3 BHK Flat',
+        bhk: '3 BHK',
+        bath: '3 Bath',
+        psf: '₹7,605/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1524360527318-6bb7f2da0418?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Well-ventilated flat featuring beautiful dining spaces, spacious bedrooms, and an attached balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1524360527318-6bb7f2da0418?w=800', // Living/Dining
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '5th Floor (Total 10 Floors)',
+        amenities: ['Attached Balcony', 'Security', 'Gym', 'Power Backup'],
+        owner: 'Lumina Homes',
+        yearBuilt: 2020,
+        facing: 'North Facing',
+        parking: '1 Covered Parking',
+        age: '3 Years Old'
+      },
+      {
+        id: 28,
+        title: 'Crescent Heights',
+        location: 'Hitech City, Hyderabad',
+        price: '₹1.85 Cr onwards',
+        token: 100000,
+        area: '1,900 sqft',
+        type: '3.5 BHK Premium Flat',
+        bhk: '3.5 BHK',
+        bath: '4 Bath',
+        psf: '₹9,736/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1505843513577-22bb7d21e455?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Located adjacent to top IT parks, equipped with smart bedrooms, gorgeous balconies, and modular kitchens.',
+        photos: [
+          'https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=800', // Interior
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1556909114-1c3e3e2f4e5e?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '12th Floor (Total 20 Floors)',
+        amenities: ['Smart Home', 'Balcony', 'Clubhouse', 'Gym', 'Infinity Pool'],
+        owner: 'Crescent Infra',
+        yearBuilt: 2022,
+        facing: 'East Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
+      },
+      {
+        id: 29,
+        title: 'Breeze Apartments',
+        location: 'Wakad, Pune',
+        price: '₹88 L onwards',
+        token: 60000,
+        area: '1,200 sqft',
+        type: '2.5 BHK Flat',
+        bhk: '2.5 BHK',
+        bath: '2 Bath',
+        psf: '₹7,333/sqft',
+        status: 'Verified',
+        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Ideal for small families with a dedicated study room, comfortable bedrooms, and a shaded balcony.',
+        photos: [
+          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800', // Living
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '8th Floor (Total 12 Floors)',
+        amenities: ['Study Room', 'Shaded Balcony', 'Gym', 'Security'],
+        owner: 'Breeze Developers',
+        yearBuilt: 2019,
+        facing: 'West Facing',
+        parking: '1 Covered Parking',
+        age: '4 Years Old'
+      },
+      {
+        id: 30,
+        title: 'Heritage Enclave',
+        location: 'Indiranagar, Bangalore',
+        price: '₹2.3 Cr onwards',
+        token: 120000,
+        area: '2,100 sqft',
+        type: '4 BHK Flat',
+        bhk: '4 BHK',
+        bath: '3 Bath',
+        psf: '₹10,952/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Classic design merged with modern utilities, featuring expansive bedrooms, luxury bath spaces, and double balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=800', // Living Classic
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: '3rd Floor (Total 5 Floors)',
+        amenities: ['Double Balconies', 'Classic Design', 'Gym', 'Security'],
+        owner: 'Heritage Builders',
+        yearBuilt: 2021,
+        facing: 'East Facing',
+        parking: '2 Covered Parking',
+        age: '2 Years Old'
+      },
+      {
+        id: 31,
+        title: 'Silver Oak Residences',
+        location: 'Anna Nagar, Chennai',
+        price: '₹1.9 Cr onwards',
+        token: 100000,
+        area: '1,750 sqft',
+        type: '3 BHK Flat',
+        bhk: '3 BHK',
+        bath: '3 Bath',
+        psf: '₹10,857/sqft',
+        status: 'Premium',
+        image: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Premium finishes with customized bedroom wardrobes, massive living rooms, and airy balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=800', // Living
+          'https://images.unsplash.com/photo-1505691938895-1758d7c181f0?w=800', // Bedroom
+          'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800', // Kitchen
+          'https://images.unsplash.com/photo-1620626011740-1ec69dd30d89?w=800'  // Balcony
+        ],
+        furnishing: 'Semi-Furnished',
+        floor: '6th Floor (Total 10 Floors)',
+        amenities: ['Airy Balcony', 'Custom Wardrobes', 'Clubhouse', 'Gym'],
+        owner: 'Silver Oak Group',
+        yearBuilt: 2022,
+        facing: 'North Facing',
+        parking: '2 Covered Parking',
+        age: '1 Year Old'
+      },
+      {
+        id: 32,
+        title: 'Pinnacle View',
+        location: 'Golf Course Road, Gurgaon',
+        price: '₹5.1 Cr onwards',
+        token: 300000,
+        area: '3,800 sqft',
+        type: '4 BHK Luxury Penthouse',
+        bhk: '4 BHK',
+        bath: '5 Bath',
+        psf: '₹13,421/sqft',
+        status: 'Featured',
+        image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
+        desc: 'Ultra-luxury penthouse featuring private pool, gorgeous bedrooms, spa-like bathrooms, and enormous terrace balconies.',
+        photos: [
+          'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800', // Penthouse Living
+          'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800', // Master Bedroom
+          'https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800', // Guest Bedroom
+          'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800', // Bathroom
+          'https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=800'  // Terrace Balcony
+        ],
+        furnishing: 'Fully Furnished',
+        floor: 'Penthouse (20th Floor)',
+        amenities: ['Private Pool', 'Terrace Balcony', 'Spa', 'Gym', 'Concierge'],
+        owner: 'Pinnacle Builders',
+        yearBuilt: 2023,
+        facing: 'West Facing',
+        parking: '3 Covered Parking',
+        age: 'New Construction'
       }
     ];
 
@@ -1114,7 +2147,15 @@
       };
     }
 
-    const homeCatalog = homeProperties.map(enrichHomeProperty);
+    const homeCatalog = homeProperties
+      .map((p) => {
+        try {
+          return enrichHomeProperty(p);
+        } catch (err) {
+          return null;
+        }
+      })
+      .filter(Boolean);
 
     const homeFilters = {
       search: document.getElementById('home-filter-search'),
@@ -1146,7 +2187,9 @@
     function renderHomeListings(list = homeCatalog) {
       const grid = document.getElementById('home-listings-grid');
       const count = document.getElementById('home-results-count');
-      if (!grid) return;
+      if (!grid) {
+        return;
+      }
       grid.innerHTML = '';
 
       if (count) {
@@ -1158,15 +2201,23 @@
         return;
       }
 
-      list.forEach((p) => {
+      list.forEach((p, idx) => {
         const card = document.createElement('div');
         card.className = 'card property-card';
         card.style.cursor = 'pointer';
+        if (idx === 0) card.classList.add('advertised');
+
+        const ribbonHtml = idx === 0 ? `<div class="ribbon">Sponsored</div>` : '';
 
         card.innerHTML = `
           <div class="prop-img" style="position:relative;background-image:url('${p.image}');background-size:cover;background-position:center;">
+            ${ribbonHtml}
             <div style="position:absolute;top:12px;left:12px;"><span class="badge badge-green">Verified ✓</span></div>
             <div style="position:absolute;top:12px;right:12px;"><span class="badge ${p.status === 'Premium' || p.status === 'Featured' ? 'badge-gold' : 'badge-navy'}">${p.status}</span></div>
+            <div style="position:absolute;bottom:12px;left:12px;right:12px;display:flex;gap:4px;">
+              ${p.photos && p.photos.length > 1 ? `<span class="badge badge-navy" style="font-size:0.7rem;">📸 ${p.photos.length} Photos</span>` : ''}
+              ${p.furnishing ? `<span class="badge badge-gold" style="font-size:0.7rem;">${p.furnishing}</span>` : ''}
+            </div>
             <span style="color:rgba(255,255,255,0.85);font-size:0.9rem;text-shadow:0 2px 8px rgba(0,0,0,0.5);">${p.type}</span>
           </div>
           <div class="prop-body">
@@ -1177,6 +2228,10 @@
               <span>🛏 ${p.bhk}</span>
               <span>🚿 ${p.bath}</span>
               <span>📐 ${p.area}</span>
+            </div>
+            <div style="margin-top:8px;color:var(--muted);font-size:0.8rem;">
+              <div>Floor: <strong style="color:var(--navy)">${p.floor || 'N/A'}</strong></div>
+              <div>Owner: <strong style="color:var(--navy)">${p.owner || 'N/A'}</strong></div>
             </div>
             <div style="margin-top:10px;color:var(--muted);font-size:0.8rem;">Area Cost: <strong style="color:var(--navy)">${p.psf}</strong></div>
             <div style="display:flex;gap:8px;margin-top:12px;">
@@ -1240,17 +2295,52 @@
       renderHomeListings(filtered);
     }
 
+    function bootstrapHomeListings() {
+      try {
+        renderHomeListings(homeCatalog);
+        applyHomeFilters();
+      } catch (err) {
+        const grid = document.getElementById('home-listings-grid');
+        const count = document.getElementById('home-results-count');
+        if (!grid) return;
+
+        const fallbackList = homeProperties.slice(0, 12);
+        if (count) count.textContent = `${fallbackList.length} properties found`;
+        grid.innerHTML = '';
+
+        fallbackList.forEach((p) => {
+          const card = document.createElement('div');
+          card.className = 'card property-card';
+          card.innerHTML = `
+            <div class="prop-img" style="position:relative;background-image:url('${p.image}');background-size:cover;background-position:center;"></div>
+            <div class="prop-body">
+              <div class="prop-price">${p.price}</div>
+              <div class="prop-title">${p.title}</div>
+              <div class="prop-location">📍 ${p.location}</div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    bootstrapHomeListings();
+
     const homeModal = document.getElementById('home-property-modal');
     const homeModalMedia = document.getElementById('home-modal-media');
     const homeModalClose = document.getElementById('home-modal-close');
     const homeTokenBtn = document.getElementById('home-modal-token-btn');
+    const homePhotoPrev = document.getElementById('home-photo-prev');
+    const homePhotoNext = document.getElementById('home-photo-next');
     let selectedHomeProperty = null;
+    let currentPhotoIndex = 0;
 
     function openHomePropertyModal(id) {
       const p = homeCatalog.find((i) => i.id === id);
       if (!p || !homeModal) return;
       selectedHomeProperty = p;
 
+      // Basic info
       document.getElementById('home-modal-title').textContent = p.title;
       document.getElementById('home-modal-location').textContent = `📍 ${p.location}`;
       document.getElementById('home-modal-price').textContent = p.price;
@@ -1259,19 +2349,90 @@
       document.getElementById('home-modal-psf').textContent = p.psf;
       document.getElementById('home-modal-desc').textContent = p.desc;
       document.getElementById('home-modal-specs').innerHTML = `<span>🛏 ${p.bhk}</span><span>🚿 ${p.bath}</span><span>🏷 ${p.status}</span>`;
-      homeModalMedia.style.backgroundImage = `url('${p.image}')`;
+
+      // New property details
+      document.getElementById('home-modal-floor').textContent = p.floor || 'N/A';
+      document.getElementById('home-modal-furnishing').textContent = p.furnishing || 'N/A';
+      document.getElementById('home-modal-facing').textContent = p.facing || 'N/A';
+      document.getElementById('home-modal-parking').textContent = p.parking || 'N/A';
+      document.getElementById('home-modal-owner').textContent = p.owner || 'N/A';
+      document.getElementById('home-modal-year').textContent = p.yearBuilt || 'N/A';
+      document.getElementById('home-modal-age').textContent = p.age || 'N/A';
+
+      // Photo gallery
+      const gallery = document.getElementById('home-modal-photo-gallery');
+      currentPhotoIndex = 0;
+
+      if (gallery && p.photos && p.photos.length > 0) {
+        gallery.innerHTML = '';
+        p.photos.forEach((photo, index) => {
+          const thumb = document.createElement('img');
+          thumb.src = photo;
+          thumb.style.width = '60px';
+          thumb.style.height = '45px';
+          thumb.style.objectFit = 'cover';
+          thumb.style.borderRadius = '4px';
+          thumb.style.cursor = 'pointer';
+          thumb.style.border = index === 0 ? '2px solid var(--gold)' : '2px solid transparent';
+          thumb.dataset.index = index;
+          thumb.addEventListener('click', function() {
+            currentPhotoIndex = parseInt(this.dataset.index);
+            updatePhotoDisplay(p.photos);
+          });
+          gallery.appendChild(thumb);
+        });
+        updatePhotoDisplay(p.photos);
+      } else {
+        homeModalMedia.style.backgroundImage = `url('${p.image}')`;
+        if (gallery) gallery.innerHTML = '';
+        if (homePhotoPrev) homePhotoPrev.style.display = 'none';
+        if (homePhotoNext) homePhotoNext.style.display = 'none';
+      }
+
+      // Amenities
+      const amenitiesContainer = document.getElementById('home-modal-amenities');
+      if (amenitiesContainer && p.amenities && p.amenities.length > 0) {
+        amenitiesContainer.innerHTML = '';
+        p.amenities.forEach(amenity => {
+          const tag = document.createElement('span');
+          tag.className = 'badge badge-navy';
+          tag.style.fontSize = '0.8rem';
+          tag.style.padding = '4px 8px';
+          tag.textContent = amenity;
+          amenitiesContainer.appendChild(tag);
+        });
+      }
 
       if (homeTokenBtn) {
-        homeTokenBtn.textContent = `Book Token (₹${HOME_BOOKING_AMOUNT.toLocaleString('en-IN')})`;
+        homeTokenBtn.textContent = `Book Token (₹${HOME_BOOKING_AMOUNT.toLocaleString('en-IN')}) - Fully Refundable`;
       }
 
       homeModal.classList.add('active');
+    }
+
+    function updatePhotoDisplay(photos) {
+      if (!photos || photos.length === 0) return;
+
+      homeModalMedia.style.backgroundImage = `url('${photos[currentPhotoIndex]}')`;
+
+      // Update thumbnail borders
+      const gallery = document.getElementById('home-modal-photo-gallery');
+      if (gallery) {
+        gallery.querySelectorAll('img').forEach((img, index) => {
+          img.style.border = index === currentPhotoIndex ? '2px solid var(--gold)' : '2px solid transparent';
+        });
+      }
+
+      // Update navigation button visibility
+      if (homePhotoPrev) homePhotoPrev.style.display = currentPhotoIndex > 0 ? 'block' : 'none';
+      if (homePhotoNext) homePhotoNext.style.display = currentPhotoIndex < photos.length - 1 ? 'block' : 'none';
     }
 
     function closeHomePropertyModal() {
       if (!homeModal) return;
       homeModal.classList.remove('active');
       selectedHomeProperty = null;
+      currentPhotoIndex = 0;
     }
 
     if (homeModalClose) homeModalClose.addEventListener('click', closeHomePropertyModal);
@@ -1282,6 +2443,166 @@
       homeTokenBtn.addEventListener('click', () => {
         if (!selectedHomeProperty) return;
         initTokenPayment(selectedHomeProperty.title, selectedHomeProperty.token);
+      });
+    }
+
+    // Schedule visit functionality
+    const scheduleVisitBtn = document.getElementById('home-modal-schedule-btn');
+    const scheduleVisitModal = document.getElementById('schedule-visit-modal');
+    const scheduleModalClose = document.getElementById('schedule-modal-close');
+    const visitDateInput = document.getElementById('visit-date');
+    const confirmVisitBtn = document.getElementById('confirm-visit-btn');
+
+    if (scheduleVisitBtn) {
+      scheduleVisitBtn.addEventListener('click', () => {
+        if (!selectedHomeProperty) return;
+        openScheduleVisitModal(selectedHomeProperty);
+      });
+    }
+
+    if (scheduleModalClose) {
+      scheduleModalClose.addEventListener('click', closeScheduleVisitModal);
+    }
+
+    if (scheduleVisitModal) {
+      scheduleVisitModal.addEventListener('click', (ev) => {
+        if (ev.target === scheduleVisitModal) closeScheduleVisitModal();
+      });
+    }
+
+    if (visitDateInput) {
+      visitDateInput.addEventListener('change', generateTimeSlots);
+    }
+
+    if (confirmVisitBtn) {
+      confirmVisitBtn.addEventListener('click', confirmVisitBooking);
+    }
+
+    function openScheduleVisitModal(property) {
+      if (!scheduleVisitModal || !property) return;
+
+      // Set minimum date to tomorrow
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const minDate = tomorrow.toISOString().split('T')[0];
+      visitDateInput.min = minDate;
+      visitDateInput.value = minDate;
+
+      // Populate property info
+      const propertyInfo = document.getElementById('schedule-property-info');
+      if (propertyInfo) {
+        propertyInfo.innerHTML = `
+          <h4 style="margin:0 0 8px 0;color:var(--navy);">${property.title}</h4>
+          <p style="margin:0;color:var(--muted);font-size:0.9rem;">${property.location}</p>
+          <p style="margin:4px 0 0 0;color:var(--navy);font-weight:500;">${property.price}</p>
+        `;
+      }
+
+      generateTimeSlots();
+      scheduleVisitModal.classList.add('active');
+    }
+
+    function closeScheduleVisitModal() {
+      if (!scheduleVisitModal) return;
+      scheduleVisitModal.classList.remove('active');
+    }
+
+    function generateTimeSlots() {
+      const timeSlotsContainer = document.getElementById('time-slots');
+      if (!timeSlotsContainer) return;
+
+      const selectedDate = visitDateInput.value;
+      if (!selectedDate) return;
+
+      // Generate 1-hour slots from 9 AM to 6 PM
+      const slots = [];
+      for (let hour = 9; hour <= 17; hour++) {
+        const timeString = `${hour.toString().padStart(2, '0')}:00`;
+        let displayTime = hour < 12 ? `${hour}:00 AM` : `${hour === 12 ? 12 : hour - 12}:00 PM`;
+        if (hour === 12) displayTime = '12:00 PM';
+        
+        slots.push({
+          time: timeString,
+          display: displayTime,
+          available: Math.random() > 0.3 // Simulate some slots as booked
+        });
+      }
+
+      timeSlotsContainer.innerHTML = '';
+      slots.forEach(slot => {
+        const slotBtn = document.createElement('button');
+        slotBtn.className = `time-slot-btn ${slot.available ? 'available' : 'booked'}`;
+        slotBtn.textContent = slot.display;
+        slotBtn.dataset.time = slot.time;
+        slotBtn.disabled = !slot.available;
+        
+        if (slot.available) {
+          slotBtn.addEventListener('click', () => {
+            document.querySelectorAll('.time-slot-btn').forEach(btn => btn.classList.remove('selected'));
+            slotBtn.classList.add('selected');
+          });
+        }
+        
+        timeSlotsContainer.appendChild(slotBtn);
+      });
+    }
+
+    function confirmVisitBooking() {
+      const selectedDate = visitDateInput.value;
+      const selectedSlot = document.querySelector('.time-slot-btn.selected');
+      const visitorName = document.getElementById('visitor-name').value.trim();
+      const visitorPhone = document.getElementById('visitor-phone').value.trim();
+      const visitorEmail = document.getElementById('visitor-email').value.trim();
+
+      if (!selectedDate) {
+        alert('Please select a date for your visit.');
+        return;
+      }
+
+      if (!selectedSlot) {
+        alert('Please select a time slot for your visit.');
+        return;
+      }
+
+      if (!visitorName || !visitorPhone || !visitorEmail) {
+        alert('Please fill in all your details.');
+        return;
+      }
+
+      // Validate email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(visitorEmail)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Confirm booking
+      const confirmation = confirm(`Confirm your visit booking:\n\nProperty: ${selectedHomeProperty.title}\nDate: ${selectedDate}\nTime: ${selectedSlot.textContent}\nName: ${visitorName}\nPhone: ${visitorPhone}\nEmail: ${visitorEmail}\n\nYou will receive a confirmation SMS and email.`);
+      
+      if (confirmation) {
+        alert(`✅ Visit Scheduled Successfully!\n\n📅 ${selectedDate} at ${selectedSlot.textContent}\n🏠 ${selectedHomeProperty.title}\n📍 ${selectedHomeProperty.location}\n\n📧 Confirmation sent to ${visitorEmail}\n📱 SMS sent to ${visitorPhone}\n\nOur agent will contact you 30 minutes before the visit.`);
+        closeScheduleVisitModal();
+      }
+    }
+
+    // Photo navigation
+    if (homePhotoPrev) {
+      homePhotoPrev.addEventListener('click', () => {
+        if (!selectedHomeProperty || !selectedHomeProperty.photos) return;
+        if (currentPhotoIndex > 0) {
+          currentPhotoIndex--;
+          updatePhotoDisplay(selectedHomeProperty.photos);
+        }
+      });
+    }
+
+    if (homePhotoNext) {
+      homePhotoNext.addEventListener('click', () => {
+        if (!selectedHomeProperty || !selectedHomeProperty.photos) return;
+        if (currentPhotoIndex < selectedHomeProperty.photos.length - 1) {
+          currentPhotoIndex++;
+          updatePhotoDisplay(selectedHomeProperty.photos);
+        }
       });
     }
 
@@ -1392,7 +2713,7 @@
       homeCommentSubmitBtn.addEventListener('click', submitHomeComment);
     }
 
-    applyHomeFilters();
+  bootstrapHomeListings();
     renderHomeComments();
   </script>
   <!-- Auto-scroll to Hand-Picked Properties on first load -->
@@ -1411,6 +2732,21 @@
           }
         });
       }
+    })();
+  </script>
+  <script>
+    // Prevent Home nav from reloading the page when already on index.html — scroll to top instead.
+    (function() {
+      const navHome = document.getElementById('nav-home');
+      if (!navHome) return;
+      navHome.addEventListener('click', function (e) {
+        const parts = location.pathname.split('/');
+        const page = parts.pop() || parts.pop(); // handle trailing slash
+        if (!page || page === 'index.html' || page === '') {
+          e.preventDefault();
+          try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (err) { window.scrollTo(0, 0); }
+        }
+      });
     })();
   </script>
 </body>
