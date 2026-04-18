@@ -343,7 +343,7 @@
         function initRentPayment(amount, description='Rent') {
           if (!amount || amount <= 0) { alert('Invalid amount'); return; }
           const options = {
-            key: 'rzp_test_SZLsFwKR6ceM6J',
+            key: 'rzp_test_ScdJnGvFQvodqy',
             amount: amount * 100,
             currency: 'INR',
             name: currentRental.property,
@@ -483,7 +483,7 @@
           if (!clientSelected) { alert('Please select a property first.'); return; }
           const tokenAmount = Math.round((clientSelected.rent || 0) * 0.1);
           const options = {
-            key: 'rzp_test_SZLsFwKR6ceM6J',
+            key: 'rzp_test_ScdJnGvFQvodqy',
             amount: tokenAmount * 100,
             currency: 'INR',
             name: 'NexusRent',
