@@ -6,6 +6,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard | EstateIQ</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .viz-canvas {
+      min-height: 220px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+      padding: 10px;
+    }
+
+    .viz-canvas.tight {
+      min-height: 170px;
+    }
+
+    .heatmap-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .heat-cell {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid rgba(26, 37, 64, 0.12);
+      cursor: pointer;
+      transition: transform .15s ease;
+    }
+
+    .heat-cell:hover {
+      transform: scale(1.06);
+    }
+
+    .flow-lane {
+      margin: 10px 0;
+    }
+
+    .flow-lane-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: .8rem;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .flow-track {
+      height: 12px;
+      border-radius: 999px;
+      background: #edf1f7;
+      overflow: hidden;
+      border: 1px solid #e3e9f3;
+    }
+
+    .flow-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width .4s ease;
+    }
+  </style>
 </head>
 
 <body>
@@ -38,6 +96,7 @@
         <button class="admin-tab-btn" data-admin-tab="revenue" role="tab" aria-selected="false">Revenue</button>
         <button class="admin-tab-btn" data-admin-tab="marketing" role="tab" aria-selected="false">Marketing</button>
         <button class="admin-tab-btn" data-admin-tab="crm" role="tab" aria-selected="false">CRM</button>
+        <button class="admin-tab-btn" data-admin-tab="scm" role="tab" aria-selected="false">SCM</button>
         <button class="admin-tab-btn" data-admin-tab="security" role="tab" aria-selected="false">Security</button>
       </div>
 
@@ -322,6 +381,25 @@
               </ul>
             </div>
           </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1.2fr .8fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>CRM Neural Network (Intent Graph)</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Crazy-mode lead network showing engagement bridges between campaigns, agents, and high-intent cohorts.</div>
+              <div id="crm-neural-map" class="viz-canvas"></div>
+            </div>
+            <div class="dashboard-card">
+              <h4>Momentum Wave</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Velocity pulses by stage (Prospect → Qualified → Won).</div>
+              <div id="crm-momentum-wave" class="viz-canvas tight"></div>
+            </div>
+          </div>
+
+          <div class="dashboard-card" style="margin-top:14px;">
+            <h4>SCM Ops Twin — Service Chain Monitor</h4>
+            <p class="metric-sub" style="margin-bottom:10px;">End-to-end service chain visualization for ticket intake, assignment, dispatch, completion, and QA closure.</p>
+            <div id="scm-flow-board" class="viz-canvas"></div>
+          </div>
         </div>
       </div>
 
@@ -353,6 +431,110 @@
                 <li>Rate-limiting for repeated failures</li>
                 <li>Device trust and secure session handling</li>
               </ul>
+            </div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>Threat Heatmap Matrix</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Weekly attack-intensity map across auth, API, infra, and payment surfaces.</div>
+              <div id="security-heatmap" class="viz-canvas"></div>
+            </div>
+            <div class="dashboard-card">
+              <h4>Zero-Trust Ring Monitor</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Live posture scores for Identity, Device, Network, Data, and Runtime.</div>
+              <div id="security-ring" class="viz-canvas"></div>
+            </div>
+          </div>
+
+          <div class="dashboard-card" style="margin-top:14px;">
+            <h4>Incident Blast Timeline</h4>
+            <div class="metric-sub" style="margin-bottom:8px;">Burst timeline of incidents and response windows over the last 24h.</div>
+            <div id="security-timeline" class="viz-canvas tight"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-tab-panel" id="admin-panel-scm" role="tabpanel" aria-hidden="true">
+        <div class="dashboard-card">
+          <h4>SCM Workspace</h4>
+          <p class="metric-sub" style="margin-bottom:14px;">Service Chain Management dashboard for ticket flow, dispatch bottlenecks, and closure quality.</p>
+
+          <div class="dashboard-grid" style="grid-template-columns:repeat(4,1fr);gap:12px;">
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Tickets Inflow</h4><div class="metric-value" style="font-size:1.5rem;">1,248</div><div class="metric-sub">Last 30 days</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Dispatch SLA</h4><div class="metric-value" style="font-size:1.5rem;">93%</div><div class="metric-sub">Within target window</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Avg Turnaround</h4><div class="metric-value" style="font-size:1.5rem;">31h</div><div class="metric-sub">From assign to close</div></div>
+            <div class="dashboard-card"><h4 style="margin-bottom:6px;">Reopen Rate</h4><div class="metric-value" style="font-size:1.5rem;">6.4%</div><div class="metric-sub">Needs QA tightening</div></div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>SCM Coverage Snapshot</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>Ticket Intake Automation — <strong>92%</strong></li>
+                <li>Skill-Based Assignment Match — <strong>89%</strong></li>
+                <li>Field Dispatch Compliance — <strong>94%</strong></li>
+                <li>Closure QA Pass Rate — <strong>91%</strong></li>
+              </ul>
+            </div>
+            <div class="dashboard-card">
+              <h4>SCM Priority Alerts</h4>
+              <ul class="dash-list" style="margin-top:8px;">
+                <li>North Zone dispatch backlog crossed 14 tickets.</li>
+                <li>Electrical vendor SLA breaches in last 48h: 3 cases.</li>
+                <li>Reopened plumbing cases trending up week-over-week.</li>
+                <li>Night shift assignment latency above 20 minutes.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>SCM Flow Twin</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Operational pass-rate at each service stage.</div>
+              <div id="scm-flow-board-main" class="viz-canvas"></div>
+            </div>
+            <div class="dashboard-card">
+              <h4>Throughput Pulse</h4>
+              <div class="metric-sub" style="margin-bottom:8px;">Weekly processed-ticket momentum.</div>
+              <div id="scm-throughput-pulse" class="viz-canvas tight"></div>
+            </div>
+          </div>
+
+          <div class="dashboard-card" style="margin-top:14px;">
+            <h4>Bottleneck Stress Matrix</h4>
+            <div class="metric-sub" style="margin-bottom:8px;">Load stress visualization across intake, assignment, dispatch, and closure channels.</div>
+            <div id="scm-bottleneck-matrix" class="viz-canvas"></div>
+          </div>
+
+          <div class="dashboard-grid" style="margin-top:14px;grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="dashboard-card">
+              <h4>SCM Queue Details</h4>
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Stage</th>
+                    <th>Open</th>
+                    <th>Avg Age</th>
+                    <th>Owner</th>
+                  </tr>
+                </thead>
+                <tbody id="scm-queue-body"></tbody>
+              </table>
+            </div>
+            <div class="dashboard-card">
+              <h4>Vendor Performance</h4>
+              <table class="dashboard-table">
+                <thead>
+                  <tr>
+                    <th>Vendor</th>
+                    <th>SLA</th>
+                    <th>First Response</th>
+                    <th>Quality</th>
+                  </tr>
+                </thead>
+                <tbody id="scm-vendor-body"></tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -568,7 +750,55 @@
         })()
       };
 
-      return { properties, tenants, orders, onboarding, onboardingMonthly, verificationQueue, delistingRequests, issueCategories, revenueStreams, resolutionTimes };
+      const crmNodes = [
+        { id: 'Campaign A', x: 90, y: 60, size: 11, color: '#1f77b4' },
+        { id: 'Campaign B', x: 240, y: 36, size: 9, color: '#ff7f0e' },
+        { id: 'Campaign C', x: 390, y: 64, size: 10, color: '#2ca02c' },
+        { id: 'Agent Pool', x: 150, y: 150, size: 12, color: '#9467bd' },
+        { id: 'Lead Engine', x: 290, y: 142, size: 14, color: '#17becf' },
+        { id: 'High Intent', x: 440, y: 148, size: 13, color: '#e377c2' },
+        { id: 'Won Deals', x: 260, y: 226, size: 15, color: '#1b9e77' }
+      ];
+
+      const scmFlow = [
+        { stage: 'Intake', value: 94, color: '#1f77b4' },
+        { stage: 'Auto-Triage', value: 88, color: '#2ca02c' },
+        { stage: 'Assignment', value: 76, color: '#ff7f0e' },
+        { stage: 'Dispatch', value: 69, color: '#d62728' },
+        { stage: 'Resolution', value: 81, color: '#9467bd' },
+        { stage: 'QA Close', value: 73, color: '#17becf' }
+      ];
+
+      const securityHeat = Array.from({ length: 28 }, (_, i) => ({
+        slot: i,
+        risk: Math.round(20 + Math.random() * 80)
+      }));
+
+      const securityRings = [
+        { label: 'Identity', score: 92, color: '#1f77b4' },
+        { label: 'Device', score: 84, color: '#2ca02c' },
+        { label: 'Network', score: 79, color: '#ff7f0e' },
+        { label: 'Data', score: 88, color: '#9467bd' },
+        { label: 'Runtime', score: 73, color: '#d62728' }
+      ];
+
+      const securityIncidents = [4, 6, 3, 8, 5, 9, 4, 7, 3, 5, 2, 6];
+
+      const scmQueues = [
+        { stage: 'Intake Validation', open: 21, age: '3.2h', owner: 'Ops Desk' },
+        { stage: 'Assignment', open: 14, age: '2.1h', owner: 'Routing AI' },
+        { stage: 'Field Dispatch', open: 18, age: '5.4h', owner: 'Field Control' },
+        { stage: 'QA Closure', open: 9, age: '6.0h', owner: 'QA Pod' }
+      ];
+
+      const scmVendors = [
+        { vendor: 'FixPro Electrical', sla: '91%', response: '18m', quality: 'A-' },
+        { vendor: 'HydroFlow Plumbing', sla: '87%', response: '25m', quality: 'B+' },
+        { vendor: 'QuickLift Mobility', sla: '95%', response: '14m', quality: 'A' },
+        { vendor: 'SecureLock Systems', sla: '89%', response: '21m', quality: 'B+' }
+      ];
+
+      return { properties, tenants, orders, onboarding, onboardingMonthly, verificationQueue, delistingRequests, issueCategories, revenueStreams, resolutionTimes, crmNodes, scmFlow, securityHeat, securityRings, securityIncidents, scmQueues, scmVendors };
     })();
 
     function fmt(n) { return `₹${n.toLocaleString('en-IN')}`; }
@@ -1022,6 +1252,367 @@
       wrap.appendChild(svg);
     }
 
+    function renderCrmNeuralMap() {
+      const container = document.getElementById('crm-neural-map');
+      if (!container) return;
+      const nodes = adminData.crmNodes || [];
+      container.innerHTML = '';
+
+      const w = Math.max(520, Math.round(container.getBoundingClientRect().width) || 620);
+      const h = 230;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', h);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+      const edges = [
+        [0,3],[1,3],[1,4],[2,4],[3,4],[4,5],[4,6],[5,6],[0,4],[2,5]
+      ];
+
+      const xScale = w / 520;
+      const yScale = h / 230;
+
+      edges.forEach(([a,b]) => {
+        const line = document.createElementNS(svgNS,'line');
+        line.setAttribute('x1', nodes[a].x * xScale);
+        line.setAttribute('y1', nodes[a].y * yScale);
+        line.setAttribute('x2', nodes[b].x * xScale);
+        line.setAttribute('y2', nodes[b].y * yScale);
+        line.setAttribute('stroke', '#d8e3f2');
+        line.setAttribute('stroke-width', '2');
+        svg.appendChild(line);
+      });
+
+      nodes.forEach((n) => {
+        const halo = document.createElementNS(svgNS,'circle');
+        halo.setAttribute('cx', n.x * xScale);
+        halo.setAttribute('cy', n.y * yScale);
+        halo.setAttribute('r', n.size + 7);
+        halo.setAttribute('fill', n.color);
+        halo.setAttribute('opacity', '0.12');
+        svg.appendChild(halo);
+
+        const c = document.createElementNS(svgNS,'circle');
+        c.setAttribute('cx', n.x * xScale);
+        c.setAttribute('cy', n.y * yScale);
+        c.setAttribute('r', n.size);
+        c.setAttribute('fill', n.color);
+        c.setAttribute('stroke', '#fff');
+        c.setAttribute('stroke-width', '2');
+        c.addEventListener('mouseenter', (e) => showTooltip(e, `${n.id} • score ${70 + Math.round(Math.random()*28)}`));
+        c.addEventListener('mousemove', showTooltip);
+        c.addEventListener('mouseleave', hideTooltip);
+        svg.appendChild(c);
+
+        const t = document.createElementNS(svgNS,'text');
+        t.setAttribute('x', n.x * xScale);
+        t.setAttribute('y', n.y * yScale + n.size + 16);
+        t.setAttribute('text-anchor', 'middle');
+        t.setAttribute('font-size', '11');
+        t.setAttribute('fill', '#24324f');
+        t.textContent = n.id;
+        svg.appendChild(t);
+      });
+
+      container.appendChild(svg);
+    }
+
+    function renderCrmMomentumWave() {
+      const container = document.getElementById('crm-momentum-wave');
+      if (!container) return;
+      const vals = [22, 34, 28, 40, 52, 46, 61, 58, 67, 64, 71, 79];
+      const max = Math.max(...vals, 1);
+      container.innerHTML = '';
+
+      const w = Math.max(300, Math.round(container.getBoundingClientRect().width) || 360);
+      const h = 170;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', h);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+      const pad = { t: 12, r: 10, b: 24, l: 10 };
+      const step = (w - pad.l - pad.r) / (vals.length - 1);
+      const y = (v) => pad.t + (h - pad.t - pad.b) * (1 - (v / max));
+      const points = vals.map((v,i) => `${pad.l + i*step},${y(v)}`).join(' ');
+
+      const area = document.createElementNS(svgNS, 'path');
+      area.setAttribute('d', `M ${pad.l},${h-pad.b} L ${points} L ${pad.l + (vals.length-1)*step},${h-pad.b} Z`);
+      area.setAttribute('fill', 'rgba(31,119,180,0.2)');
+      svg.appendChild(area);
+
+      const line = document.createElementNS(svgNS, 'polyline');
+      line.setAttribute('points', points);
+      line.setAttribute('fill', 'none');
+      line.setAttribute('stroke', '#1f77b4');
+      line.setAttribute('stroke-width', '3');
+      svg.appendChild(line);
+
+      vals.forEach((v, i) => {
+        const cx = pad.l + i*step;
+        const cy = y(v);
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', cx);
+        dot.setAttribute('cy', cy);
+        dot.setAttribute('r', '3.5');
+        dot.setAttribute('fill', '#1f77b4');
+        dot.addEventListener('mouseenter', (e)=> showTooltip(e, `Week ${i+1}: ${v} momentum`));
+        dot.addEventListener('mousemove', showTooltip);
+        dot.addEventListener('mouseleave', hideTooltip);
+        svg.appendChild(dot);
+      });
+
+      container.appendChild(svg);
+    }
+
+    function renderScmFlowBoard(targetId = 'scm-flow-board') {
+      const container = document.getElementById(targetId);
+      if (!container) return;
+      const lanes = adminData.scmFlow || [];
+      container.innerHTML = '';
+
+      lanes.forEach((lane) => {
+        const row = document.createElement('div');
+        row.className = 'flow-lane';
+        row.innerHTML = `
+          <div class="flow-lane-head">
+            <span>${lane.stage}</span>
+            <strong>${lane.value}%</strong>
+          </div>
+          <div class="flow-track">
+            <div class="flow-fill" style="width:${lane.value}%;background:${lane.color}"></div>
+          </div>
+        `;
+        row.addEventListener('mouseenter', (e)=> showTooltip(e, `${lane.stage} completion ${lane.value}%`));
+        row.addEventListener('mousemove', showTooltip);
+        row.addEventListener('mouseleave', hideTooltip);
+        container.appendChild(row);
+      });
+    }
+
+    function renderScmThroughputPulse() {
+      const container = document.getElementById('scm-throughput-pulse');
+      if (!container) return;
+      const vals = [82, 88, 91, 86, 97, 102, 95, 108, 112, 106, 118, 123];
+      const max = Math.max(...vals, 1);
+      container.innerHTML = '';
+
+      const w = Math.max(320, Math.round(container.getBoundingClientRect().width) || 360);
+      const h = 170;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', h);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+      const pad = { t: 12, r: 10, b: 24, l: 10 };
+      const step = (w - pad.l - pad.r) / (vals.length - 1);
+      const y = (v) => pad.t + (h - pad.t - pad.b) * (1 - (v / max));
+      const points = vals.map((v, i) => `${pad.l + i * step},${y(v)}`).join(' ');
+
+      const area = document.createElementNS(svgNS, 'path');
+      area.setAttribute('d', `M ${pad.l},${h - pad.b} L ${points} L ${pad.l + (vals.length - 1) * step},${h - pad.b} Z`);
+      area.setAttribute('fill', 'rgba(44,160,44,0.18)');
+      svg.appendChild(area);
+
+      const line = document.createElementNS(svgNS, 'polyline');
+      line.setAttribute('points', points);
+      line.setAttribute('fill', 'none');
+      line.setAttribute('stroke', '#2ca02c');
+      line.setAttribute('stroke-width', '3');
+      svg.appendChild(line);
+
+      vals.forEach((v, i) => {
+        const cx = pad.l + i * step;
+        const cy = y(v);
+        const dot = document.createElementNS(svgNS, 'circle');
+        dot.setAttribute('cx', cx);
+        dot.setAttribute('cy', cy);
+        dot.setAttribute('r', '3.5');
+        dot.setAttribute('fill', '#2ca02c');
+        dot.addEventListener('mouseenter', (e) => showTooltip(e, `Week ${i + 1}: ${v} tickets`));
+        dot.addEventListener('mousemove', showTooltip);
+        dot.addEventListener('mouseleave', hideTooltip);
+        svg.appendChild(dot);
+      });
+
+      container.appendChild(svg);
+    }
+
+    function renderScmBottleneckMatrix() {
+      const container = document.getElementById('scm-bottleneck-matrix');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const rows = [
+        { stage: 'Intake Validation', load: 62, color: '#1f77b4' },
+        { stage: 'Skill-Based Assignment', load: 78, color: '#ff7f0e' },
+        { stage: 'Field Dispatch', load: 84, color: '#d62728' },
+        { stage: 'Closure QA', load: 57, color: '#9467bd' }
+      ];
+
+      rows.forEach((r) => {
+        const row = document.createElement('div');
+        row.className = 'flow-lane';
+        row.innerHTML = `
+          <div class="flow-lane-head">
+            <span>${r.stage}</span>
+            <strong>${r.load}% stress</strong>
+          </div>
+          <div class="flow-track">
+            <div class="flow-fill" style="width:${r.load}%;background:${r.color}"></div>
+          </div>
+        `;
+        row.addEventListener('mouseenter', (e) => showTooltip(e, `${r.stage}: ${r.load}% load`));
+        row.addEventListener('mousemove', showTooltip);
+        row.addEventListener('mouseleave', hideTooltip);
+        container.appendChild(row);
+      });
+    }
+
+    function renderScmInfoSection() {
+      const queueBody = document.getElementById('scm-queue-body');
+      const vendorBody = document.getElementById('scm-vendor-body');
+      if (!queueBody || !vendorBody) return;
+
+      queueBody.innerHTML = '';
+      (adminData.scmQueues || []).forEach((q) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${q.stage}</td><td>${q.open}</td><td>${q.age}</td><td>${q.owner}</td>`;
+        queueBody.appendChild(tr);
+      });
+
+      vendorBody.innerHTML = '';
+      (adminData.scmVendors || []).forEach((v) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${v.vendor}</td><td>${v.sla}</td><td>${v.response}</td><td>${v.quality}</td>`;
+        vendorBody.appendChild(tr);
+      });
+    }
+
+    function renderSecurityHeatmap() {
+      const container = document.getElementById('security-heatmap');
+      if (!container) return;
+      container.innerHTML = '<div class="metric-sub">Mon → Sun / Surface risk intensity</div>';
+
+      const grid = document.createElement('div');
+      grid.className = 'heatmap-grid';
+      const data = adminData.securityHeat || [];
+
+      data.forEach((cell, idx) => {
+        const d = document.createElement('div');
+        const risk = cell.risk;
+        const r = risk > 75 ? 211 : risk > 50 ? 255 : risk > 30 ? 255 : 46;
+        const g = risk > 75 ? 39 : risk > 50 ? 127 : risk > 30 ? 193 : 204;
+        const b = risk > 75 ? 40 : risk > 50 ? 14 : risk > 30 ? 7 : 113;
+        d.className = 'heat-cell';
+        d.style.background = `rgb(${r},${g},${b})`;
+        d.style.opacity = `${0.45 + (risk/200)}`;
+        d.addEventListener('mouseenter', (e)=> showTooltip(e, `Slot ${idx+1} • Risk ${risk}/100`));
+        d.addEventListener('mousemove', showTooltip);
+        d.addEventListener('mouseleave', hideTooltip);
+        grid.appendChild(d);
+      });
+
+      container.appendChild(grid);
+    }
+
+    function renderSecurityRing() {
+      const container = document.getElementById('security-ring');
+      if (!container) return;
+      container.innerHTML = '';
+      const data = adminData.securityRings || [];
+      const w = Math.max(330, Math.round(container.getBoundingClientRect().width) || 380);
+      const h = 220;
+      const cx = w / 2;
+      const cy = h / 2 - 8;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', h);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+      data.forEach((d, i) => {
+        const r = 26 + i * 15;
+        const track = document.createElementNS(svgNS, 'circle');
+        track.setAttribute('cx', cx);
+        track.setAttribute('cy', cy);
+        track.setAttribute('r', r);
+        track.setAttribute('fill', 'none');
+        track.setAttribute('stroke', '#e7edf6');
+        track.setAttribute('stroke-width', '8');
+        svg.appendChild(track);
+
+        const dash = 2 * Math.PI * r;
+        const arc = document.createElementNS(svgNS, 'circle');
+        arc.setAttribute('cx', cx);
+        arc.setAttribute('cy', cy);
+        arc.setAttribute('r', r);
+        arc.setAttribute('fill', 'none');
+        arc.setAttribute('stroke', d.color);
+        arc.setAttribute('stroke-width', '8');
+        arc.setAttribute('stroke-linecap', 'round');
+        arc.setAttribute('transform', `rotate(-90 ${cx} ${cy})`);
+        arc.setAttribute('stroke-dasharray', `${(d.score/100)*dash} ${dash}`);
+        arc.addEventListener('mouseenter', (e)=> showTooltip(e, `${d.label}: ${d.score}%`));
+        arc.addEventListener('mousemove', showTooltip);
+        arc.addEventListener('mouseleave', hideTooltip);
+        svg.appendChild(arc);
+      });
+
+      const centerLabel = document.createElementNS(svgNS, 'text');
+      centerLabel.setAttribute('x', cx);
+      centerLabel.setAttribute('y', cy + 4);
+      centerLabel.setAttribute('text-anchor', 'middle');
+      centerLabel.setAttribute('font-size', '14');
+      centerLabel.setAttribute('font-weight', '700');
+      centerLabel.setAttribute('fill', '#24324f');
+      centerLabel.textContent = 'ZERO TRUST';
+      svg.appendChild(centerLabel);
+
+      container.appendChild(svg);
+    }
+
+    function renderSecurityTimeline() {
+      const container = document.getElementById('security-timeline');
+      if (!container) return;
+      const incidents = adminData.securityIncidents || [];
+      container.innerHTML = '';
+
+      const w = Math.max(560, Math.round(container.getBoundingClientRect().width) || 700);
+      const h = 170;
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('width', '100%');
+      svg.setAttribute('height', h);
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+      const pad = { t: 20, r: 14, b: 26, l: 18 };
+      const max = Math.max(...incidents, 1);
+      const step = (w - pad.l - pad.r) / incidents.length;
+
+      incidents.forEach((v, i) => {
+        const x = pad.l + i * step + 4;
+        const bh = ((h - pad.t - pad.b) * v) / max;
+        const y = h - pad.b - bh;
+        const bar = document.createElementNS(svgNS, 'rect');
+        bar.setAttribute('x', x);
+        bar.setAttribute('y', y);
+        bar.setAttribute('width', Math.max(8, step - 8));
+        bar.setAttribute('height', bh);
+        bar.setAttribute('rx', '4');
+        bar.setAttribute('fill', v >= 8 ? '#d62728' : v >= 6 ? '#ff7f0e' : '#1f77b4');
+        bar.addEventListener('mouseenter', (e)=> showTooltip(e, `T-${12-i}h : ${v} incidents`));
+        bar.addEventListener('mousemove', showTooltip);
+        bar.addEventListener('mouseleave', hideTooltip);
+        svg.appendChild(bar);
+      });
+
+      container.appendChild(svg);
+    }
+
     function showTooltip(e, text){
       const tip = document.getElementById('chart-tooltip');
       if(text){ tip.textContent = text; }
@@ -1060,6 +1651,19 @@
         renderRevenueShare();
         renderResolutionTimes();
         renderProfitMix();
+      } else if (normalized === 'crm') {
+        renderCrmNeuralMap();
+        renderCrmMomentumWave();
+        renderScmFlowBoard('scm-flow-board');
+      } else if (normalized === 'scm') {
+        renderScmFlowBoard('scm-flow-board-main');
+        renderScmThroughputPulse();
+        renderScmBottleneckMatrix();
+        renderScmInfoSection();
+      } else if (normalized === 'security') {
+        renderSecurityHeatmap();
+        renderSecurityRing();
+        renderSecurityTimeline();
       }
     }
 
